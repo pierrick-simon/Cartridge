@@ -1,4 +1,6 @@
 # Game Boy binaries
 obj/
 *.gb
-
+*.ihx
+*.map
+*.noi
