@@ -1,0 +1,21 @@
+/*
+** EPITECH PROJECT, 2026
+** cartridge
+** File description:
+** Mini-game 1 interface
+*/
+
+#ifndef GAME1_H
+    #define GAME1_H
+
+    #include "types.h"
+#include "input.h"
+
+typedef struct {
+    uint8_t score;
+} Game1State;
+
+void game1Init(Game1State *game);
+game_state_t game1Update(Game1State *game, const InputState *input);
+
+#endif
