@@ -9,7 +9,7 @@
     #define MENU_H
 
 #include <stdint.h>
-#include "types.h"
+#include "game_types.h"
 #include "input.h"
 
 #define MENU_ENTRY_COUNT 3

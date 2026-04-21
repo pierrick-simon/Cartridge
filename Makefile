@@ -8,16 +8,18 @@
 NAME        =   game.gb
 
 GBDK        ?=  /opt/gbdk
-LCC         =   $(GBDK)/bin/lcc
+LCC         =   $(GBDK)/bin/lcgit gi
 
 # -Wl-yt0x1B : MBC5 + RAM + BATTERY
 # -Wl-yoA : 512 KB ROM
 # -Wl-ya1 : 8 KB SRAM
-CFLAGS      =   -Wa-l -Wl-m -Wl-j -DUSE_SFR_FOR_REG
-CFLAGS      +=  -Wf--noinduction -Wf--nolospre
+CFLAGS      =   -Wa-l -Wl-m -Wl-j
 LFLAGS      =   -Wl-yt0x1B -Wl-yoA -Wl-ya1
 
-INCLUDE     =   -I include
+# Pass include path to the SDCC frontend only (-Wf) not to lcc itself
+# Dont add GBDK's include path
+# lcc adds it
+INCLUDE     =   -Wf-I./include
 
 SRC_DIR     =   src
 OBJ_DIR     =   obj
@@ -37,7 +39,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(LCC) $(CFLAGS) $(INCLUDE) -c -o $@ $<
 
 $(NAME): $(OBJS)
-	$(LCC) $(CFLAGS) $(LFLAGS) $(INCLUDE) -o $@ $^
+	$(LCC) $(CFLAGS) $(LFLAGS) -o $@ $^
 
 clean:
 	$(RM) -r $(OBJ_DIR)
@@ -47,4 +49,9 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+CORE    =   $(HOME)/.var/app/org.libretro.RetroArch/config/retroarch/cores/gambatte_libretro.so
+run: all
+	flatpak run org.libretro.RetroArch -L $(CORE) $(NAME)
+	$(RM) $(NAME)
+
+.PHONY: all clean fclean re run

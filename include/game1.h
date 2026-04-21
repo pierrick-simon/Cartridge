@@ -8,7 +8,7 @@
 #ifndef GAME1_H
     #define GAME1_H
 
-    #include "types.h"
+    #include "game_types.h"
 #include "input.h"
 
 typedef struct {
