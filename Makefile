@@ -8,7 +8,7 @@
 NAME        =   game.gb
 
 GBDK        ?=  /opt/gbdk
-LCC         =   $(GBDK)/bin/lcgit gi
+LCC         =   $(GBDK)/bin/lcc
 
 # -Wl-yt0x1B : MBC5 + RAM + BATTERY
 # -Wl-yoA : 512 KB ROM
