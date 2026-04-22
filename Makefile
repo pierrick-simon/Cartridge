@@ -24,7 +24,13 @@ INCLUDE     =   -Wf-I./include
 SRC_DIR     =   src
 OBJ_DIR     =   obj
 
-SRCS        =   $(wildcard $(SRC_DIR)/*.c)
+SRCS        =   $(SRC_DIR)/game1.c \
+				$(SRC_DIR)/game2.c \
+				$(SRC_DIR)/game3.c \
+				$(SRC_DIR)/input.c \
+				$(SRC_DIR)/main.c \
+				$(SRC_DIR)/menu.c \
+
 OBJS        =   $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
 
 all: $(NAME)
