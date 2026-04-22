@@ -16,7 +16,7 @@ static void transitionTo(AppContext *ctx, game_state_t next)
     init_table[ctx->state](ctx);
 }
 
-static game_state_t dispatchUpdate(AppContext *ctx)
+inline static game_state_t dispatchUpdate(AppContext *ctx)
 {
     return update_table[ctx->state](ctx);
 }
@@ -24,9 +24,9 @@ static game_state_t dispatchUpdate(AppContext *ctx)
 // DISPLAY_ON GBDK, macro turns on display after init
 void main(void)
 {
-    static AppContext ctx = {0};
+    static AppContext ctx = {.state = INIT_STATE};
 
-    init_table[STATE_MENU](&ctx);
+    init_table[ctx.state](&ctx);
     DISPLAY_ON;
 
     while (1) {

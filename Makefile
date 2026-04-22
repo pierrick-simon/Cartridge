@@ -19,7 +19,8 @@ LFLAGS      =   -Wl-yt0x1B -Wl-yoA -Wl-ya1
 # Pass include path to the SDCC frontend only (-Wf) not to lcc itself
 # Dont add GBDK's include path
 # lcc adds it
-INCLUDE     =   -Wf-I./include
+INCLUDE     =   -Wf-I./include -Wf-I./assets/tiles/ \
+				-Wf-I./assets/maps/ -Wf-I./assets/sprites/
 
 SRC_DIR     =   src
 ASSETS_DIR  =   assets
@@ -33,6 +34,14 @@ SRCS		=   $(addprefix $(SRC_DIR)/, 			\
 					main.c 							\
 					menu.c 							\
 					cursor.c						\
+				)									\
+				$(addprefix $(ASSETS_DIR)/, 		\
+					$(addprefix tiles/, 			\
+						grasstile.c					\
+					)								\
+					$(addprefix sprites/, 			\
+						playertile.c				\
+					)								\
 				)									\
 
 OBJS        =   $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))

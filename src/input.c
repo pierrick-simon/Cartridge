@@ -20,12 +20,12 @@ void readInput(InputState *input)
     input->justPressed = input->current & ~input->previous;
 }
 
-uint8_t getHeld(const InputState *input)
+inline uint8_t getHeld(const InputState *input)
 {
     return input->current;
 }
 
-uint8_t getJustPressed(const InputState *input)
+inline uint8_t getJustPressed(const InputState *input)
 {
     return input->justPressed;
 }
