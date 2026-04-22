@@ -22,14 +22,18 @@ LFLAGS      =   -Wl-yt0x1B -Wl-yoA -Wl-ya1
 INCLUDE     =   -Wf-I./include
 
 SRC_DIR     =   src
+ASSETS_DIR  =   assets
 OBJ_DIR     =   obj
 
-SRCS        =   $(SRC_DIR)/game1.c \
-				$(SRC_DIR)/game2.c \
-				$(SRC_DIR)/game3.c \
-				$(SRC_DIR)/input.c \
-				$(SRC_DIR)/main.c \
-				$(SRC_DIR)/menu.c \
+SRCS		=   $(addprefix $(SRC_DIR)/, 			\
+					game1.c							\
+					game2.c							\
+					game3.c							\
+					input.c							\
+					main.c 							\
+					menu.c 							\
+					cursor.c						\
+				)									\
 
 OBJS        =   $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
 
