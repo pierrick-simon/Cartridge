@@ -9,12 +9,15 @@
     #define GAME1_H
 
     #include "game_types.h"
-#include "input.h"
+    #include "input.h"
 
+    #define SPEED 2
+    
 typedef struct {
     uint8_t score;
     uint8_t player_x;
     uint8_t player_y;
+    uint8_t player_flip;
 } Game1State;
 
 void game1Init(Game1State *game);
