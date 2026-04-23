@@ -6,7 +6,14 @@
 */
 
 #include <gb/gb.h>
+#include <string.h>
 #include "core.h"
+
+void clear_screen(void) {
+    uint8_t blank[20 * 18];
+    memset(blank, 0, sizeof(blank));
+    set_bkg_tiles(0, 0, 20, 18, blank);
+}
 
 static void transitionTo(AppContext *ctx, game_state_t next)
 {
@@ -14,6 +21,8 @@ static void transitionTo(AppContext *ctx, game_state_t next)
         return;
     ctx->state = next;
     init_table[ctx->state](ctx);
+    vsync();
+    clear_screen();
 }
 
 inline static game_state_t dispatchUpdate(AppContext *ctx)

@@ -29,6 +29,9 @@ void printCenterString(const char *str)
 //clear screen, load menu tiles, draw game entries
 void menuInit(MenuState *menu)
 {
+    NR52_REG = 0x80;
+    NR50_REG = 0x77;
+    NR51_REG = 0xFF;
     printf("\n\n\n\n\n");
     printCenterString("Game 1");
     printf("\n\n");
@@ -40,12 +43,18 @@ void menuInit(MenuState *menu)
     SHOW_SPRITES;
     SPRITES_8x8;
     menu->cursor = 0;
+    move_sprite(0, 56, 56 + 24 * menu->cursor);
 }
 
 static void moveCursorDown(MenuState *menu)
 {
     menu->cursor = (menu->cursor + 1) % MENU_ENTRY_COUNT;
     move_sprite(0, 56, 56 + 24 * menu->cursor);
+    NR10_REG=0X00;
+    NR11_REG=0X81;
+    NR12_REG=0X43;
+    NR13_REG=0X73;
+    NR14_REG=0X86;
 }
 
 static void moveCursorUp(MenuState *menu)
@@ -54,6 +63,11 @@ static void moveCursorUp(MenuState *menu)
         ? MENU_ENTRY_COUNT - 1
         : menu->cursor - 1;
     move_sprite(0, 56, 56 + 24 * menu->cursor);
+    NR10_REG=0X00;
+    NR11_REG=0X81;
+    NR12_REG=0X43;
+    NR13_REG=0X73;
+    NR14_REG=0X86;
 }
 
 //draw cursor at new pos && update state if game selected

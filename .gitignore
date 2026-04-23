@@ -5,3 +5,4 @@ obj/
 *.map
 *.noi
 org.libretro.RetroArch.flatpakref
+.vscode
