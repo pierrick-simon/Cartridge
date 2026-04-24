@@ -13,9 +13,9 @@
 
     #define P_SPEED 1.42
     #define P_DIAG_SPEED 1
-    #define BH_TO_W(x) ((uint16_t)(x * 256))
-    #define SPEED ((uint16_t)(P_SPEED * 256))
-    #define DIAG_SPEED ((uint16_t)(P_DIAG_SPEED * 256))
+    #define H_TO_W(x) ((uint16_t)(x * 256))
+    #define SPEED (H_TO_W(P_SPEED))
+    #define DIAG_SPEED (H_TO_W(P_DIAG_SPEED))
     
 typedef struct {
     uint8_t score;

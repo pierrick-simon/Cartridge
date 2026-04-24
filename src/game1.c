@@ -20,16 +20,11 @@ void game1Init(Game1State *game)
     game->player_x.b.h = 160 / 2;
     game->player_y.b.h = 144 / 2;
     game->player_flip = 0;
-
-    HIDE_SPRITES;
-
-    set_bkg_data(0,0,grass_tile);
-    set_bkg_tiles(0,0,20,18,grass_map);
-    
+    set_bkg_data(0, 0, grass_tile);
+    set_bkg_tiles(0, 0, 20, 18, grass_map);
     set_sprite_data(1, 6, player_tile);
     set_sprite_tile(1, P_IDLE);
     move_sprite(1, game->player_x.b.h, game->player_y.b.h);
-
     SHOW_BKG;
     SHOW_SPRITES;
 }
