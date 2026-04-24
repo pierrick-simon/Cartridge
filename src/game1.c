@@ -15,16 +15,20 @@
 void game1Init(Game1State *game)
 {
     game->score = 0;
-    game->player_x = 160 / 2;
-    game->player_y = 144 / 2;
+    game->player_x.w = 0;
+    game->player_y.w = 0;
+    game->player_x.b.h = 160 / 2;
+    game->player_y.b.h = 144 / 2;
     game->player_flip = 0;
+
+    HIDE_SPRITES;
 
     set_bkg_data(0,0,grass_tile);
     set_bkg_tiles(0,0,20,18,grass_map);
     
-    set_sprite_data(1, 6, player_tile); // ici ça va bugger je crois
+    set_sprite_data(1, 6, player_tile);
     set_sprite_tile(1, P_IDLE);
-    move_sprite(1, game->player_x, game->player_y);
+    move_sprite(1, game->player_x.b.h, game->player_y.b.h);
 
     SHOW_BKG;
     SHOW_SPRITES;
@@ -48,17 +52,20 @@ static void change_playertile(Game1State *game, const uint8_t touch)
 static void move_player(Game1State *game, const InputState *input)
 {
     uint8_t touch = getHeld(input);
-    
-    if (touch & J_UP && game->player_y > 8 + 8)
-        game->player_y -= SPEED;
-    if (touch & J_DOWN && game->player_y < 144 + 8)
-        game->player_y += SPEED;
-    if (touch & J_RIGHT && game->player_x < 160)
-        game->player_x += SPEED;
-    if (touch & J_LEFT && game->player_x > 8)
-        game->player_x -= SPEED;
+    uint16_t speed = SPEED;
+
+    if (touch & (J_UP | J_DOWN) && touch & (J_LEFT | J_RIGHT))
+        speed = DIAG_SPEED;
+    if (touch & J_UP && game->player_y.b.h > 8 + 8)
+        game->player_y.w -= speed;
+    if (touch & J_DOWN && game->player_y.b.h < 144 + 8)
+        game->player_y.w += speed;
+    if (touch & J_RIGHT && game->player_x.b.h < 160)
+        game->player_x.w += speed;
+    if (touch & J_LEFT && game->player_x.b.h > 8)
+        game->player_x.w -= speed;
     if (touch & (J_UP | J_DOWN | J_LEFT | J_RIGHT)) {
-        move_sprite(1, game->player_x, game->player_y);
+        move_sprite(1, game->player_x.b.h, game->player_y.b.h);
         change_playertile(game, touch);
         set_sprite_prop(1, game->player_flip);
     } else {

@@ -11,12 +11,16 @@
     #include "game_types.h"
     #include "input.h"
 
-    #define SPEED 2
+    #define P_SPEED 1.42
+    #define P_DIAG_SPEED 1
+    #define BH_TO_W(x) ((uint16_t)(x * 256))
+    #define SPEED ((uint16_t)(P_SPEED * 256))
+    #define DIAG_SPEED ((uint16_t)(P_DIAG_SPEED * 256))
     
 typedef struct {
     uint8_t score;
-    uint8_t player_x;
-    uint8_t player_y;
+    fixed player_x;
+    fixed player_y;
     uint8_t player_flip;
 } Game1State;
 
