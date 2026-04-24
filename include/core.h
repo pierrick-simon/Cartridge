@@ -24,34 +24,34 @@ typedef struct {
     Game3State game3;
 } AppContext;
 
-typedef void (*init_fn_t)(AppContext *);
-typedef game_state_t (*update_fn_t)(AppContext *);
+typedef void (*init_fn_t)(AppContext *, sound_t *bgm);
+typedef game_state_t (*update_fn_t)(AppContext *, sound_t *bgm);
 
 // Init wrappers
-static void menuInitWrap(AppContext *ctx)
-{ menuInit(&ctx->menu); }
+static void menuInitWrap(AppContext *ctx, sound_t *bgm)
+{ menuInit(&ctx->menu, bgm); }
 
-static void game1InitWrap(AppContext *ctx)
-{ game1Init(&ctx->game1); }
+static void game1InitWrap(AppContext *ctx, sound_t *bgm)
+{ game1Init(&ctx->game1, bgm); }
 
-static void game2InitWrap(AppContext *ctx)
-{ game2Init(&ctx->game2); }
+static void game2InitWrap(AppContext *ctx, sound_t *bgm)
+{ game2Init(&ctx->game2, bgm); }
 
-static void game3InitWrap(AppContext *ctx)
-{ game3Init(&ctx->game3); }
+static void game3InitWrap(AppContext *ctx, sound_t *bgm)
+{ game3Init(&ctx->game3, bgm); }
 
 // Update wrappers
-static game_state_t menuUpdateWrap(AppContext *ctx)
-{ return menuUpdate(&ctx->menu, &ctx->input); }
+static game_state_t menuUpdateWrap(AppContext *ctx, sound_t *bgm)
+{ return menuUpdate(&ctx->menu, &ctx->input, bgm); }
 
-static game_state_t game1UpdateWrap(AppContext *ctx)
-{ return game1Update(&ctx->game1, &ctx->input); }
+static game_state_t game1UpdateWrap(AppContext *ctx, sound_t *bgm)
+{ return game1Update(&ctx->game1, &ctx->input, bgm); }
 
-static game_state_t game2UpdateWrap(AppContext *ctx)
-{ return game2Update(&ctx->game2, &ctx->input); }
+static game_state_t game2UpdateWrap(AppContext *ctx, sound_t *bgm)
+{ return game2Update(&ctx->game2, &ctx->input, bgm); }
 
-static game_state_t game3UpdateWrap(AppContext *ctx)
-{ return game3Update(&ctx->game3, &ctx->input); }
+static game_state_t game3UpdateWrap(AppContext *ctx, sound_t *bgm)
+{ return game3Update(&ctx->game3, &ctx->input, bgm); }
 
 // Dispatch tables
 static init_fn_t init_table[] = {

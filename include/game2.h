@@ -9,13 +9,15 @@
     #define GAME2_H
 
     #include "game_types.h"
-#include "input.h"
+    #include "input.h"
+    #include "sound_manager.h"
 
-typedef struct {
-    uint8_t score;
-} Game2State;
+    typedef struct {
+        uint8_t score;
+    } Game2State;
 
-void game2Init(Game2State *game);
-game_state_t game2Update(Game2State *game, const InputState *input);
+    void game2Init(Game2State *game, sound_t *bgm);
+    game_state_t game2Update(Game2State *game,
+        const InputState *input, sound_t *bgm);
 
 #endif

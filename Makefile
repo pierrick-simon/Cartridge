@@ -20,7 +20,8 @@ LFLAGS      =   -Wl-yt0x1B -Wl-yoA -Wl-ya1
 # Dont add GBDK's include path
 # lcc adds it
 INCLUDE     =   -Wf-I./include -Wf-I./assets/tiles/ \
-				-Wf-I./assets/maps/ -Wf-I./assets/sprites/
+				-Wf-I./assets/maps/ -Wf-I./assets/sprites/ \
+				-Wf-I./assets/musics/
 
 SRC_DIR     =   src
 ASSETS_DIR  =   assets
@@ -35,6 +36,7 @@ SRCS		=   $(addprefix $(SRC_DIR)/, 			\
 					main.c 							\
 					menu.c 							\
 					cursor.c						\
+					sound_manager.c 				\
 				)									\
 				$(addprefix $(ASSETS_DIR)/, 		\
 					$(addprefix tiles/, 			\
@@ -42,6 +44,10 @@ SRCS		=   $(addprefix $(SRC_DIR)/, 			\
 					)								\
 					$(addprefix sprites/, 			\
 						playertile.c				\
+					)								\
+					$(addprefix musics/, 			\
+						sound_note.c 				\
+						starwars.c					\
 					)								\
 				)									\
 

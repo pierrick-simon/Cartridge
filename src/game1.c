@@ -9,9 +9,11 @@
 #include "game1.h"
 #include "grasstile.h"
 #include "playertile.h"
+#include "starwars.h"
 
-void game1Init(Game1State *game)
+void game1Init(Game1State *game, sound_t *bgm)
 {
+    sound_start(bgm, 3, NULL, FALSE);
     game->score = 0;
     game->player_x.w = 0;
     game->player_y.w = 0;
@@ -29,7 +31,8 @@ void game1Init(Game1State *game)
 }
 
 // implement logik here
-game_state_t game1Update(Game1State *game, const InputState *input)
+game_state_t game1Update(Game1State *game,
+    const InputState *input, sound_t *bgm)
 {
     move_player(game, input);
     if (getJustPressed(input) & J_START)

@@ -8,6 +8,7 @@
 #include <gb/gb.h>
 #include <string.h>
 #include "core.h"
+#include "sound_manager.h"
 
 void clear_screen(void) {
     uint8_t blank[20 * 18];
@@ -15,32 +16,36 @@ void clear_screen(void) {
     set_bkg_tiles(0, 0, 20, 18, blank);
 }
 
-static void transitionTo(AppContext *ctx, game_state_t next)
+static void transitionTo(AppContext *ctx, game_state_t next, sound_t *bgm)
 {
     if (next == ctx->state)
         return;
     ctx->state = next;
-    init_table[ctx->state](ctx);
+    init_table[ctx->state](ctx, bgm);
     vsync();
     clear_screen();
+    for (size_t i = 1; i <= 4; i++) {
+        mute_channel(i);
+    }
 }
 
-inline static game_state_t dispatchUpdate(AppContext *ctx)
+static game_state_t dispatchUpdate(AppContext *ctx, sound_t *bgm)
 {
-    return update_table[ctx->state](ctx);
+    return update_table[ctx->state](ctx, bgm);
 }
 
 // DISPLAY_ON GBDK, macro turns on display after init
 void main(void)
 {
     static AppContext ctx = {.state = INIT_STATE};
+    sound_t bgm;
 
-    init_table[ctx.state](&ctx);
+    init_table[ctx.state](&ctx, &bgm);
     DISPLAY_ON;
-
+    sound_init();
     while (1) {
         wait_vbl_done();
         readInput(&ctx.input);
-        transitionTo(&ctx, dispatchUpdate(&ctx));
+        transitionTo(&ctx, dispatchUpdate(&ctx, &bgm), &bgm);
     }
 }
