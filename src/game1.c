@@ -13,9 +13,9 @@
 #include "playertile.h"
 #include "starwars.h"
 
-void game1Init(Game1State *game, sound_t *bgm)
+void game1Init(Game1State *game, sound_t bgm[NB_CHANNEL])
 {
-    sound_start(bgm, 3, NULL, FALSE);
+    //sound_start(bgm, 3, NULL, FALSE);
     game->score = 0;
     game->player_x.w = 0;
     game->player_y.w = 0;
@@ -72,7 +72,7 @@ static void move_player(Game1State *game, const InputState *input)
 
 // implement logik here
 game_state_t game1Update(Game1State *game,
-    const InputState *input, sound_t *bgm)
+    const InputState *input, sound_t bgm[NB_CHANNEL])
 {
     move_player(game, input);
     if (getJustPressed(input) & J_START)

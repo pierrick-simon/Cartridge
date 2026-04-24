@@ -25,8 +25,8 @@ typedef struct {
     uint8_t player_flip;
 } Game1State;
 
-    void game1Init(Game1State *game, sound_t *bgm);
+    void game1Init(Game1State *game, sound_t bgm[NB_CHANNEL]);
     game_state_t game1Update(Game1State *game,
-        const InputState *input, sound_t *bgm);
+        const InputState *input, sound_t bgm[NB_CHANNEL]);
 
 #endif

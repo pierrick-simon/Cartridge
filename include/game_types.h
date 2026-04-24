@@ -17,6 +17,6 @@ typedef enum {
     STATE_GAME3 = 3
 } game_state_t;
 
-    #define INIT_STATE STATE_GAME1
+    #define INIT_STATE STATE_MENU
 
 #endif

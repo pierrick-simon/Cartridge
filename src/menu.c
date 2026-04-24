@@ -14,15 +14,15 @@ void printCenterString(const char *str)
 
     if (!str)
         return;
-    len = strlen(str) / 2;
+    len = strlen(str);
     for (size_t i = 0; i < (20 - len) / 2; i++)
         printf(" ");
     printf("%s\n", str);
 }
 
-void menuInit(MenuState *menu, sound_t *bgm)
+void menuInit(MenuState *menu, sound_t bgm[NB_CHANNEL])
 {
-    sound_start(bgm, 3, starwars_music, TRUE);
+    sound_start(&bgm[2], 3, starwars_music, TRUE);
     printf("\n\n\n\n\n");
     printCenterString("Game 1");
     printf("\n\n");
@@ -53,10 +53,10 @@ static void moveCursorUp(MenuState *menu)
 }
 
 game_state_t menuUpdate(MenuState *menu,
-    const InputState *input, sound_t *bgm)
+    const InputState *input, sound_t bgm[NB_CHANNEL])
 {
     uint8_t pressed = getJustPressed(input);
-    sound_update(bgm);
+    sound_update(&bgm[2]);
  
     if (pressed & J_DOWN)
         moveCursorDown(menu);

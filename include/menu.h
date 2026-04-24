@@ -19,8 +19,8 @@
         uint8_t cursor;
     } MenuState;
 
-    void menuInit(MenuState *menu, sound_t *bgm);
+    void menuInit(MenuState *menu, sound_t bgm[NB_CHANNEL]);
     game_state_t menuUpdate(MenuState *menu,
-        const InputState *input, sound_t *bgm);
+        const InputState *input, sound_t bgm[NB_CHANNEL]);
 
 #endif

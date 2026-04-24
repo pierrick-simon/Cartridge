@@ -16,8 +16,8 @@
         uint8_t score;
     } Game2State;
 
-    void game2Init(Game2State *game, sound_t *bgm);
+    void game2Init(Game2State *game, sound_t bgm[NB_CHANNEL]);
     game_state_t game2Update(Game2State *game,
-        const InputState *input, sound_t *bgm);
+        const InputState *input, sound_t bgm[NB_CHANNEL]);
 
 #endif
