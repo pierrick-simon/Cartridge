@@ -12,11 +12,18 @@
     #include "input.h"
     #include "sound_manager.h"
 
-    typedef struct {
-        uint8_t score;
-        uint8_t player_x;
-        uint8_t player_y;
-    } Game1State;
+    #define P_SPEED 1.42
+    #define P_DIAG_SPEED 1
+    #define H_TO_W(x) ((uint16_t)(x * 256))
+    #define SPEED (H_TO_W(P_SPEED))
+    #define DIAG_SPEED (H_TO_W(P_DIAG_SPEED))
+    
+typedef struct {
+    uint8_t score;
+    fixed player_x;
+    fixed player_y;
+    uint8_t player_flip;
+} Game1State;
 
     void game1Init(Game1State *game, sound_t *bgm);
     game_state_t game1Update(Game1State *game,
