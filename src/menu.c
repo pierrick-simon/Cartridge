@@ -1,10 +1,3 @@
-/*
-** EPITECH PROJECT, 2026
-** cartridge
-** File description:
-** Main menu: navigation and state transitions
-*/
-
 #include <gb/gb.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -13,6 +6,7 @@
 #include "menu.h"
 #include "input.h"
 #include "cursor.h"
+#include "starwars.h"
 
 void printCenterString(const char *str)
 {
@@ -26,12 +20,9 @@ void printCenterString(const char *str)
     printf("%s\n", str);
 }
 
-//clear screen, load menu tiles, draw game entries
-void menuInit(MenuState *menu)
+void menuInit(MenuState *menu, sound_t *bgm)
 {
-    NR52_REG = 0x80;
-    NR50_REG = 0x77;
-    NR51_REG = 0xFF;
+    sound_start(bgm, 3, starwars_music, TRUE);
     printf("\n\n\n\n\n");
     printCenterString("Game 1");
     printf("\n\n");
@@ -40,9 +31,8 @@ void menuInit(MenuState *menu)
     printCenterString("Game 3");
     set_sprite_data(0, NB_CURSOR_TILE, CursorTiles);
     set_sprite_tile(0, 0);
-    SHOW_SPRITES;
-    SPRITES_8x8;
     menu->cursor = 0;
+    SHOW_SPRITES;
     move_sprite(0, 56, 56 + 24 * menu->cursor);
 }
 
@@ -50,11 +40,7 @@ static void moveCursorDown(MenuState *menu)
 {
     menu->cursor = (menu->cursor + 1) % MENU_ENTRY_COUNT;
     move_sprite(0, 56, 56 + 24 * menu->cursor);
-    NR10_REG=0X00;
-    NR11_REG=0X81;
-    NR12_REG=0X43;
-    NR13_REG=0X73;
-    NR14_REG=0X86;
+    sound_channel1(0x00, 0x81, 0x43, 0x73, 0x86);
 }
 
 static void moveCursorUp(MenuState *menu)
@@ -63,18 +49,15 @@ static void moveCursorUp(MenuState *menu)
         ? MENU_ENTRY_COUNT - 1
         : menu->cursor - 1;
     move_sprite(0, 56, 56 + 24 * menu->cursor);
-    NR10_REG=0X00;
-    NR11_REG=0X81;
-    NR12_REG=0X43;
-    NR13_REG=0X73;
-    NR14_REG=0X86;
+    sound_channel1(0x00, 0x81, 0x43, 0x73, 0x86);
 }
 
-//draw cursor at new pos && update state if game selected
-game_state_t menuUpdate(MenuState *menu, const InputState *input)
+game_state_t menuUpdate(MenuState *menu,
+    const InputState *input, sound_t *bgm)
 {
     uint8_t pressed = getJustPressed(input);
-
+    sound_update(bgm);
+ 
     if (pressed & J_DOWN)
         moveCursorDown(menu);
     if (pressed & J_UP)
