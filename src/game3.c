@@ -64,7 +64,21 @@ void game3Init(Game3State *game)
 game_state_t game3Update(Game3State *game,
     const InputState *input)
 {
-    (void)game;
+    uint8_t held = getHeld(input);
+
+    if (held & J_LEFT) {
+        if (game->px <= 8)
+            game->px = 160;
+        else
+            game->px -= G3_PLAYER_SPEED;
+    }
+    if (held & J_RIGHT) {
+        if (game->px >= 160)
+            game->px = 8;
+        else
+            game->px += G3_PLAYER_SPEED;
+    }
+    move_sprite(G3_PLAYER_SPR, game->px, game->py);
     if (getJustPressed(input) & J_START)
         return STATE_MENU;
     return STATE_GAME3;

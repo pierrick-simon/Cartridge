@@ -29,6 +29,7 @@
     #define G3_CAMERA_Y 56
     #define G3_PLAT_GAP_MIN 24
     #define G3_PLAT_GAP_MAX 40
+    #define G3_PLAYER_SPEED 2
 
     typedef struct {
         uint8_t x;
