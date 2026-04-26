@@ -42,6 +42,7 @@ SRCS		=   $(addprefix $(SRC_DIR)/, 			\
 				$(addprefix $(ASSETS_DIR)/, 		\
 					$(addprefix tiles/, 			\
 						grasstile.c					\
+						platformtile.c				\
 					)								\
 					$(addprefix sprites/, 			\
 						playertile.c				\
