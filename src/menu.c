@@ -22,7 +22,7 @@ void printCenterString(const char *str)
 
 void menuInit(MenuState *menu, sound_t bgm[NB_CHANNEL])
 {
-    sound_start(&bgm[2], 3, starwars_music, TRUE);
+    sound_start(&bgm[0], 3, starwars_music, TRUE, 0xFF);
     printf("\n\n\n\n\n");
     printCenterString("Game 1");
     printf("\n\n");
@@ -56,8 +56,8 @@ game_state_t menuUpdate(MenuState *menu,
     const InputState *input, sound_t bgm[NB_CHANNEL])
 {
     uint8_t pressed = getJustPressed(input);
-    sound_update(&bgm[2]);
- 
+    sound_update(&bgm[0]);
+
     if (pressed & J_DOWN)
         moveCursorDown(menu);
     if (pressed & J_UP)

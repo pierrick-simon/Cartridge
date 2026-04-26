@@ -10,7 +10,7 @@ void sound_init(void)
 }
 
 void sound_start(sound_t *snd, uint8_t channel,
-    const uint8_t *music, uint8_t loop)
+    const uint8_t *music, uint8_t loop, uint8_t volume)
 {
     snd->music = music;
     snd->idx = 0;
@@ -19,21 +19,28 @@ void sound_start(sound_t *snd, uint8_t channel,
     snd->play = 0;
     snd->rest = 0;
     snd->loop = loop;
+    snd->volume = volume;
 }
 
-static void play_note(uint8_t channel, uint8_t note_id)
+static void play_note(uint8_t channel, uint8_t note_id, uint8_t volume)
 {
     uint16_t freq = note_freq[note_id];
-    uint8_t  n3 = (uint8_t)(freq & 0xFF);
-    uint8_t  n4 = (uint8_t)(freq >> 8) | 0x80;
+    uint8_t n3 = (uint8_t)(freq & 0xFF);
+    uint8_t n4 = (uint8_t)(freq >> 8) | 0x80;
+    uint8_t env = ((volume >> 4) & 0x0F) << 4;
+    uint8_t v2 = (volume >> 6) & 0x03;
+    uint8_t wave_vol = v2 << 5;
 
+    if (v2 != 0)
+        wave_vol = (4 - v2) << 5;
     if (channel == 1)
-        sound_channel1(0x80, 0x0, 0xFF, n3, n4);
+        sound_channel1(0x80, 0x80, env, n3, n4);
     if (channel == 2)
-        sound_channel2(0x80, 0xFF, n3, n4);
+        sound_channel2(0x80, env, n3, n4);
     if (channel == 3)
-        sound_channel3(0x80, 0x0, 0xFF, n3, n4);
+        sound_channel3(0x80, 0x0, wave_vol, n3, n4);
 }
+
 
 void mute_channel(uint8_t channel)
 {
@@ -89,7 +96,7 @@ static void sound_play(sound_t *sound)
     sound->play = duration_frames[play];
     sound->rest = duration_frames[rest];
     if (note != Silent)
-        play_note(sound->channel, note);
+        play_note(sound->channel, note, sound->volume);
     sound->state = SND_PLAYING;
 }
 

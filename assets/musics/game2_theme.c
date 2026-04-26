@@ -1,0 +1,26 @@
+/*
+** EPITECH PROJECT, 2026
+** Cartridge
+** File description:
+** battlefield1942
+*/
+
+#include "sound_note.h"
+
+const uint8_t game2_theme_music[] =
+{
+    PE,RT,F4,PE,RT,C4,PE,RT,A4,PE,RT,C4,PE,RT,G4,PE,RT,C4,PE,RT,F4,PE,RT,C4,
+    PE,RT,F4,PE,RT,C4,PE,RT,A4,PE,RT,C4,PE,RT,G4,PE,RT,C4,PE,RT,F4,PE,RT,C4,
+    PE,RT,F4,PE,RT,D4,PE,RT,A4,PE,RT,D4,PE,RT,G4,PE,RT,D4,PE,RT,F4,PE,RT,D4,
+    PE,RT,B4,PE,RT,D4,PE,RT,B4,PE,RT,D4,PE,RT,A4,PE,RT,D4,PE,RT,G4,PE,RT,D4,
+
+    // PQ,RT,C5,PQ,RT,A4,PQ,RT,G4,PQ,RT,F4,
+    // PQ,RT,F5,PQ,RT,A4,PQ,RT,G4,PQ,RT,F4,
+    // PQ,RT,A5,PQ,RT,A4,PQ,RT,G4,PQ,RT,F4,
+    // PQ,RT,G5,PQ,RT,B4,PQ,RT,A4,PQ,RT,G4,
+    // PQ,RT,C5,PQ,RT,A4,PQ,RT,G4,PQ,RT,F4,
+    // PQ,RT,F5,PQ,RT,A4,PQ,RT,G4,PQ,RT,F4,
+    // PQ,RT,A5,PQ,RT,A4,PQ,RT,G4,PQ,RT,F4,
+    // PQ,RT,B5,PQ,RT,B4,PQ,RT,A5,PQ,RT,G5,
+    END,END,END
+};

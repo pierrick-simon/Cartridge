@@ -11,9 +11,11 @@
 #include "spacetile.h"
 #include "spaceship1.h"
 #include "spaceship2.h"
+#include "game2_theme.h"
 
 void game2Init(Game2State *game, sound_t bgm[NB_CHANNEL])
 {
+    sound_start(&bgm[0], 3, game2_theme_music, TRUE, 0x80);
     game->nb_sprites = 0;
     set_bkg_data(0, 0, space_tiles);
     set_bkg_tiles(0, 0, 20, 18, space_map);
@@ -23,13 +25,14 @@ void game2Init(Game2State *game, sound_t bgm[NB_CHANNEL])
     game->player.nb_sprite = 2;
     game->player.y = 160 / 2;
     game->player.x = 144 / 2;
+    move_sprite(game->player.sprite_id + 1, game->player.x, game->player.y);
     SHOW_BKG;
     SHOW_SPRITES;
 }
 
 static void change_ship(Game2State *game, uint8_t pressed)
 {
-    if (!pressed & J_A)
+    if (!(pressed & J_A))
         return;
     game->player.sprite_id++;
     if (game->player.sprite_id == game->player.nb_sprite)
@@ -48,6 +51,7 @@ game_state_t game2Update(Game2State *game,
     static uint8_t clock = 0;
     uint8_t pressed = getJustPressed(input);
 
+    sound_update(&bgm[0]);
     if (clock == 4) {
         move_up_sprite(&game->sprites[game->player.sprite_id]);
         clock = 0;
