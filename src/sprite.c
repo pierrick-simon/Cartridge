@@ -51,3 +51,8 @@ void move_up_down_sprite(sprite_t *sprite)
     }
     set_sprite_tile(sprite->id, sprite->current);
 }
+
+void hide_sprite(sprite_t *sprite)
+{
+    move_sprite(sprite->id, 0, 0);
+}

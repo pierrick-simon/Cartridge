@@ -25,6 +25,7 @@ void init_sprite(const uint8_t *sprite, uint8_t size,
 
 void move_up_down_sprite(sprite_t *sprite);
 void move_up_sprite(sprite_t *sprite);
+void hide_sprite(sprite_t *sprite);
 
 #endif
 

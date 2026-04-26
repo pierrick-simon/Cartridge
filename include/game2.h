@@ -11,9 +11,20 @@
     #include "game_types.h"
     #include "input.h"
     #include "sound_manager.h"
+    #include "sprite.h"
+    
+    typedef struct {
+        uint8_t x;
+        uint8_t y;
+        uint8_t sprite_id;
+        uint8_t nb_sprite;
+    } palyer_t;
 
     typedef struct {
         uint8_t score;
+        uint8_t nb_sprites;
+        sprite_t sprites[40];
+        palyer_t player;
     } Game2State;
 
     void game2Init(Game2State *game, sound_t bgm[NB_CHANNEL]);

@@ -45,6 +45,9 @@ SRCS		=   $(addprefix $(SRC_DIR)/, 			\
 					)								\
 					$(addprefix sprites/, 			\
 						playertile.c				\
+						spacetile.c 				\
+						spaceship1.c 				\
+						spaceship2.c 				\
 					)								\
 					$(addprefix musics/, 			\
 						sound_note.c 				\
