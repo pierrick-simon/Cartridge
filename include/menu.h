@@ -15,12 +15,18 @@
 
     #define MENU_ENTRY_COUNT 3
 
+    typedef enum {
+        MENU_THEME,
+        MENU_NB_MUSIC,
+    };
+
     typedef struct {
         uint8_t cursor;
+        sound_t musics[MENU_NB_MUSIC];
     } MenuState;
 
-    void menuInit(MenuState *menu, sound_t bgm[NB_CHANNEL]);
+    void menuInit(MenuState *menu);
     game_state_t menuUpdate(MenuState *menu,
-        const InputState *input, sound_t bgm[NB_CHANNEL]);
+        const InputState *input);
 
 #endif

@@ -13,9 +13,9 @@
 #include "spaceship2.h"
 #include "game2_theme.h"
 
-void game2Init(Game2State *game, sound_t bgm[NB_CHANNEL])
+void game2Init(Game2State *game)
 {
-    sound_start(&bgm[0], 3, game2_theme_music, TRUE, 0x80);
+    sound_start(&game->musics[GAME2_THEME], 3, game2_theme_music, TRUE, 0x80);
     game->nb_sprites = 0;
     set_bkg_data(0, 0, space_tiles);
     set_bkg_tiles(0, 0, 20, 18, space_map);
@@ -46,12 +46,12 @@ static void change_ship(Game2State *game, uint8_t pressed)
 }
 
 game_state_t game2Update(Game2State *game,
-    const InputState *input, sound_t bgm[NB_CHANNEL])
+    const InputState *input)
 {
     static uint8_t clock = 0;
     uint8_t pressed = getJustPressed(input);
 
-    sound_update(&bgm[0]);
+    sound_update(&game->musics[GAME2_THEME]);
     if (clock == 4) {
         move_up_sprite(&game->sprites[game->player.sprite_id]);
         clock = 0;

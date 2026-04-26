@@ -9,15 +9,14 @@
 #include "game3.h"
 #include "input.h"
 
-void game3Init(Game3State *game, sound_t bgm[NB_CHANNEL])
+void game3Init(Game3State *game)
 {
-    // sound_start(bgm, 3, NULL, FALSE);
     game->score = 0;
 }
 
 // implement logik here
 game_state_t game3Update(Game3State *game,
-    const InputState *input, sound_t bgm[NB_CHANNEL])
+    const InputState *input)
 {
     (void)game;
     if (getJustPressed(input) & J_START)

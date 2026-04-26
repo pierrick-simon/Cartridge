@@ -10,7 +10,6 @@
 
     #include "game_types.h"
     #include "input.h"
-    #include "sound_manager.h"
 
     #define P_SPEED 1.42
     #define P_DIAG_SPEED 1
@@ -31,9 +30,9 @@ typedef struct {
     uint8_t dash_timer;
 } Game1State;
 
-    void game1Init(Game1State *game, sound_t bgm[NB_CHANNEL]);
+    void game1Init(Game1State *game);
     game_state_t game1Update(Game1State *game,
-        const InputState *input, sound_t bgm[NB_CHANNEL]);
+        const InputState *input);
 
 void move_player(Game1State *game, const InputState *input);
 

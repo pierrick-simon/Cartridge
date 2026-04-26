@@ -13,7 +13,7 @@
     #define TRUE 1
     #define FALSE 0
 
-    #define NB_CHANNEL 3
+    #define NB_CHANNEL 4
 
     typedef enum {
         SND_PLAYING,

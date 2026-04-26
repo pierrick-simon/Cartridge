@@ -13,6 +13,11 @@
     #include "sound_manager.h"
     #include "sprite.h"
     
+    typedef enum {
+        GAME2_THEME,
+        GAME2_NB_MUSIC,
+    };
+
     typedef struct {
         uint8_t x;
         uint8_t y;
@@ -24,11 +29,12 @@
         uint8_t score;
         uint8_t nb_sprites;
         sprite_t sprites[40];
+        sound_t musics[GAME2_NB_MUSIC];
         palyer_t player;
     } Game2State;
 
-    void game2Init(Game2State *game, sound_t bgm[NB_CHANNEL]);
+    void game2Init(Game2State *game);
     game_state_t game2Update(Game2State *game,
-        const InputState *input, sound_t bgm[NB_CHANNEL]);
+        const InputState *input);
 
 #endif
