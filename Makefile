@@ -37,6 +37,7 @@ SRCS		=   $(addprefix $(SRC_DIR)/, 			\
 					menu.c 							\
 					cursor.c						\
 					sound_manager.c 				\
+					sprite.c 						\
 				)									\
 				$(addprefix $(ASSETS_DIR)/, 		\
 					$(addprefix tiles/, 			\
