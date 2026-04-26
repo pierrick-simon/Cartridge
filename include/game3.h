@@ -14,6 +14,7 @@
     #include "input.h"
 
     #define G3_NB_PLATFORMS 6
+    #define G3_PLAT_TILE_IDX 8
     #define G3_PLAT_W 16
     #define G3_PLAT_H 8
     #define G3_PLAT_SPR_OFF 2
@@ -30,8 +31,8 @@
     #define G3_PLAT_GAP_MAX 40
 
     typedef struct {
-        int8_t x;
-        int8_t y;
+        uint8_t x;
+        uint8_t y;
     } platform_t;
 
     typedef enum {
@@ -41,8 +42,8 @@
 
     typedef struct {
         uint8_t score;
-        int8_t px;
-        int8_t py;
+        uint8_t px;
+        uint8_t py;
         int8_t vx;
         int8_t vy;
         platform_t platforms[G3_NB_PLATFORMS];
