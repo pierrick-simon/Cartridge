@@ -61,11 +61,49 @@ void game3Init(Game3State *game)
     SHOW_SPRITES;
 }
 
-game_state_t game3Update(Game3State *game,
-    const InputState *input)
+static void applyGravity(Game3State *game)
 {
-    uint8_t held = getHeld(input);
+    int8_t newvy = game->vy + G3_GRAVITY;
 
+    if (newvy > G3_MAX_VY)
+        newvy = G3_MAX_VY;
+    game->vy = newvy;
+    game->py = game->py + game->vy;
+}
+
+static uint8_t landedOn(const Game3State *game, uint8_t i)
+{
+    uint8_t foot = game->py;
+    uint8_t ptop = game->platforms[i].y;
+    uint8_t pleft = game->platforms[i].x;
+
+    if (game->vy <= 0)
+        return 0;
+    if (foot < ptop || foot > ptop + G3_GRAVITY + 1)
+        return 0;
+    if (game->px + G3_PLAYER_W < pleft)
+        return 0;
+    if (game->px > pleft + G3_PLAT_W)
+        return 0;
+    return 1;
+}
+
+static void checkCollisions(Game3State *game)
+{
+    uint8_t i = 0;
+
+    while (i < G3_NB_PLATFORMS) {
+        if (landedOn(game, i)) {
+            game->vy = G3_JUMP_VY;
+            game->score++;
+            return;
+        }
+        i++;
+    }
+}
+
+static void moveHorizontal(Game3State *game, uint8_t held)
+{
     if (held & J_LEFT) {
         if (game->px <= 8)
             game->px = 160;
@@ -78,6 +116,16 @@ game_state_t game3Update(Game3State *game,
         else
             game->px += G3_PLAYER_SPEED;
     }
+}
+
+game_state_t game3Update(Game3State *game,
+    const InputState *input)
+{
+    uint8_t held = getHeld(input);
+
+    moveHorizontal(game, held);
+    applyGravity(game);
+    checkCollisions(game);
     move_sprite(G3_PLAYER_SPR, game->px, game->py);
     if (getJustPressed(input) & J_START)
         return STATE_MENU;
