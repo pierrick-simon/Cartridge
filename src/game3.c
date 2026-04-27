@@ -48,13 +48,14 @@ void game3Init(Game3State *game)
     game->phase = G3_PLAY;
     game->rng = DIV_REG;
     game->px = 88;
-    game->py = 128;
+    game->py.w = 0;
+    game->py.b.h = 128;
     game->vx = 0;
     game->vy = G3_JUMP_VY;
     initPlatforms(game);
     set_sprite_data(1, 7, player_tile);
     set_sprite_tile(G3_PLAYER_SPR, P_IDLE);
-    move_sprite(G3_PLAYER_SPR, game->px, game->py);
+    move_sprite(G3_PLAYER_SPR, game->px, game->py.b.h);
     set_sprite_data(G3_PLAT_TILE_IDX, PLATFORM_TILE_SIZE, platform_tile);
     drawPlatforms(game);
     SHOW_BKG;
@@ -63,23 +64,21 @@ void game3Init(Game3State *game)
 
 static void applyGravity(Game3State *game)
 {
-    int8_t newvy = game->vy + G3_GRAVITY;
-
-    if (newvy > G3_MAX_VY)
-        newvy = G3_MAX_VY;
-    game->vy = newvy;
-    game->py = game->py + game->vy;
+    game->vy += G3_GRAVITY;
+    if (game->vy > G3_MAX_VY)
+        game->vy = G3_MAX_VY;
+    game->py.w = (uint16_t)((int16_t)game->py.w + game->vy);
 }
 
 static uint8_t landedOn(const Game3State *game, uint8_t i)
 {
-    uint8_t foot = game->py;
+    uint8_t foot = game->py.b.h;
     uint8_t ptop = game->platforms[i].y;
     uint8_t pleft = game->platforms[i].x;
 
-    if (game->vy <= 0)
+    if (game->vy <= 0 || foot == 0)
         return 0;
-    if (foot < ptop || foot > ptop + G3_GRAVITY + 1)
+    if (foot < ptop || foot > ptop + 8)
         return 0;
     if (game->px + G3_PLAYER_W < pleft)
         return 0;
@@ -126,7 +125,7 @@ game_state_t game3Update(Game3State *game,
     moveHorizontal(game, held);
     applyGravity(game);
     checkCollisions(game);
-    move_sprite(G3_PLAYER_SPR, game->px, game->py);
+    move_sprite(G3_PLAYER_SPR, game->px, game->py.b.h);
     if (getJustPressed(input) & J_START)
         return STATE_MENU;
     return STATE_GAME3;
