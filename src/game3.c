@@ -62,12 +62,60 @@ void game3Init(Game3State *game)
     SHOW_SPRITES;
 }
 
+static uint8_t nextRng(uint8_t rng)
+{
+    return rng * 53 + 1;
+}
+
+static void recyclePlatform(Game3State *game, uint8_t i, uint8_t topy)
+{
+    game->rng = nextRng(game->rng);
+    game->platforms[i].x =
+        8 + (game->rng % (G3_SCREEN_W - G3_PLAT_W - 16));
+    game->platforms[i].y = topy;
+}
+
+static void scrollWorld(Game3State *game, uint8_t delta)
+{
+    uint8_t i = 0;
+    uint8_t sid;
+    uint8_t top_y = 255;
+
+    while (i < G3_NB_PLATFORMS) {
+        game->platforms[i].y += delta;
+        if (game->platforms[i].y < top_y)
+            top_y = game->platforms[i].y;
+        i++;
+    }
+    i = 0;
+    while (i < G3_NB_PLATFORMS) {
+        if (game->platforms[i].y > G3_SCREEN_H + 16) {
+            game->rng = nextRng(game->rng);
+            recyclePlatform(game, i, top_y - G3_PLAT_GAP_MIN
+                - (game->rng % (G3_PLAT_GAP_MAX - G3_PLAT_GAP_MIN)));
+            top_y = game->platforms[i].y;
+        }
+        sid = G3_PLAT_SPR_OFF + i * 2;
+        move_sprite(sid, game->platforms[i].x, game->platforms[i].y);
+        move_sprite(sid + 1, game->platforms[i].x + 8, game->platforms[i].y);
+        i++;
+    }
+}
+
 static void applyGravity(Game3State *game)
 {
+    uint8_t delta;
+
     game->vy += G3_GRAVITY;
     if (game->vy > G3_MAX_VY)
         game->vy = G3_MAX_VY;
     game->py.w = (uint16_t)((int16_t)game->py.w + game->vy);
+    if (game->py.b.h < G3_CAMERA_Y && game->vy < 0) {
+        delta = G3_CAMERA_Y - game->py.b.h;
+        game->py.b.h = G3_CAMERA_Y;
+        game->py.b.l = 0;
+        scrollWorld(game, delta);
+    }
 }
 
 static uint8_t landedOn(const Game3State *game, uint8_t i)
