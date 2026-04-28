@@ -21,14 +21,14 @@
     #define G3_PLAYER_SPR 1
     #define G3_SCREEN_W 160
     #define G3_SCREEN_H 144
-    #define G3_JUMP_VY (-936)
+    #define G3_JUMP_VY (-830)
     #define G3_GRAVITY 32
     #define G3_MAX_VY 512
     #define G3_PLAYER_W 8
     #define G3_PLAYER_H 8
     #define G3_CAMERA_Y 56
-    #define G3_PLAT_GAP_MIN 24
-    #define G3_PLAT_GAP_MAX 40
+    #define G3_PLAT_GAP_MIN 30
+    #define G3_PLAT_GAP_MAX 52
     #define G3_PLAYER_SPEED 2
 
     typedef struct {
