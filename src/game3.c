@@ -6,6 +6,7 @@
 */
 
 #include <gb/gb.h>
+#include <stdio.h>
 #include "game3.h"
 #include "input.h"
 #include "playertile.h"
@@ -126,7 +127,7 @@ static uint8_t landedOn(const Game3State *game, uint8_t i)
 
     if (game->vy <= 0 || foot == 0)
         return 0;
-    if (foot < ptop || foot > ptop + 8)
+    if (foot < ptop - 5 || foot > ptop + 15)
         return 0;
     if (game->px + G3_PLAYER_W < pleft)
         return 0;
@@ -165,7 +166,26 @@ static void moveHorizontal(Game3State *game, uint8_t held)
     }
 }
 
-game_state_t game3Update(Game3State *game,
+static void showGameOver(const Game3State *game)
+{
+        HIDE_SPRITES;
+}
+
+static game_state_t updateDead(Game3State *game,
+    const InputState *input)
+{
+    uint8_t pressed = getJustPressed(input);
+
+    if (pressed & J_A) {
+        game3Init(game);
+        return STATE_GAME3;
+    }
+    if (pressed & J_START)
+        return STATE_MENU;
+    return STATE_GAME3;
+}
+
+static game_state_t updatePlay(Game3State *game,
     const InputState *input)
 {
     uint8_t held = getHeld(input);
@@ -174,7 +194,19 @@ game_state_t game3Update(Game3State *game,
     applyGravity(game);
     checkCollisions(game);
     move_sprite(G3_PLAYER_SPR, game->px, game->py.b.h);
+    if (game->py.b.h > G3_SCREEN_H + 16) {
+        game->phase = G3_DEAD;
+        showGameOver(game);
+    }
     if (getJustPressed(input) & J_START)
         return STATE_MENU;
     return STATE_GAME3;
+}
+
+game_state_t game3Update(Game3State *game,
+    const InputState *input)
+{
+    if (game->phase == G3_DEAD)
+        return updateDead(game, input);
+    return updatePlay(game, input);
 }
