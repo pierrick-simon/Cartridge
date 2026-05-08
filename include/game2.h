@@ -16,10 +16,17 @@
     #define NB_AMMUNITION 3
 
     typedef enum {
-        GAME2_SHIP1,
-        GAME2_SHIP2,
-        GAME2_AMMUNITION,
-        NB_GAME2_SPRITE,
+        GAME2_VRAM_SHIP1,
+        GAME2_VRAM_SHIP2,
+        GAME2_VRAM_AMMUNITION,
+        NB_GAME2_VRAM,
+    };
+
+    typedef enum {
+        GAME2_PLAYER,
+        GAME2_AMMUNITION1,
+        GAME2_AMMUNITION2,
+        GAME2_AMMUNITION3,
     };
 
     typedef enum {
@@ -44,7 +51,7 @@
     typedef struct {
         uint8_t score;
         uint8_t nb_vram;
-        vram_sprite_t vram[NB_GAME2_SPRITE];
+        vram_sprite_t vram[NB_GAME2_VRAM];
         sprite_t sprites[MAX_SPRITE];
         sound_t musics[GAME2_NB_MUSIC];
         ammunition_t ammunitions[NB_AMMUNITION];
