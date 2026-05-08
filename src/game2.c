@@ -11,7 +11,31 @@
 #include "spacetile.h"
 #include "spaceship1.h"
 #include "spaceship2.h"
+#include "spaceship3.h"
 #include "game2_theme.h"
+#include "explosion.h"
+
+static void init_player(Game2State *game)
+{
+    game->player.vram_id = GAME2_VRAM_SHIP1;
+    game->player.nb_skins = 2;
+    game->player.x = 160 / 2;
+    game->player.y = 144 - 8;
+    init_sprite(game->player.vram_id, GAME2_PLAYER, game->sprites, game->vram);
+    move_sprite(GAME2_PLAYER, game->player.x, game->player.y);
+}
+
+static void init_ammunition(Game2State *game)
+{
+    for (uint8_t i = 0; i <  NB_AMMUNITION; i++) {
+        game->ammunitions[i].shoot = 0;
+        game->ammunitions[i].x = 0;
+        game->ammunitions[i].y = 0;
+        init_sprite(GAME2_VRAM_AMMUNITION, i + GAME2_AMMUNITION1,
+            game->sprites, game->vram);
+        hide_sprite(&game->sprites[i]);
+    }
+}
 
 void game2Init(Game2State *game)
 {
@@ -23,21 +47,17 @@ void game2Init(Game2State *game)
     set_bkg_tiles(0, 0, 32, 32, space_map);
     init_vram_sprite(spaceship1_tiles, SPACESHIP1_SIZE, &game->nb_vram, game->vram);
     init_vram_sprite(spaceship2_tiles, SPACESHIP2_SIZE, &game->nb_vram, game->vram);
+    init_vram_sprite(spaceship3_tiles, SPACESHIP3_SIZE, &game->nb_vram, game->vram);
     init_vram_sprite(projectile1_tiles, PROJECTILE1_SIZE, &game->nb_vram, game->vram);
-    init_sprite(game->player.vram_id, GAME2_PLAYER, game->sprites, game->vram);
-    for (uint8_t i = 0; i <  NB_AMMUNITION; i++) {
-        game->ammunitions[i].shoot = 0;
-        game->ammunitions[i].x = 0;
-        game->ammunitions[i].y = 0;
-        init_sprite(GAME2_VRAM_AMMUNITION, i + GAME2_AMMUNITION1, game->sprites, game->vram);
-        hide_sprite(&game->sprites[i]);
-    }
-    game->player.vram_id = GAME2_VRAM_SHIP1;
-    game->player.nb_skins = 2;
-    game->player.x = 160 / 2;
-    game->player.y = 144 - 8;
-    move_sprite(GAME2_PLAYER, game->player.x, game->player.y);
-    
+    init_vram_sprite(explosion_tiles, EXPLOSION_SIZE, &game->nb_vram, game->vram);
+    init_player(game);
+    init_ammunition(game);
+    init_sprite(GAME2_VRAM_SHIP3, GAME2_ENEMY1, game->sprites, game->vram);
+    game->enemies[0].vram_id = GAME2_VRAM_SHIP3;
+    game->enemies[0].show = 1;
+    game->enemies[0].x = 160 / 2;
+    game->enemies[0].y = 16;
+    game->enemies[0].explode = 0;
     SHOW_BKG;
     SHOW_SPRITES;
 }
@@ -107,15 +127,65 @@ static void handle_ammunition(Game2State *game, uint8_t pressed)
     }
 }
 
+static void handle_shown_enemy(Game2State *game, uint8_t i, uint8_t clock)
+{
+    if (clock % 2 == 0)
+        move_up_sprite(&game->sprites[i + GAME2_ENEMY1], game->vram);
+    move_sprite(i + GAME2_ENEMY1, game->enemies[i].x, game->enemies[i].y);
+}
+
+static void handle_explode_enemy(Game2State *game, uint8_t i, uint8_t clock)
+{
+    sprite_t *sprite = &game->sprites[i + GAME2_ENEMY1];
+
+    if (sprite->anim_up == 0 && sprite->current
+        == game->vram[sprite->vram_id].start) {
+        game->enemies[i].explode = 0;
+        game->enemies[i].show = 1;
+        init_sprite(GAME2_VRAM_SHIP3, GAME2_ENEMY1 + i, game->sprites, game->vram);
+    } else if (clock % 2 == 0)
+        move_up_down_sprite(sprite, game->vram);
+}
+
+static void check_hit_enemy(Game2State *game, enemy_t *enemy, uint8_t id)
+{
+    for (uint8_t i = 0; i < NB_AMMUNITION; i++) {
+        if (game->ammunitions[i].shoot == 0)
+            continue;
+        if (game->ammunitions[i].y == enemy->y + 8
+            && game->ammunitions[i].x + 3 > enemy->x + 1
+            && game->ammunitions[i].x + 3 < enemy->x + 7) {
+            enemy->explode = 1;
+            init_sprite(GAME2_VRAM_EXPLOSION, GAME2_ENEMY1 + id, game->sprites, game->vram);
+            hide_sprite(&game->sprites[i + GAME2_AMMUNITION1]);
+            sound_channel1(0x00, 0x81, 0x43, 0x73, 0x86);
+            break;
+        }
+    }
+}
+
+static void handle_enemies(Game2State *game, uint8_t clock)
+{
+    for (uint8_t i = 0; i < NB_ENEMY; i++) {
+        if (game->enemies[i].show == 0)
+            continue;
+        if (game->enemies[i].explode == 0) {
+            handle_shown_enemy(game, i, clock);
+            check_hit_enemy(game, &game->enemies[i], i);
+        } else
+            handle_explode_enemy(game, i, clock);
+    }
+}
 
 game_state_t game2Update(Game2State *game, const InputState *input)
 {
     static uint8_t clock = 0;
     uint8_t pressed = getJustPressed(input);
 
-    sound_update(&game->musics[GAME2_THEME]);
+    // sound_update(&game->musics[GAME2_THEME]);
     handle_player(game, input, pressed, clock);
     handle_ammunition(game, pressed);
+    handle_enemies(game, clock);
     game->bg_y--;
     move_bkg(game->bg_x, game->bg_y);
     clock++;

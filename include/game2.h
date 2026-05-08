@@ -14,11 +14,14 @@
     #include "sprite.h"
     
     #define NB_AMMUNITION 3
+    #define NB_ENEMY 3
 
     typedef enum {
         GAME2_VRAM_SHIP1,
         GAME2_VRAM_SHIP2,
+        GAME2_VRAM_SHIP3,
         GAME2_VRAM_AMMUNITION,
+        GAME2_VRAM_EXPLOSION,
         NB_GAME2_VRAM,
     };
 
@@ -27,6 +30,7 @@
         GAME2_AMMUNITION1,
         GAME2_AMMUNITION2,
         GAME2_AMMUNITION3,
+        GAME2_ENEMY1,
     };
 
     typedef enum {
@@ -45,6 +49,14 @@
         uint8_t x;
         uint8_t y;
         uint8_t vram_id;
+        uint8_t show;
+        uint8_t explode;
+    } enemy_t;
+
+    typedef struct {
+        uint8_t x;
+        uint8_t y;
+        uint8_t vram_id;
         uint8_t shoot;
     } ammunition_t;
 
@@ -55,6 +67,7 @@
         sprite_t sprites[MAX_SPRITE];
         sound_t musics[GAME2_NB_MUSIC];
         ammunition_t ammunitions[NB_AMMUNITION];
+        enemy_t enemies[NB_ENEMY];
         palyer_t player;
         uint8_t bg_x;
         uint8_t bg_y;
