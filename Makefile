@@ -52,6 +52,7 @@ SRCS		=   $(addprefix $(SRC_DIR)/, 			\
 						spaceship1.c 				\
 						spaceship2.c 				\
 						spaceship3.c 				\
+						spaceship4.c 				\
 						explosion.c 				\
 					)								\
 					$(addprefix musics/, 			\

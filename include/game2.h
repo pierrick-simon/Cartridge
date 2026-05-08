@@ -15,12 +15,14 @@
     
     #define NB_AMMUNITION 3
     #define NB_ENEMY 15
+    #define NB_ENEMY_SKIN 2
     #define NB_SKIN 2
 
     typedef enum {
         GAME2_VRAM_SHIP1,
         GAME2_VRAM_SHIP2,
         GAME2_VRAM_SHIP3,
+        GAME2_VRAM_SHIP4,
         GAME2_VRAM_AMMUNITION,
         GAME2_VRAM_EXPLOSION,
         NB_GAME2_VRAM,

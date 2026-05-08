@@ -12,6 +12,7 @@
 #include "spaceship1.h"
 #include "spaceship2.h"
 #include "spaceship3.h"
+#include "spaceship4.h"
 #include "game2_theme.h"
 #include "explosion.h"
 
@@ -44,6 +45,8 @@ static void init_vram(Game2State *game)
         &game->nb_vram, game->vram);
     init_vram_sprite(spaceship3_tiles, SPACESHIP3_SIZE,
         &game->nb_vram, game->vram);
+    init_vram_sprite(spaceship4_tiles, SPACESHIP4_SIZE,
+        &game->nb_vram, game->vram);
     init_vram_sprite(projectile1_tiles, PROJECTILE1_SIZE,
         &game->nb_vram, game->vram);
     init_vram_sprite(explosion_tiles, EXPLOSION_SIZE,
@@ -52,11 +55,15 @@ static void init_vram(Game2State *game)
 
 static void init_enemies(Game2State *game)
 {
+    uint8_t ship_skin = 0;
+
     for (uint8_t i = 0; i < NB_ENEMY; i++) {
-        init_sprite(GAME2_VRAM_SHIP3, GAME2_ENEMY1 + i,
+        ship_skin = (rand() % NB_ENEMY_SKIN) + GAME2_VRAM_SHIP3;
+        init_sprite(ship_skin, GAME2_ENEMY1 + i,
             game->sprites, game->vram);
-        game->sprites[GAME2_ENEMY1 + i].current = rand() % SPACESHIP3_SIZE;
-        game->enemies[i].vram_id = GAME2_VRAM_SHIP3;
+        game->sprites[GAME2_ENEMY1 + i].current = rand() % SPACESHIP3_SIZE
+            + game->vram[ship_skin].start;
+        game->enemies[i].vram_id = ship_skin;
         game->enemies[i].show = 1;
         game->enemies[i].x = 16 + i * 8;
         game->enemies[i].y = 16 + i * 4;

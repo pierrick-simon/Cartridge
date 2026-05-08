@@ -6,6 +6,7 @@
 */
 
 #include <gb/gb.h>
+#include <rand.h>
 #include "game2.h"
 #include "input.h"
 
@@ -23,9 +24,9 @@ static void change_ship(Game2State *game, uint8_t pressed)
 static void move_everything(Game2State *game, uint8_t value)
 {
     if (value > 2)
-        game->bg_x--;
-    else
         game->bg_x++;
+    else
+        game->bg_x--;
     for (uint8_t i = 0; i < NB_AMMUNITION; i++) {
         if (game->ammunitions[i].shoot == 0)
             continue;
@@ -97,12 +98,15 @@ static void handle_shown_enemy(Game2State *game, uint8_t i, uint8_t clock)
 static void handle_explode_enemy(Game2State *game, uint8_t i, uint8_t clock)
 {
     sprite_t *sprite = &game->sprites[i + GAME2_ENEMY1];
+    uint8_t ship_skin = 0;
 
     if (sprite->anim_up == 0 && sprite->current
         == game->vram[sprite->vram_id].start) {
         game->enemies[i].explode = 0;
         game->enemies[i].show = 1;
-        init_sprite(GAME2_VRAM_SHIP3, GAME2_ENEMY1 + i, game->sprites, game->vram);
+        ship_skin = (rand() % NB_ENEMY_SKIN) + GAME2_VRAM_SHIP3;
+        game->enemies[i].vram_id = ship_skin;
+        init_sprite(ship_skin, GAME2_ENEMY1 + i, game->sprites, game->vram);
     } else if (clock % 2 == 0)
         move_up_down_sprite(sprite, game->vram);
 }
