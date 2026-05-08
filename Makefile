@@ -59,6 +59,7 @@ SRCS		=   $(addprefix $(SRC_DIR)/, 			\
 						sound_note.c 				\
 						starwars.c					\
 						game2_theme.c 				\
+						power.c 					\
 					)								\
 				)									\
 

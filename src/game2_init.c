@@ -15,6 +15,7 @@
 #include "spaceship4.h"
 #include "game2_theme.h"
 #include "explosion.h"
+#include "power.h"
 
 static void init_player(Game2State *game)
 {
@@ -77,6 +78,10 @@ void game2Init(Game2State *game)
     game->bg_x = 0;
     game->bg_y = 0;
     sound_start(&game->musics[GAME2_THEME], 3, game2_theme_music, TRUE, 0x80);
+    sound_start(&game->musics[GAME2_POWER_UP], 1, power_up_sound, FALSE, 0x80);
+    sound_start(&game->musics[GAME2_POWER_DOWN], 1, power_down_sound, FALSE, 0x80);
+    game->musics[GAME2_POWER_UP].state = SND_OFF;
+    game->musics[GAME2_POWER_DOWN].state = SND_OFF;
     set_bkg_data(0, 4, space_tiles);
     set_bkg_tiles(0, 0, 32, 32, space_map);
     init_vram(game);

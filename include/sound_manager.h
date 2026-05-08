@@ -37,6 +37,7 @@
     void sound_start(sound_t *snd, uint8_t channel,
         const uint8_t *music, uint8_t loop, uint8_t volume);
     void sound_update(sound_t *snd);
+    void reset_sound(sound_t *sound);
     void sound_channel1(
         uint8_t b0, uint8_t b1, uint8_t b2, uint8_t b3, uint8_t b4);
     void sound_channel2(uint8_t b1, uint8_t b2, uint8_t b3, uint8_t b4);

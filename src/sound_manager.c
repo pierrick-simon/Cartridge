@@ -82,7 +82,7 @@ static void sound_play(sound_t *sound)
 
     if (play == END) {
         if (sound->loop) {
-            sound->idx  = 0;
+            reset_sound(sound);
             play = sound->music[sound->idx];
         } else {
             sound->state = SND_OFF;
@@ -109,6 +109,13 @@ void sound_update(sound_t *sound)
     if (sound->state == SND_RESTING)
         return sound_resting(sound);
     sound_play(sound);
+}
+
+void reset_sound(sound_t *sound)
+{
+    sound->idx = 0;
+    sound->state = SND_NEXT_NOTE;
+    sound->play = 0;
 }
 
 void sound_channel1(uint8_t b0, uint8_t b1, uint8_t b2, uint8_t b3, uint8_t b4)

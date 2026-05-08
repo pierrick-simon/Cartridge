@@ -52,6 +52,8 @@
 
     typedef enum {
         GAME2_THEME,
+        GAME2_POWER_UP,
+        GAME2_POWER_DOWN,
         GAME2_NB_MUSIC,
     };
 

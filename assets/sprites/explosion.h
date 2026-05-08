@@ -8,7 +8,7 @@
 #ifndef EXPLOSION_H_
     #define EXPLOSION_H_
 
-    #define EXPLOSION_SIZE 5
+    #define EXPLOSION_SIZE 13
 
     extern unsigned char explosion_tiles[];
 

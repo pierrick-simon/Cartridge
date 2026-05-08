@@ -12,8 +12,11 @@
 
 static void change_ship(Game2State *game, uint8_t pressed)
 {
+    if (pressed & J_DOWN)
+        reset_sound(&game->musics[GAME2_POWER_DOWN]);
     if (!(pressed & J_UP))
         return;
+    reset_sound(&game->musics[GAME2_POWER_UP]);
     game->player.vram_id++;
     if (game->player.vram_id >= game->player.nb_skins)
         game->player.vram_id = 0;
@@ -68,6 +71,7 @@ static uint8_t shoot(Game2State *game, uint8_t id)
     game->ammunitions[id].shoot = 1;
     game->ammunitions[id].x = game->player.x;
     game->ammunitions[id].y = game->player.y;
+    sound_channel1(0x2A, 0x80, 0xF1, 0xA9, 0x87);
     return 1;
 }
 
@@ -100,15 +104,15 @@ static void handle_explode_enemy(Game2State *game, uint8_t i, uint8_t clock)
     sprite_t *sprite = &game->sprites[i + GAME2_ENEMY1];
     uint8_t ship_skin = 0;
 
-    if (sprite->anim_up == 0 && sprite->current
-        == game->vram[sprite->vram_id].start) {
+    if (sprite->current
+        == game->vram[sprite->vram_id].end - 1) {
         game->enemies[i].explode = 0;
         game->enemies[i].show = 1;
         ship_skin = (rand() % NB_ENEMY_SKIN) + GAME2_VRAM_SHIP3;
         game->enemies[i].vram_id = ship_skin;
         init_sprite(ship_skin, GAME2_ENEMY1 + i, game->sprites, game->vram);
     } else if (clock % 2 == 0)
-        move_up_down_sprite(sprite, game->vram);
+        move_up_sprite(sprite, game->vram);
 }
 
 static void check_hit_enemy(Game2State *game, enemy_t *enemy, uint8_t id)
@@ -121,9 +125,10 @@ static void check_hit_enemy(Game2State *game, enemy_t *enemy, uint8_t id)
             && game->ammunitions[i].x + 3 >= enemy->x + 1
             && game->ammunitions[i].x + 3 < enemy->x + 7) {
             enemy->explode = 1;
-            init_sprite(GAME2_VRAM_EXPLOSION, GAME2_ENEMY1 + id, game->sprites, game->vram);
+            init_sprite(GAME2_VRAM_EXPLOSION, GAME2_ENEMY1 + id,
+                game->sprites, game->vram);
             game->ammunitions[i].y = 8;
-            sound_channel1(0x00, 0x81, 0x43, 0x73, 0x86);
+            sound_channel4(0x00, 0xF2, 0x57, 0x80);
             break;
         }
     }
