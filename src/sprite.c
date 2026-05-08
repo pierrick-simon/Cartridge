@@ -26,11 +26,11 @@ void init_sprite(uint8_t vram_id, uint8_t nb,
 {
     if (nb >= MAX_SPRITE)
         return;
-    sprites[nb].id = nb + 1;
+    sprites[nb].id = nb;
     sprites[nb].vram_id = vram_id;
     sprites[nb].current = vram[vram_id].start;
     sprites[nb].anim_up = 1;
-    set_sprite_tile(nb + 1, vram[vram_id].start);
+    set_sprite_tile(nb, vram[vram_id].start);
 }
 
 void copy_sprite(uint8_t *nb, uint8_t copy, sprite_t sprites[MAX_SPRITE])

@@ -30,20 +30,20 @@
     typedef struct {
         uint8_t x;
         uint8_t y;
-        uint8_t sprite_id;
-        uint8_t nb_sprite;
+        uint8_t vram_id;
+        uint8_t nb_skins;
     } palyer_t;
 
     typedef struct {
         uint8_t x;
         uint8_t y;
-        uint8_t sprite_id;
+        uint8_t vram_id;
         uint8_t shoot;
     } ammunition_t;
 
     typedef struct {
         uint8_t score;
-        uint8_t nb_sprites;
+        uint8_t nb_vram;
         vram_sprite_t vram[NB_GAME2_SPRITE];
         sprite_t sprites[MAX_SPRITE];
         sound_t musics[GAME2_NB_MUSIC];
