@@ -21,13 +21,12 @@ void game2Init(Game2State *game)
     sound_start(&game->musics[GAME2_THEME], 3, game2_theme_music, TRUE, 0x80);
     set_bkg_data(0, 4, space_tiles);
     set_bkg_tiles(0, 0, 32, 32, space_map);
-    init_sprite(spaceship1_tiles, SPACESHIP1_SIZE, &game->nb_sprites, game->sprites);
-    init_sprite(spaceship2_tiles, SPACESHIP2_SIZE, &game->nb_sprites, game->sprites);
-    init_sprite(projectile1_tiles, PROJECTILE1_SIZE, &game->nb_sprites, game->sprites);
-    copy_sprite(&game->nb_sprites, 2, game->sprites);
-    copy_sprite(&game->nb_sprites, 2, game->sprites);
+    init_vram_sprite(spaceship1_tiles, SPACESHIP1_SIZE, &game->nb_sprites, game->vram);
+    init_vram_sprite(spaceship2_tiles, SPACESHIP2_SIZE, &game->nb_sprites, game->vram);
+    init_vram_sprite(projectile1_tiles, PROJECTILE1_SIZE, &game->nb_sprites, game->vram);
     game->player.sprite_id = 0;
     game->player.nb_sprite = 2;
+    init_sprite(game->player.sprite_id, 0, game->sprites, game->vram);
     game->player.y = 144 - 8;
     game->player.x = 160 / 2;
     move_sprite(game->player.sprite_id + 1, game->player.x, game->player.y);
@@ -42,12 +41,7 @@ static void change_ship(Game2State *game, uint8_t pressed)
     game->player.sprite_id++;
     if (game->player.sprite_id == game->player.nb_sprite)
         game->player.sprite_id = 0;
-    for (uint8_t i = 0; i < game->player.nb_sprite; i++) {
-        if (i == game->player.sprite_id)
-            move_sprite(i + 1, game->player.x, game->player.y);
-        else
-            hide_sprite(&game->sprites[i]);
-    }
+    init_sprite(game->player.sprite_id, 0, game->sprites, game->vram);
 }
 
 game_state_t game2Update(Game2State *game,
@@ -58,14 +52,14 @@ game_state_t game2Update(Game2State *game,
     static uint8_t projectile_y = 0;
     static uint8_t projectile_x = 0;
 
-    if (projectile_y) {
-        projectile_y--;
-        move_sprite(3, projectile_x, projectile_y);
-        move_up_sprite(&game->sprites[2]);
-    }
+    // if (projectile_y) {
+    //     projectile_y--;
+    //     move_sprite(3, projectile_x, projectile_y);
+    //     move_up_sprite(&game->sprites[2]);
+    // }
     sound_update(&game->musics[GAME2_THEME]);
     if (clock == 4) {
-        move_up_sprite(&game->sprites[game->player.sprite_id]);
+        move_up_sprite(&game->sprites[0], game->vram);
         clock = 0;
     }
     clock++;
@@ -90,10 +84,10 @@ game_state_t game2Update(Game2State *game,
         move_bkg(game->bg_x, game->bg_y);
         move_sprite(game->player.sprite_id + 1, game->player.x, game->player.y);
     }
-    if (pressed & J_UP) {
-        projectile_y = game->player.y;
-        projectile_x = game->player.x;
-    }
+    // if (pressed & J_UP) {
+    //     projectile_y = game->player.y;
+    //     projectile_x = game->player.x;
+    // }
     // if (getHeld(input) & J_UP) {
     //     game->bg_y--;
     //     move_bkg(game->bg_x, game->bg_y);

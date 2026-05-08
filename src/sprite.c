@@ -8,23 +8,29 @@
 #include <gb/gb.h>
 #include "sprite.h"
 
-void init_sprite(const uint8_t *sprite, uint8_t size,
-    uint8_t *nb, sprite_t sprites[MAX_SPRITE])
+void init_vram_sprite(const uint8_t *data, uint8_t size,
+    uint8_t *nb_vram, vram_sprite_t *vram)
 {
-    uint8_t start = 1;
+    uint8_t start = 0;
 
-    if (*nb >= MAX_SPRITE)
+    if (*nb_vram != 0)
+        start = vram[*nb_vram - 1].end;
+    vram[*nb_vram].start = start;
+    vram[*nb_vram].end = start + size;
+    set_sprite_data(start, size, data);
+    (*nb_vram)++;
+}
+
+void init_sprite(uint8_t vram_id, uint8_t nb,
+    sprite_t sprites[MAX_SPRITE], const vram_sprite_t *vram)
+{
+    if (nb >= MAX_SPRITE)
         return;
-    if (*nb != 0)
-        start = sprites[*nb - 1].end;
-    sprites[*nb].id = *nb + 1;
-    sprites[*nb].start = start;
-    sprites[*nb].end = start + size;
-    sprites[*nb].current = start;
-    sprites[*nb].anim_up = 1;
-    set_sprite_data(start, size, sprite);
-    set_sprite_tile(*nb + 1, start);
-    (*nb)++;
+    sprites[nb].id = nb + 1;
+    sprites[nb].vram_id = vram_id;
+    sprites[nb].current = vram[vram_id].start;
+    sprites[nb].anim_up = 1;
+    set_sprite_tile(nb + 1, vram[vram_id].start);
 }
 
 void copy_sprite(uint8_t *nb, uint8_t copy, sprite_t sprites[MAX_SPRITE])
@@ -32,31 +38,34 @@ void copy_sprite(uint8_t *nb, uint8_t copy, sprite_t sprites[MAX_SPRITE])
     if (*nb >= MAX_SPRITE || copy >= MAX_SPRITE)
         return;
     sprites[*nb].id = *nb + 1;
-    sprites[*nb].start = sprites[copy].start;
-    sprites[*nb].end = sprites[copy].end;
-    sprites[*nb].current = sprites[copy].start;
+    sprites[*nb].vram_id = sprites[copy].vram_id;
+    sprites[*nb].current = sprites[copy].current;
     sprites[*nb].anim_up = 1;
     (*nb)++;
 }
 
-void move_up_sprite(sprite_t *sprite)
+void move_up_sprite(sprite_t *sprite,
+    const vram_sprite_t *vram)
 {
+    const vram_sprite_t *v = &vram[sprite->vram_id];
+
     sprite->current++;
-    if (sprite->current == sprite->end)
-        sprite->current = sprite->start;
+    if (sprite->current >= v->end)
+        sprite->current = v->start;
     set_sprite_tile(sprite->id, sprite->current);
 }
 
-void move_up_down_sprite(sprite_t *sprite)
+void move_up_down_sprite(sprite_t *sprite, const vram_sprite_t *vram)
 {
+    const vram_sprite_t *v = &vram[sprite->vram_id];
+
     if (sprite->anim_up) {
-        if (sprite->current == sprite->end - 1)
+        if (sprite->current >= v->end - 1)
             sprite->anim_up = 0;
         else
             sprite->current++;
-
     } else {
-        if (sprite->current == sprite->start)
+        if (sprite->current <= v->start)
             sprite->anim_up = 1;
         else
             sprite->current--;
