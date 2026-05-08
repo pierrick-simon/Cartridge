@@ -27,6 +27,18 @@ void init_sprite(const uint8_t *sprite, uint8_t size,
     (*nb)++;
 }
 
+void copy_sprite(uint8_t *nb, uint8_t copy, sprite_t sprites[MAX_SPRITE])
+{
+    if (*nb >= MAX_SPRITE || copy >= MAX_SPRITE)
+        return;
+    sprites[*nb].id = *nb + 1;
+    sprites[*nb].start = sprites[copy].start;
+    sprites[*nb].end = sprites[copy].end;
+    sprites[*nb].current = sprites[copy].start;
+    sprites[*nb].anim_up = 1;
+    (*nb)++;
+}
+
 void move_up_sprite(sprite_t *sprite)
 {
     sprite->current++;

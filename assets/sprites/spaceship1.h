@@ -9,7 +9,10 @@
     #define SPACESHIP1_H_
 
     #define SPACESHIP1_SIZE 4
+    #define PROJECTILE1_SIZE 4
 
     extern unsigned char spaceship1_tiles[];
+    extern unsigned char projectile1_tiles[];
+    extern unsigned char ammunition1_tiles[];
 
 #endif /* !SPACESHIP1_H_ */

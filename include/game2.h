@@ -13,6 +13,16 @@
     #include "sound_manager.h"
     #include "sprite.h"
     
+    #define NB_AMMUNITION 3
+
+    typedef enum {
+        GAME2_SHIP1 = 1,
+        GAME2_SHIP2,
+        GAME2_AMMUNITION1,
+        GAME2_AMMUNITION2,
+        GAME2_AMMUNITION3,
+    };
+
     typedef enum {
         GAME2_THEME,
         GAME2_NB_MUSIC,
@@ -26,11 +36,21 @@
     } palyer_t;
 
     typedef struct {
+        uint8_t x;
+        uint8_t y;
+        uint8_t sprite_id;
+        uint8_t shoot;
+    } ammunition_t;
+
+    typedef struct {
         uint8_t score;
         uint8_t nb_sprites;
-        sprite_t sprites[40];
+        sprite_t sprites[MAX_SPRITE];
         sound_t musics[GAME2_NB_MUSIC];
+        ammunition_t ammunitions[NB_AMMUNITION];
         palyer_t player;
+        uint8_t bg_x;
+        uint8_t bg_y;
     } Game2State;
 
     void game2Init(Game2State *game);

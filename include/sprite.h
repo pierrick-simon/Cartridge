@@ -22,6 +22,7 @@
 
 void init_sprite(const uint8_t *sprite, uint8_t size,
     uint8_t *nb, sprite_t sprites[MAX_SPRITE]);
+void copy_sprite(uint8_t *nb, uint8_t copy, sprite_t sprites[MAX_SPRITE]);
 
 void move_up_down_sprite(sprite_t *sprite);
 void move_up_sprite(sprite_t *sprite);
