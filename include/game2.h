@@ -14,7 +14,8 @@
     #include "sprite.h"
     
     #define NB_AMMUNITION 3
-    #define NB_ENEMY 3
+    #define NB_ENEMY 15
+    #define NB_SKIN 2
 
     typedef enum {
         GAME2_VRAM_SHIP1,
@@ -31,6 +32,20 @@
         GAME2_AMMUNITION2,
         GAME2_AMMUNITION3,
         GAME2_ENEMY1,
+        GAME2_ENEMY2,
+        GAME2_ENEMY3,
+        GAME2_ENEMY4,
+        GAME2_ENEMY5,
+        GAME2_ENEMY6,
+        GAME2_ENEMY7,
+        GAME2_ENEMY8,
+        GAME2_ENEMY9,
+        GAME2_ENEMY10,
+        GAME2_ENEMY11,
+        GAME2_ENEMY12,
+        GAME2_ENEMY13,
+        GAME2_ENEMY14,
+        GAME2_ENEMY15,
     };
 
     typedef enum {
@@ -76,5 +91,10 @@
     void game2Init(Game2State *game);
     game_state_t game2Update(Game2State *game,
         const InputState *input);
+
+    void handle_enemies(Game2State *game, uint8_t clock);
+    void handle_ammunition(Game2State *game, uint8_t pressed);
+    void handle_player(Game2State *game, const InputState *input,
+        uint8_t pressed, uint8_t clock);
 
 #endif
