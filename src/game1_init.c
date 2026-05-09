@@ -33,12 +33,12 @@ static void init_vram(g1_state *game)
 
 static void init_hearts(g1_state *game)
 {
-    for (uint8_t i = 0; i < NB_HEART; i++) {
+    for (uint8_t i = 0; i < G1_NB_HEART; i++) {
         init_sprite(GAME1_VRAM_HEART, GAME1_HEART1 + i,
             game->sprites, game->vram);
         game->player.hearts[i].show = 1;
         game->player.hearts[i].y = 148;
-        game->player.hearts[i].x = 160 - 10 * NB_HEART + 10 * i;
+        game->player.hearts[i].x = 160 - 10 * G1_NB_HEART + 10 * i;
         move_sprite(GAME1_HEART1 + i,
             game->player.hearts[i].x, game->player.hearts[i].y);
     }

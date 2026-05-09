@@ -15,7 +15,7 @@
 static void change_playertile(g1_state *game, const input_state *input)
 {
     uint8_t touch = getHeld(input);
-    uint8_t dash = game->player.dash_timer >= DASH_DELTA_TIME;
+    uint8_t dash = game->player.dash_timer >= G1_DASH_DELTA_TIME;
 
     if ((touch & J_UP && touch & J_LEFT) || (touch & J_DOWN && touch & J_RIGHT)) {
         game->player.flip = S_FLIPY;
@@ -33,13 +33,13 @@ static void change_playertile(g1_state *game, const input_state *input)
 static void replace_player(g1_state *game)
 {
     if (game->player.y.b.h < 8 + 8)
-        game->player.y.w = H_TO_W(8 + 8);
+        game->player.y.w = G1_H_TO_W(8 + 8);
     if (game->player.y.b.h > 144 - 8)
-        game->player.y.w = H_TO_W(144 - 8);
+        game->player.y.w = G1_H_TO_W(144 - 8);
     if (game->player.x.b.h > 160)
-        game->player.x.w = H_TO_W(160);
+        game->player.x.w = G1_H_TO_W(160);
     if (game->player.x.b.h < 8)
-        game->player.x.w = H_TO_W(8);
+        game->player.x.w = G1_H_TO_W(8);
 }
 
 static void move_classic(g1_state *game,
@@ -59,22 +59,22 @@ static void move_dash(g1_state *game,
     const uint8_t touch, const uint16_t speed)
 {
     if (game->player.dash_timer != 0) {
-        if (game->player.dash_timer >= DASH_DELTA_TIME)
-            return move_classic(game, touch, speed * DASH_MULTI);
+        if (game->player.dash_timer >= G1_DASH_DELTA_TIME)
+            return move_classic(game, touch, speed * G1_DASH_MULTI);
         return move_classic(game, touch, speed);
     }
-    game->player.dash_timer = DASH_COOLDOWN;
-    move_classic(game, touch, speed * DASH_MULTI);
+    game->player.dash_timer = G1_DASH_COOLDOWN;
+    move_classic(game, touch, speed * G1_DASH_MULTI);
 }
 
 void g1_move_player(g1_state *game, const input_state *input)
 {
     uint8_t touch = getHeld(input);
-    uint16_t speed = SPEED;
+    uint16_t speed = G1_SPEED;
 
     if (touch & (J_UP | J_DOWN) && touch & (J_LEFT | J_RIGHT))
-        speed = DIAG_SPEED;
-    if (input->justPressed & J_A || game->player.dash_timer >= DASH_DELTA_TIME)
+        speed = G1_DIAG_SPEED;
+    if (input->justPressed & J_A || game->player.dash_timer >= G1_DASH_DELTA_TIME)
         move_dash(game, touch, speed);
     else
         move_classic(game, touch, speed);

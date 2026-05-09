@@ -31,7 +31,7 @@ static void change_nb_live(g1_state *game, uint8_t gain)
 {
     uint8_t last = 0;
 
-    for (uint8_t i = 0; i < NB_HEART; i++) {
+    for (uint8_t i = 0; i < G1_NB_HEART; i++) {
         if (gain == 0 && game->player.hearts[i].show == 1) {
             game->player.hearts[i].show = 0;
             break;
@@ -48,7 +48,7 @@ void g1_handle_player(g1_state *game, const input_state *input,
     uint8_t pressed, uint8_t clock)
 {
     change_nb_live(game, clock % 4);
-    for (uint8_t i = 0; i < NB_HEART; i++)
+    for (uint8_t i = 0; i < G1_NB_HEART; i++)
         handle_heart(game, clock, i);
     g1_move_player(game, input);
 }

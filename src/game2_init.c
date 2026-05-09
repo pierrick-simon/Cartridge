@@ -22,16 +22,16 @@
 static void init_player(g2_state *game)
 {
     game->player.vram_id = GAME2_VRAM_SHIP1;
-    game->player.nb_skins = NB_SKIN;
+    game->player.nb_skins = G2_NB_SKIN;
     game->player.x = 160 / 2;
     game->player.y = 144 - 10;
     init_sprite(game->player.vram_id, GAME2_PLAYER, game->sprites, game->vram);
-    for (uint8_t i = 0; i < NB_HEART; i++) {
+    for (uint8_t i = 0; i < G2_NB_HEART; i++) {
         init_sprite(GAME2_VRAM_HEART, GAME2_HEART1 + i,
             game->sprites, game->vram);
         game->player.hearts[i].show = 1;
         game->player.hearts[i].y = 144;
-        game->player.hearts[i].x = 160 - 10 * NB_HEART + 10 * i;
+        game->player.hearts[i].x = 160 - 10 * G2_NB_HEART + 10 * i;
         move_sprite(GAME2_HEART1 + i,
             game->player.hearts[i].x, game->player.hearts[i].y);
     }
@@ -39,7 +39,7 @@ static void init_player(g2_state *game)
 
 static void init_ammunition(g2_state *game)
 {
-    for (uint8_t i = 0; i <  NB_AMMUNITION; i++) {
+    for (uint8_t i = 0; i <  G2_NB_AMMUNITION; i++) {
         game->ammunitions[i].shoot = 0;
         game->ammunitions[i].x = 0;
         game->ammunitions[i].y = 0;
@@ -73,8 +73,8 @@ static void init_enemies(g2_state *game)
 {
     uint8_t ship_skin = 0;
 
-    for (uint8_t i = 0; i < NB_ENEMY; i++) {
-        ship_skin = (rand() % NB_ENEMY_SKIN) + GAME2_VRAM_SHIP3;
+    for (uint8_t i = 0; i < G2_NB_ENEMY; i++) {
+        ship_skin = (rand() % G2_NB_ENEMY_SKIN) + GAME2_VRAM_SHIP3;
         init_sprite(ship_skin, GAME2_ENEMY1 + i,
             game->sprites, game->vram);
         game->sprites[GAME2_ENEMY1 + i].current = rand() % SPACESHIP3_SIZE
@@ -89,7 +89,7 @@ static void init_enemies(g2_state *game)
 
 static void init_score(g2_state *game)
 {
-    for (uint8_t i = 0; i < NB_NUMBER; i++) {
+    for (uint8_t i = 0; i < G2_NB_NUMBER; i++) {
         init_sprite(GAME2_VRAM_SCORE, GAME2_SCORE1 + i,
             game->sprites, game->vram);
         move_sprite(GAME2_SCORE1 + i, 8 + 6 * i, 144);

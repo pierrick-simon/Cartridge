@@ -14,12 +14,12 @@
     #include "sprite.h"
     #include "heart.h"
     
-    #define NB_AMMUNITION 3
-    #define NB_ENEMY 15
-    #define NB_ENEMY_SKIN 2
-    #define NB_SKIN 2
-    #define NB_HEART 3
-    #define NB_NUMBER 5
+    #define G2_NB_AMMUNITION 3
+    #define G2_NB_ENEMY 15
+    #define G2_NB_ENEMY_SKIN 2
+    #define G2_NB_SKIN 2
+    #define G2_NB_HEART 3
+    #define G2_NB_NUMBER 5
 
     typedef enum {
         GAME2_VRAM_SHIP1,
@@ -90,7 +90,7 @@
         uint8_t y;
         uint8_t vram_id;
         uint8_t nb_skins;
-        heart_t hearts[NB_HEART];
+        heart_t hearts[G2_NB_HEART];
     } player_t;
 
     typedef struct {
@@ -99,8 +99,8 @@
         vram_sprite_t vram[NB_GAME2_VRAM];
         sprite_t sprites[MAX_SPRITE];
         sound_t musics[GAME2_NB_MUSIC];
-        ammunition_t ammunitions[NB_AMMUNITION];
-        enemy_t enemies[NB_ENEMY];
+        ammunition_t ammunitions[G2_NB_AMMUNITION];
+        enemy_t enemies[G2_NB_ENEMY];
         player_t player;
         uint8_t bg_x;
         uint8_t bg_y;

@@ -13,17 +13,17 @@
     #include "sprite.h"
     #include "heart.h"
 
-    #define P_SPEED 1.42
-    #define P_DIAG_SPEED 1
-    #define H_TO_W(x) ((uint16_t)((x) * 256))
-    #define SPEED (H_TO_W(P_SPEED))
-    #define DIAG_SPEED (H_TO_W(P_DIAG_SPEED))
-    #define NB_HEART 3
+    #define G1_P_SPEED 1.42
+    #define G1_P_DIAG_SPEED 1
+    #define G1_H_TO_W(x) ((uint16_t)((x) * 256))
+    #define G1_SPEED (G1_H_TO_W(G1_P_SPEED))
+    #define G1_DIAG_SPEED (G1_H_TO_W(G1_P_DIAG_SPEED))
+    #define G1_NB_HEART 3
 
-    #define DASH_MULTI 3
-    #define DASH_COOLDOWN 150
-    #define DASH_TIME 10
-    #define DASH_DELTA_TIME (DASH_COOLDOWN - DASH_TIME)
+    #define G1_DASH_MULTI 3
+    #define G1_DASH_COOLDOWN 150
+    #define G1_DASH_TIME 10
+    #define G1_DASH_DELTA_TIME (G1_DASH_COOLDOWN - G1_DASH_TIME)
     
 typedef enum {
     GAME1_VRAM_PLAYER,
@@ -44,7 +44,7 @@ typedef struct {
     fixed y;
     uint8_t vram_id;
     uint8_t nb_skins;
-    heart_t hearts[NB_HEART];
+    heart_t hearts[G1_NB_HEART];
     uint8_t dash_timer;
     uint8_t flip;
 } palyer_t;

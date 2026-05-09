@@ -31,7 +31,7 @@ static void change_nb_live(g2_state *game, uint8_t gain)
 {
     uint8_t last = 0;
 
-    for (uint8_t i = 0; i < NB_HEART; i++) {
+    for (uint8_t i = 0; i < G2_NB_HEART; i++) {
         if (gain == 0 && game->player.hearts[i].show == 1) {
             game->player.hearts[i].show = 0;
             break;
@@ -67,12 +67,12 @@ static void move_everything(g2_state *game, uint8_t value)
         game->bg_x++;
     else
         game->bg_x--;
-    for (uint8_t i = 0; i < NB_AMMUNITION; i++) {
+    for (uint8_t i = 0; i < G2_NB_AMMUNITION; i++) {
         if (game->ammunitions[i].shoot == 0)
             continue;
         game->ammunitions[i].x += value;
     }
-    for (uint8_t i = 0; i < NB_ENEMY; i++) {
+    for (uint8_t i = 0; i < G2_NB_ENEMY; i++) {
         if (game->enemies[i].show == 0)
             continue;
         game->enemies[i].x += value;
@@ -118,7 +118,7 @@ void g2_handle_player(g2_state *game, const input_state *input,
         move_sprite(GAME2_PLAYER, game->player.x, game->player.y);
         move_everything(game, -1);
     }
-    for (uint8_t i = 0; i < NB_HEART; i++)
+    for (uint8_t i = 0; i < G2_NB_HEART; i++)
         handle_heart(game, clock, i);
 }
 
@@ -137,7 +137,7 @@ void g2_handle_ammunition(g2_state *game, uint8_t pressed)
 {
     uint8_t launch = 0;
 
-    for (uint8_t i = 0; i < NB_AMMUNITION; i++) {
+    for (uint8_t i = 0; i < G2_NB_AMMUNITION; i++) {
         if ((pressed & J_A) && launch == 0)
             launch = shoot(game, i);
         if (game->ammunitions[i].shoot == 1) {
@@ -166,7 +166,7 @@ static void handle_explode_enemy(g2_state *game, uint8_t i, uint8_t clock)
         == game->vram[sprite->vram_id].end - 1) {
         game->enemies[i].explode = 0;
         game->enemies[i].show = 1;
-        ship_skin = (rand() % NB_ENEMY_SKIN) + GAME2_VRAM_SHIP3;
+        ship_skin = (rand() % G2_NB_ENEMY_SKIN) + GAME2_VRAM_SHIP3;
         game->enemies[i].vram_id = ship_skin;
         init_sprite(ship_skin, GAME2_ENEMY1 + i, game->sprites, game->vram);
     } else if (clock % 2 == 0)
@@ -175,7 +175,7 @@ static void handle_explode_enemy(g2_state *game, uint8_t i, uint8_t clock)
 
 static void check_hit_enemy(g2_state *game, enemy_t *enemy, uint8_t id)
 {
-    for (uint8_t i = 0; i < NB_AMMUNITION; i++) {
+    for (uint8_t i = 0; i < G2_NB_AMMUNITION; i++) {
         if (game->ammunitions[i].shoot == 0)
             continue;
         if (game->ammunitions[i].x != 0
@@ -195,7 +195,7 @@ static void check_hit_enemy(g2_state *game, enemy_t *enemy, uint8_t id)
 
 void g2_handle_enemies(g2_state *game, uint8_t clock)
 {
-    for (uint8_t i = 0; i < NB_ENEMY; i++) {
+    for (uint8_t i = 0; i < G2_NB_ENEMY; i++) {
         if (game->enemies[i].show == 0)
             continue;
         if (game->enemies[i].explode == 0) {
