@@ -9,6 +9,23 @@
 #include "game1.h"
 #include "flash.h"
 
+void g1_change_score(g1_state *game, uint8_t gain)
+{
+    uint16_t score;
+
+    game->score += gain;
+    score = game->score;
+    move_to_tile(&game->sprites[GAME1_SCORE5], game->vram, score % 10);
+    score /= 10;
+    move_to_tile(&game->sprites[GAME1_SCORE4], game->vram, score % 10);
+    score /= 10;
+    move_to_tile(&game->sprites[GAME1_SCORE3], game->vram, score % 10);
+    score /= 10;
+    move_to_tile(&game->sprites[GAME1_SCORE2], game->vram, score % 10);
+    score /= 10;
+    move_to_tile(&game->sprites[GAME1_SCORE1], game->vram, score % 10);
+}
+
 static void handle_heart(g1_state *game, uint8_t clock, uint8_t i)
 {
     if (game->player.hearts[i].show == 0) {

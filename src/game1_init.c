@@ -11,6 +11,7 @@
 #include "playertile.h"
 #include "hearttile.h"
 #include "flash.h"
+#include "number.h"
 
 static void init_value(g1_state *game)
 {
@@ -32,6 +33,17 @@ static void init_vram(g1_state *game)
         &game->nb_vram, game->vram);
     init_vram_sprite(flash_tile, NB_FLASH,
         &game->nb_vram, game->vram);
+    init_vram_sprite(number_tiles, NUMBER_SIZE,
+        &game->nb_vram, game->vram);
+}
+
+static void init_score(g1_state *game)
+{
+    for (uint8_t i = 0; i < G1_NB_NUMBER; i++) {
+        init_sprite(GAME1_VRAM_SCORE, GAME1_SCORE1 + i,
+            game->sprites, game->vram);
+        move_sprite(GAME1_SCORE1 + i, 8 + 6 * i, 148);
+    }
 }
 
 static void init_hearts(g1_state *game)
@@ -41,7 +53,7 @@ static void init_hearts(g1_state *game)
             game->sprites, game->vram);
         game->player.hearts[i].show = 1;
         game->player.hearts[i].y = 148;
-        game->player.hearts[i].x = 160 - 10 * G1_NB_HEART + 10 * i;
+        game->player.hearts[i].x = 164 - 10 * G1_NB_HEART + 10 * i;
         move_sprite(GAME1_HEART1 + i,
             game->player.hearts[i].x, game->player.hearts[i].y);
     }
@@ -60,6 +72,7 @@ static void init_player(g1_state *game)
     init_sprite(game->player.vram_id, GAME1_PLAYER, game->sprites, game->vram);
     move_sprite(GAME1_PLAYER, game->player.x.b.h, game->player.y.b.h);
     init_hearts(game);
+    init_score(game);
     init_sprite(GAME1_VRAM_FLASH, GAME1_FLASH, game->sprites, game->vram);
     move_sprite(GAME1_FLASH, 160 / 2, 148);
 }

@@ -19,6 +19,7 @@
     #define G1_SPEED (G1_H_TO_W(G1_P_SPEED))
     #define G1_DIAG_SPEED (G1_H_TO_W(G1_P_DIAG_SPEED))
     #define G1_NB_HEART 3
+    #define G1_NB_NUMBER 5
 
     #define G1_DASH_MULTI 3
     #define G1_DASH_COOLDOWN 150
@@ -29,7 +30,7 @@ typedef enum {
     GAME1_VRAM_PLAYER,
     GAME1_VRAM_HEART,
     GAME1_VRAM_FLASH,
-    // GAME1_VRAM_SCORE,
+    GAME1_VRAM_SCORE,
     NB_GAME1_VRAM,
 };
 
@@ -39,6 +40,11 @@ typedef enum {
     GAME1_HEART2,
     GAME1_HEART3,
     GAME1_FLASH,
+    GAME1_SCORE1,
+    GAME1_SCORE2,
+    GAME1_SCORE3,
+    GAME1_SCORE4,
+    GAME1_SCORE5,
 };
 
 typedef struct {
@@ -66,5 +72,6 @@ typedef struct {
 void g1_move_player(g1_state *game, const input_state *input);
 void g1_handle_player(g1_state *game, const input_state *input,
     uint8_t pressed, uint8_t clock);
+void g1_change_score(g1_state *game, uint8_t gain);
     
 #endif
