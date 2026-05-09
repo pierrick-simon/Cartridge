@@ -55,7 +55,7 @@ void game3Init(Game3State *game)
     game->vy = G3_JUMP_VY;
     initPlatforms(game);
     set_sprite_data(1, 7, player_tile);
-    set_sprite_tile(G3_PLAYER_SPR, P_IDLE);
+    set_sprite_tile(G3_PLAYER_SPR, 1);
     move_sprite(G3_PLAYER_SPR, game->px, game->py.b.h);
     set_sprite_data(G3_PLAT_TILE_IDX, PLATFORM_TILE_SIZE, platform_tile);
     drawPlatforms(game);
