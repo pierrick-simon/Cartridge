@@ -27,13 +27,16 @@
     
 typedef enum {
     GAME1_VRAM_PLAYER,
-    // GAME1_VRAM_HEART,
+    GAME1_VRAM_HEART,
     // GAME1_VRAM_SCORE,
     NB_GAME1_VRAM,
 };
 
 typedef enum {
     GAME1_PLAYER,
+    GAME1_HEART1,
+    GAME1_HEART2,
+    GAME1_HEART3,
 };
 
 typedef struct {

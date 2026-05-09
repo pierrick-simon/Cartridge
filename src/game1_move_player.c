@@ -15,7 +15,7 @@
 static void change_playertile(Game1State *game, const InputState *input)
 {
     uint8_t touch = getHeld(input);
-    uint8_t dash = (input->current & J_A) || game->player.dash_timer >= DASH_DELTA_TIME;
+    uint8_t dash = game->player.dash_timer >= DASH_DELTA_TIME;
 
     if ((touch & J_UP && touch & J_LEFT) || (touch & J_DOWN && touch & J_RIGHT)) {
         game->player.flip = S_FLIPY;
@@ -34,8 +34,8 @@ static void replace_player(Game1State *game)
 {
     if (game->player.y.b.h < 8 + 8)
         game->player.y.w = H_TO_W(8 + 8);
-    if (game->player.y.b.h > 144 + 8)
-        game->player.y.w = H_TO_W(144 + 8);
+    if (game->player.y.b.h > 144 - 8)
+        game->player.y.w = H_TO_W(144 - 8);
     if (game->player.x.b.h > 160)
         game->player.x.w = H_TO_W(160);
     if (game->player.x.b.h < 8)

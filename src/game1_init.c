@@ -7,8 +7,9 @@
 
 #include <gb/gb.h>
 #include "game1.h"
-#include "grasstile.h"
+#include "moontile.h"
 #include "playertile.h"
+#include "hearttile.h"
 
 static void init_value(Game1State *game)
 {
@@ -18,14 +19,29 @@ static void init_value(Game1State *game)
 
 static void init_background()
 {
-    set_bkg_data(0, 0, grass_tile);
-    set_bkg_tiles(0, 0, 20, 18, grass_map);
+    set_bkg_data(0, 0, moon_tile);
+    set_bkg_tiles(0, 0, 20, 18, moon_map);
 }
 
 static void init_vram(Game1State *game)
 {
     init_vram_sprite(player_tile, P_NB_SPRITE,
         &game->nb_vram, game->vram);
+    init_vram_sprite(heart_tiles, HEART_SIZE,
+        &game->nb_vram, game->vram);
+}
+
+static void init_hearts(Game1State *game)
+{
+    for (uint8_t i = 0; i < NB_HEART; i++) {
+        init_sprite(GAME1_VRAM_HEART, GAME1_HEART1 + i,
+            game->sprites, game->vram);
+        game->player.hearts[i].show = 1;
+        game->player.hearts[i].y = 148;
+        game->player.hearts[i].x = 160 - 10 * NB_HEART + 10 * i;
+        move_sprite(GAME1_HEART1 + i,
+            game->player.hearts[i].x, game->player.hearts[i].y);
+    }
 }
 
 static void init_player(Game1State *game)
@@ -40,6 +56,7 @@ static void init_player(Game1State *game)
     game->player.dash_timer = 0;
     init_sprite(game->player.vram_id, GAME1_PLAYER, game->sprites, game->vram);
     move_sprite(GAME1_PLAYER, game->player.x.b.h, game->player.y.b.h);
+    init_hearts(game);
 }
 
 void game1Init(Game1State *game)

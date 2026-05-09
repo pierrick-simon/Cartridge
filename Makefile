@@ -30,7 +30,7 @@ OBJ_DIR     =   obj
 SRCS		=   $(addprefix $(SRC_DIR)/, 			\
 					game1.c							\
 					game1_init.c					\
-					move_player.c					\
+					game1_move_player.c				\
 					game2.c							\
 					game2_init.c					\
 					game2_handle.c					\
@@ -44,7 +44,7 @@ SRCS		=   $(addprefix $(SRC_DIR)/, 			\
 				)									\
 				$(addprefix $(ASSETS_DIR)/, 		\
 					$(addprefix tiles/, 			\
-						grasstile.c					\
+						moontile.c					\
 						platformtile.c				\
 					)								\
 					$(addprefix sprites/, 			\

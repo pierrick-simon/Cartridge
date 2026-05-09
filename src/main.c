@@ -23,7 +23,7 @@ static void transitionTo(AppContext *ctx, game_state_t next)
 {
     if (next == ctx->state)
         return;
-    for (size_t i = 1; i <= NB_CHANNEL; i++)
+    for (uint8_t i = 1; i <= NB_CHANNEL; i++)
         mute_channel(i);
     clear_screen();
     ctx->state = next;
