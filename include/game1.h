@@ -55,12 +55,14 @@ typedef struct {
     sprite_t sprites[MAX_SPRITE];
     uint8_t score;
     palyer_t player;
-} Game1State;
+} g1_state;
 
-    void game1Init(Game1State *game);
-    game_state_t game1Update(Game1State *game,
-        const InputState *input);
+    void g1_init(g1_state *game);
+    game_state_t g1_update(g1_state *game,
+        const input_state *input);
 
-void move_player(Game1State *game, const InputState *input);
-
+void g1_move_player(g1_state *game, const input_state *input);
+void g1_handle_player(g1_state *game, const input_state *input,
+    uint8_t pressed, uint8_t clock);
+    
 #endif

@@ -13,19 +13,19 @@
 // keeps buttons that are currently pressed but were not in the previous state
 // by keeping bits set in current but not in previous
 
-void readInput(InputState *input)
+void readInput(input_state *input)
 {
     input->previous = input->current;
     input->current = joypad();
     input->justPressed = input->current & ~input->previous;
 }
 
-inline uint8_t getHeld(const InputState *input)
+inline uint8_t getHeld(const input_state *input)
 {
     return input->current;
 }
 
-inline uint8_t getJustPressed(const InputState *input)
+inline uint8_t getJustPressed(const input_state *input)
 {
     return input->justPressed;
 }

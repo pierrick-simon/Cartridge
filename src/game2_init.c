@@ -19,7 +19,7 @@
 #include "hearttile.h"
 #include "number.h"
 
-static void init_player(Game2State *game)
+static void init_player(g2_state *game)
 {
     game->player.vram_id = GAME2_VRAM_SHIP1;
     game->player.nb_skins = NB_SKIN;
@@ -37,7 +37,7 @@ static void init_player(Game2State *game)
     }
 }
 
-static void init_ammunition(Game2State *game)
+static void init_ammunition(g2_state *game)
 {
     for (uint8_t i = 0; i <  NB_AMMUNITION; i++) {
         game->ammunitions[i].shoot = 0;
@@ -49,7 +49,7 @@ static void init_ammunition(Game2State *game)
     }
 }
 
-static void init_vram(Game2State *game)
+static void init_vram(g2_state *game)
 {
     init_vram_sprite(spaceship1_tiles, SPACESHIP1_SIZE,
         &game->nb_vram, game->vram);
@@ -69,7 +69,7 @@ static void init_vram(Game2State *game)
         &game->nb_vram, game->vram);
 }
 
-static void init_enemies(Game2State *game)
+static void init_enemies(g2_state *game)
 {
     uint8_t ship_skin = 0;
 
@@ -87,7 +87,7 @@ static void init_enemies(Game2State *game)
     }
 }
 
-static void init_score(Game2State *game)
+static void init_score(g2_state *game)
 {
     for (uint8_t i = 0; i < NB_NUMBER; i++) {
         init_sprite(GAME2_VRAM_SCORE, GAME2_SCORE1 + i,
@@ -96,7 +96,7 @@ static void init_score(Game2State *game)
     }
 }
 
-void game2Init(Game2State *game)
+void g2_init(g2_state *game)
 {
     game->nb_vram = 0;
     game->bg_x = 0;

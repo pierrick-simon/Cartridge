@@ -104,15 +104,15 @@
         player_t player;
         uint8_t bg_x;
         uint8_t bg_y;
-    } Game2State;
+    } g2_state;
 
-    void game2Init(Game2State *game);
-    game_state_t game2Update(Game2State *game,
-        const InputState *input);
+    void g2_init(g2_state *game);
+    game_state_t g2_update(g2_state *game,
+        const input_state *input);
 
-    void handle_enemies(Game2State *game, uint8_t clock);
-    void handle_ammunition(Game2State *game, uint8_t pressed);
-    void handle_player(Game2State *game, const InputState *input,
+    void g2_handle_enemies(g2_state *game, uint8_t clock);
+    void g2_handle_ammunition(g2_state *game, uint8_t pressed);
+    void g2_handle_player(g2_state *game, const input_state *input,
         uint8_t pressed, uint8_t clock);
 
 #endif

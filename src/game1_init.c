@@ -11,7 +11,7 @@
 #include "playertile.h"
 #include "hearttile.h"
 
-static void init_value(Game1State *game)
+static void init_value(g1_state *game)
 {
     game->nb_vram = 0;
     game->score = 0;
@@ -23,7 +23,7 @@ static void init_background()
     set_bkg_tiles(0, 0, 20, 18, moon_map);
 }
 
-static void init_vram(Game1State *game)
+static void init_vram(g1_state *game)
 {
     init_vram_sprite(player_tile, P_NB_SPRITE,
         &game->nb_vram, game->vram);
@@ -31,7 +31,7 @@ static void init_vram(Game1State *game)
         &game->nb_vram, game->vram);
 }
 
-static void init_hearts(Game1State *game)
+static void init_hearts(g1_state *game)
 {
     for (uint8_t i = 0; i < NB_HEART; i++) {
         init_sprite(GAME1_VRAM_HEART, GAME1_HEART1 + i,
@@ -44,7 +44,7 @@ static void init_hearts(Game1State *game)
     }
 }
 
-static void init_player(Game1State *game)
+static void init_player(g1_state *game)
 {
     game->player.vram_id = GAME1_VRAM_PLAYER;
     game->player.nb_skins = 1;
@@ -59,7 +59,7 @@ static void init_player(Game1State *game)
     init_hearts(game);
 }
 
-void game1Init(Game1State *game)
+void g1_init(g1_state *game)
 {
     init_value(game);
     init_background();

@@ -6,13 +6,13 @@
 */
 
 #include <stdio.h>
-#include <gb/gb.h>
 #include <string.h>
+#include <gb/gb.h>
 #include "game1.h"
 #include "playertile.h"
 #include "input.h"
 
-static void change_playertile(Game1State *game, const InputState *input)
+static void change_playertile(g1_state *game, const input_state *input)
 {
     uint8_t touch = getHeld(input);
     uint8_t dash = game->player.dash_timer >= DASH_DELTA_TIME;
@@ -30,7 +30,7 @@ static void change_playertile(Game1State *game, const InputState *input)
         return move_to_tile(&game->sprites[GAME1_PLAYER], game->vram, (dash) ? P_UD_F: P_UD);
 }
 
-static void replace_player(Game1State *game)
+static void replace_player(g1_state *game)
 {
     if (game->player.y.b.h < 8 + 8)
         game->player.y.w = H_TO_W(8 + 8);
@@ -42,7 +42,7 @@ static void replace_player(Game1State *game)
         game->player.x.w = H_TO_W(8);
 }
 
-static void move_classic(Game1State *game,
+static void move_classic(g1_state *game,
     const uint8_t touch, const uint16_t speed)
 {
     if (touch & J_UP)
@@ -55,7 +55,7 @@ static void move_classic(Game1State *game,
         game->player.x.w -= speed;
 }
 
-static void move_dash(Game1State *game,
+static void move_dash(g1_state *game,
     const uint8_t touch, const uint16_t speed)
 {
     if (game->player.dash_timer != 0) {
@@ -67,7 +67,7 @@ static void move_dash(Game1State *game,
     move_classic(game, touch, speed * DASH_MULTI);
 }
 
-void move_player(Game1State *game, const InputState *input)
+void g1_move_player(g1_state *game, const input_state *input)
 {
     uint8_t touch = getHeld(input);
     uint16_t speed = SPEED;

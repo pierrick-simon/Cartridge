@@ -19,7 +19,7 @@ void clear_screen(void)
         set_sprite_data(i, 1, empty_tile);
 }
 
-static void transitionTo(AppContext *ctx, game_state_t next)
+static void transition_to(app_ctx *ctx, game_state_t next)
 {
     if (next == ctx->state)
         return;
@@ -31,7 +31,7 @@ static void transitionTo(AppContext *ctx, game_state_t next)
     vsync();
 }
 
-static game_state_t dispatchUpdate(AppContext *ctx)
+static game_state_t dispatchUpdate(app_ctx *ctx)
 {
     return update_table[ctx->state](ctx);
 }
@@ -39,7 +39,7 @@ static game_state_t dispatchUpdate(AppContext *ctx)
 // DISPLAY_ON GBDK, macro turns on display after init
 void main(void)
 {
-    static AppContext ctx = {.state = INIT_STATE};
+    static app_ctx ctx = {.state = INIT_STATE};
 
     init_table[ctx.state](&ctx);
     DISPLAY_ON;
@@ -47,6 +47,6 @@ void main(void)
     while (1) {
         wait_vbl_done();
         readInput(&ctx.input);
-        transitionTo(&ctx, dispatchUpdate(&ctx));
+        transition_to(&ctx, dispatchUpdate(&ctx));
     }
 }

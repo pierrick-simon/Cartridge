@@ -30,6 +30,7 @@ OBJ_DIR     =   obj
 SRCS		=   $(addprefix $(SRC_DIR)/, 			\
 					game1.c							\
 					game1_init.c					\
+					game1_handle.c					\
 					game1_move_player.c				\
 					game2.c							\
 					game2_init.c					\
