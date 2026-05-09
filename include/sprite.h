@@ -32,7 +32,9 @@ void init_sprite(uint8_t vram_id, uint8_t nb,
     sprite_t sprites[MAX_SPRITE], const vram_sprite_t *vram);
 void copy_sprite(uint8_t *nb, uint8_t copy, sprite_t sprites[MAX_SPRITE]);
 
+void move_to_tile(sprite_t *sprite, const vram_sprite_t *vram, uint8_t nb);
 void move_up_sprite(sprite_t *sprite, const vram_sprite_t *vram);
+void move_down_sprite(sprite_t *sprite, const vram_sprite_t *vram);
 void move_up_down_sprite(sprite_t *sprite, const vram_sprite_t *vram);
 void hide_sprite(sprite_t *sprite);
 

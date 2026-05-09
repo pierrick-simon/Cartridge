@@ -44,14 +44,31 @@ void copy_sprite(uint8_t *nb, uint8_t copy, sprite_t sprites[MAX_SPRITE])
     (*nb)++;
 }
 
-void move_up_sprite(sprite_t *sprite,
-    const vram_sprite_t *vram)
+void move_up_sprite(sprite_t *sprite, const vram_sprite_t *vram)
 {
     const vram_sprite_t *v = &vram[sprite->vram_id];
 
     sprite->current++;
     if (sprite->current >= v->end)
         sprite->current = v->start;
+    set_sprite_tile(sprite->id, sprite->current);
+}
+
+void move_down_sprite(sprite_t *sprite, const vram_sprite_t *vram)
+{
+    const vram_sprite_t *v = &vram[sprite->vram_id];
+
+    sprite->current--;
+    if (sprite->current < v->start)
+        sprite->current = v->end - 1;
+    set_sprite_tile(sprite->id, sprite->current);
+}
+
+void move_to_tile(sprite_t *sprite, const vram_sprite_t *vram, uint8_t nb)
+{
+    if (nb >= vram[sprite->vram_id].end - vram[sprite->vram_id].start)
+        return;
+    sprite->current = vram[sprite->vram_id].start + nb;
     set_sprite_tile(sprite->id, sprite->current);
 }
 

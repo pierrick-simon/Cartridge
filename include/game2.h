@@ -17,6 +17,8 @@
     #define NB_ENEMY 15
     #define NB_ENEMY_SKIN 2
     #define NB_SKIN 2
+    #define NB_HEART 3
+    #define NB_NUMBER 5
 
     typedef enum {
         GAME2_VRAM_SHIP1,
@@ -25,6 +27,8 @@
         GAME2_VRAM_SHIP4,
         GAME2_VRAM_AMMUNITION,
         GAME2_VRAM_EXPLOSION,
+        GAME2_VRAM_HEART,
+        GAME2_VRAM_SCORE,
         NB_GAME2_VRAM,
     };
 
@@ -48,6 +52,14 @@
         GAME2_ENEMY13,
         GAME2_ENEMY14,
         GAME2_ENEMY15,
+        GAME2_HEART1,
+        GAME2_HEART2,
+        GAME2_HEART3,
+        GAME2_SCORE1,
+        GAME2_SCORE2,
+        GAME2_SCORE3,
+        GAME2_SCORE4,
+        GAME2_SCORE5,
     };
 
     typedef enum {
@@ -56,13 +68,6 @@
         GAME2_POWER_DOWN,
         GAME2_NB_MUSIC,
     };
-
-    typedef struct {
-        uint8_t x;
-        uint8_t y;
-        uint8_t vram_id;
-        uint8_t nb_skins;
-    } palyer_t;
 
     typedef struct {
         uint8_t x;
@@ -78,6 +83,20 @@
         uint8_t vram_id;
         uint8_t shoot;
     } ammunition_t;
+
+    typedef struct {
+        uint8_t x;
+        uint8_t y;
+        uint8_t show;
+    } heart_t;
+
+    typedef struct {
+        uint8_t x;
+        uint8_t y;
+        uint8_t vram_id;
+        uint8_t nb_skins;
+        heart_t hearts[NB_HEART];
+    } palyer_t;
 
     typedef struct {
         uint8_t score;

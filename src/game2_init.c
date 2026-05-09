@@ -16,14 +16,25 @@
 #include "game2_theme.h"
 #include "explosion.h"
 #include "power.h"
+#include "heart.h"
+#include "number.h"
 
 static void init_player(Game2State *game)
 {
     game->player.vram_id = GAME2_VRAM_SHIP1;
     game->player.nb_skins = NB_SKIN;
     game->player.x = 160 / 2;
-    game->player.y = 144 - 8;
+    game->player.y = 144 - 10;
     init_sprite(game->player.vram_id, GAME2_PLAYER, game->sprites, game->vram);
+    for (uint8_t i = 0; i < NB_HEART; i++) {
+        init_sprite(GAME2_VRAM_HEART, GAME2_HEART1 + i,
+            game->sprites, game->vram);
+        game->player.hearts[i].show = 1;
+        game->player.hearts[i].y = 144;
+        game->player.hearts[i].x = 160 - 10 * NB_HEART + 10 * i;
+        move_sprite(GAME2_HEART1 + i,
+            game->player.hearts[i].x, game->player.hearts[i].y);
+    }
 }
 
 static void init_ammunition(Game2State *game)
@@ -52,6 +63,10 @@ static void init_vram(Game2State *game)
         &game->nb_vram, game->vram);
     init_vram_sprite(explosion_tiles, EXPLOSION_SIZE,
         &game->nb_vram, game->vram);
+    init_vram_sprite(heart_tiles, HEART_SIZE,
+        &game->nb_vram, game->vram);
+    init_vram_sprite(number_tiles, NUMBER_SIZE,
+        &game->nb_vram, game->vram);
 }
 
 static void init_enemies(Game2State *game)
@@ -72,6 +87,15 @@ static void init_enemies(Game2State *game)
     }
 }
 
+static void init_score(Game2State *game)
+{
+    for (uint8_t i = 0; i < NB_NUMBER; i++) {
+        init_sprite(GAME2_VRAM_SCORE, GAME2_SCORE1 + i,
+            game->sprites, game->vram);
+        move_sprite(GAME2_SCORE1 + i, 8 + 6 * i, 144);
+    }
+}
+
 void game2Init(Game2State *game)
 {
     game->nb_vram = 0;
@@ -88,6 +112,7 @@ void game2Init(Game2State *game)
     init_player(game);
     init_ammunition(game);
     init_enemies(game);
+    init_score(game);
     move_sprite(GAME2_PLAYER, game->player.x, game->player.y);
     SHOW_BKG;
     SHOW_SPRITES;
