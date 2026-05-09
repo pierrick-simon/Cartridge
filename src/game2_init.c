@@ -45,7 +45,15 @@ static void init_ammunition(Game2State *game)
         game->ammunitions[i].y = 0;
         init_sprite(GAME2_VRAM_AMMUNITION, i + GAME2_AMMUNITION1,
             game->sprites, game->vram);
-        hide_sprite(&game->sprites[i]);
+        hide_sprite(&game->sprites[i + GAME2_AMMUNITION1]);
+    }
+    for (uint8_t i = 0; i <  NB_ENEMIES_AMMUNITION; i++) {
+        game->enemies_ammunitions[i].shoot = 0;
+        game->enemies_ammunitions[i].x = 0;
+        game->enemies_ammunitions[i].y = 0;
+        init_sprite(GAME2_VRAM_AMMUNITION, i + GAME2_ENEMIES_AMMUNITION1,
+            game->sprites, game->vram);
+        hide_sprite(&game->sprites[i + GAME2_ENEMIES_AMMUNITION1]);
     }
 }
 
@@ -101,6 +109,7 @@ void game2Init(Game2State *game)
     game->nb_vram = 0;
     game->bg_x = 0;
     game->bg_y = 0;
+    game->score = 0;
     sound_start(&game->musics[GAME2_THEME], 3, game2_theme_music, TRUE, 0x80);
     sound_start(&game->musics[GAME2_POWER_UP], 1, power_up_sound, FALSE, 0x80);
     sound_start(&game->musics[GAME2_POWER_DOWN], 1, power_down_sound, FALSE, 0x80);

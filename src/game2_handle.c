@@ -79,7 +79,7 @@ static void move_everything(Game2State *game, uint8_t value)
     }
 }
 
-static void handle_heart(Game2State *game, uint8_t clock, uint8_t i)
+static void handle_heart(Game2State *game, uint16_t clock, uint8_t i)
 {
     if (game->player.hearts[i].show == 0) {
         if (game->sprites[GAME2_HEART1 + i].current
@@ -99,7 +99,7 @@ static void handle_heart(Game2State *game, uint8_t clock, uint8_t i)
 }
 
 void handle_player(Game2State *game, const InputState *input,
-    uint8_t pressed, uint8_t clock)
+    uint8_t pressed, uint16_t clock)
 {
     if (clock % 4 == 0)
         move_up_sprite(&game->sprites[GAME2_PLAYER], game->vram);
@@ -151,13 +151,13 @@ void handle_ammunition(Game2State *game, uint8_t pressed)
     }
 }
 
-static void handle_shown_enemy(Game2State *game, uint8_t i, uint8_t clock)
+static void handle_shown_enemy(Game2State *game, uint8_t i, uint16_t clock)
 {
     if (clock % 4 == 0)
         move_up_sprite(&game->sprites[i + GAME2_ENEMY1], game->vram);
 }
 
-static void handle_explode_enemy(Game2State *game, uint8_t i, uint8_t clock)
+static void handle_explode_enemy(Game2State *game, uint8_t i, uint16_t clock)
 {
     sprite_t *sprite = &game->sprites[i + GAME2_ENEMY1];
     uint8_t ship_skin = 0;
@@ -193,7 +193,33 @@ static void check_hit_enemy(Game2State *game, enemy_t *enemy, uint8_t id)
     }
 }
 
-void handle_enemies(Game2State *game, uint8_t clock)
+void handle_enemies_ammunition(Game2State *game)
+{
+    for (uint8_t i = 0; i < NB_ENEMIES_AMMUNITION; i++) {
+        if (game->enemies_ammunitions[i].shoot == 1) {
+            game->enemies_ammunitions[i].y++;
+            move_sprite(GAME2_ENEMIES_AMMUNITION1 + i,
+                game->enemies_ammunitions[i].x, game->enemies_ammunitions[i].y);
+            move_up_sprite(&game->sprites[GAME2_ENEMIES_AMMUNITION1 + i], game->vram);
+        }
+        if (game->enemies_ammunitions[i].y >= 152)
+            game->enemies_ammunitions[i].shoot = 0;
+    }
+}
+
+static void enemies_shoot(Game2State *game, enemy_t *enemy)
+{
+    for (uint8_t i = 0; i < NB_ENEMIES_AMMUNITION; i++) {
+        if (game->enemies_ammunitions[i].shoot == 1)
+            continue;
+        game->enemies_ammunitions[i].x = enemy->x;
+        game->enemies_ammunitions[i].y = enemy->y;
+        game->enemies_ammunitions[i].shoot = 1;
+        break;
+    }
+}
+
+void handle_enemies(Game2State *game, uint16_t clock)
 {
     for (uint8_t i = 0; i < NB_ENEMY; i++) {
         if (game->enemies[i].show == 0)
@@ -201,6 +227,7 @@ void handle_enemies(Game2State *game, uint8_t clock)
         if (game->enemies[i].explode == 0) {
             handle_shown_enemy(game, i, clock);
             check_hit_enemy(game, &game->enemies[i], i);
+            enemies_shoot(game, &game->enemies[i]);
         } else
             handle_explode_enemy(game, i, clock);
         move_sprite(i + GAME2_ENEMY1, game->enemies[i].x, game->enemies[i].y);

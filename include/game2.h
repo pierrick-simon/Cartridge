@@ -19,6 +19,7 @@
     #define NB_SKIN 2
     #define NB_HEART 3
     #define NB_NUMBER 5
+    #define NB_ENEMIES_AMMUNITION 10
 
     typedef enum {
         GAME2_VRAM_SHIP1,
@@ -52,6 +53,16 @@
         GAME2_ENEMY13,
         GAME2_ENEMY14,
         GAME2_ENEMY15,
+        GAME2_ENEMIES_AMMUNITION1,
+        GAME2_ENEMIES_AMMUNITION2,
+        GAME2_ENEMIES_AMMUNITION3,
+        GAME2_ENEMIES_AMMUNITION4,
+        GAME2_ENEMIES_AMMUNITION5,
+        GAME2_ENEMIES_AMMUNITION6,
+        GAME2_ENEMIES_AMMUNITION7,
+        GAME2_ENEMIES_AMMUNITION8,
+        GAME2_ENEMIES_AMMUNITION9,
+        GAME2_ENEMIES_AMMUNITION10,
         GAME2_HEART1,
         GAME2_HEART2,
         GAME2_HEART3,
@@ -105,6 +116,7 @@
         sprite_t sprites[MAX_SPRITE];
         sound_t musics[GAME2_NB_MUSIC];
         ammunition_t ammunitions[NB_AMMUNITION];
+        ammunition_t enemies_ammunitions[NB_AMMUNITION];
         enemy_t enemies[NB_ENEMY];
         palyer_t player;
         uint8_t bg_x;
@@ -115,9 +127,10 @@
     game_state_t game2Update(Game2State *game,
         const InputState *input);
 
-    void handle_enemies(Game2State *game, uint8_t clock);
+    void handle_enemies_ammunition(Game2State *game);
+    void handle_enemies(Game2State *game, uint16_t clock);
     void handle_ammunition(Game2State *game, uint8_t pressed);
     void handle_player(Game2State *game, const InputState *input,
-        uint8_t pressed, uint8_t clock);
+        uint8_t pressed, uint16_t clock);
 
 #endif
