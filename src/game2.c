@@ -9,17 +9,17 @@
 #include "game2.h"
 #include "input.h"
 
-game_state_t game2Update(Game2State *game, const InputState *input)
+game_state_t g2_update(g2_state *game, const input_state *input)
 {
     static uint16_t clock = 0;
     uint8_t pressed = getJustPressed(input);
 
     for (uint8_t i = 0; i < GAME2_NB_MUSIC; i++)
         sound_update(&game->musics[i]);
-    handle_player(game, input, pressed, clock);
-    handle_ammunition(game, pressed);
-    handle_enemies_ammunition(game);
-    handle_enemies(game, clock);
+    g2_handle_player(game, input, pressed, clock);
+    g2_handle_ammunition(game, pressed);
+    g2_handle_enemies_ammunition(game);
+    g2_handle_enemies(game, clock);
     move_bkg(game->bg_x, game->bg_y);
     game->bg_y--;
     clock++;

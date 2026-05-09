@@ -8,7 +8,7 @@
 #include "cursor.h"
 #include "starwars.h"
 
-void printCenterString(const char *str)
+static void printCenterString(const char *str)
 {
     size_t len = 0;
 
@@ -20,7 +20,7 @@ void printCenterString(const char *str)
     printf("%s\n", str);
 }
 
-void menuInit(MenuState *menu)
+void m_init(menu_state *menu)
 {
     sound_start(&menu->musics[MENU_THEME], 3, starwars_music, TRUE, 0xFF);
     printf("\n\n\n\n\n");
@@ -36,14 +36,14 @@ void menuInit(MenuState *menu)
     move_sprite(0, 56, 56 + 24 * menu->cursor);
 }
 
-static void moveCursorDown(MenuState *menu)
+static void moveCursorDown(menu_state *menu)
 {
     menu->cursor = (menu->cursor + 1) % MENU_ENTRY_COUNT;
     move_sprite(0, 56, 56 + 24 * menu->cursor);
     sound_channel1(0x00, 0x81, 0x43, 0x73, 0x86);
 }
 
-static void moveCursorUp(MenuState *menu)
+static void moveCursorUp(menu_state *menu)
 {
     menu->cursor = (menu->cursor == 0)
         ? MENU_ENTRY_COUNT - 1
@@ -52,8 +52,8 @@ static void moveCursorUp(MenuState *menu)
     sound_channel1(0x00, 0x81, 0x43, 0x73, 0x86);
 }
 
-game_state_t menuUpdate(MenuState *menu,
-    const InputState *input)
+game_state_t m_update(menu_state *menu,
+    const input_state *input)
 {
     uint8_t pressed = getJustPressed(input);
     sound_update(&menu->musics[MENU_THEME]);

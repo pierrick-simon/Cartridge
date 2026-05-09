@@ -12,15 +12,16 @@
     #include "input.h"
     #include "sound_manager.h"
     #include "sprite.h"
+    #include "heart.h"
     
-    #define NB_AMMUNITION 3
-    #define NB_ENEMY 15
-    #define NB_ENEMY_SKIN 2
-    #define NB_SKIN 2
-    #define NB_HEART 3
-    #define NB_NUMBER 5
-    #define NB_ENEMIES_AMMUNITION 10
-    #define ENEMY_SHOOT_DELAY 90
+    #define G2_NB_AMMUNITION 3
+    #define G2_NB_ENEMY 15
+    #define G2_NB_ENEMY_SKIN 2
+    #define G2_NB_SKIN 2
+    #define G2_NB_HEART 3
+    #define G2_NB_NUMBER 5
+    #define G2_NB_ENEMIES_AMMUNITION 10
+    #define G2_ENEMY_SHOOT_DELAY 90
 
     typedef enum {
         GAME2_VRAM_SHIP1,
@@ -102,16 +103,10 @@
     typedef struct {
         uint8_t x;
         uint8_t y;
-        uint8_t show;
-    } heart_t;
-
-    typedef struct {
-        uint8_t x;
-        uint8_t y;
         uint8_t vram_id;
         uint8_t nb_skins;
-        heart_t hearts[NB_HEART];
-    } palyer_t;
+        heart_t hearts[G2_NB_HEART];
+    } player_t;
 
     typedef struct {
         uint16_t score;
@@ -119,24 +114,24 @@
         vram_sprite_t vram[NB_GAME2_VRAM];
         sprite_t sprites[MAX_SPRITE];
         sound_t musics[GAME2_NB_MUSIC];
-        ammunition_t ammunitions[NB_AMMUNITION];
-        ammunition_t enemies_ammunitions[NB_ENEMIES_AMMUNITION];
-        enemy_t enemies[NB_ENEMY];
-        palyer_t player;
+        ammunition_t ammunitions[G2_NB_AMMUNITION];
+        ammunition_t enemies_ammunitions[G2_NB_ENEMIES_AMMUNITION];
+        enemy_t enemies[G2_NB_ENEMY];
+        player_t player;
         uint8_t bg_x;
         uint8_t bg_y;
-    } Game2State;
+    } g2_state;
 
-    void game2Init(Game2State *game);
-    game_state_t game2Update(Game2State *game,
-        const InputState *input);
+    void g2_init(g2_state *game);
+    game_state_t g2_update(g2_state *game,
+        const input_state *input);
 
-    void handle_enemies_ammunition(Game2State *game);
-    void handle_enemies(Game2State *game, uint16_t clock);
-    void handle_ammunition(Game2State *game, uint8_t pressed);
-    void handle_player(Game2State *game, const InputState *input,
+    void g2_handle_enemies_ammunition(g2_state *game);
+    void g2_handle_enemies(g2_state *game, uint16_t clock);
+    void g2_handle_ammunition(g2_state *game, uint8_t pressed);
+    void g2_handle_player(g2_state *game, const input_state *input,
         uint8_t pressed, uint16_t clock);
-    void change_score(Game2State *game, uint8_t gain);
-    void change_nb_live(Game2State *game, uint8_t gain);
+    void g2_change_score(g2_state *game, uint8_t gain);
+    void g2_change_nb_live(g2_state *game, uint8_t gain);
 
 #endif

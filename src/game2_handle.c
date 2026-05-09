@@ -10,7 +10,7 @@
 #include "game2.h"
 #include "input.h"
 
-void change_score(Game2State *game, uint8_t gain)
+void g2_change_score(g2_state *game, uint8_t gain)
 {
     uint16_t score;
 
@@ -27,11 +27,11 @@ void change_score(Game2State *game, uint8_t gain)
     move_to_tile(&game->sprites[GAME2_SCORE1], game->vram, score % 10);
 }
 
-void change_nb_live(Game2State *game, uint8_t gain)
+void g2_change_nb_live(g2_state *game, uint8_t gain)
 {
     uint8_t last = 0;
 
-    for (uint8_t i = 0; i < NB_HEART; i++) {
+    for (uint8_t i = 0; i < G2_NB_HEART; i++) {
         if (gain == 0 && game->player.hearts[i].show == 1) {
             game->player.hearts[i].show = 0;
             return;
@@ -44,11 +44,11 @@ void change_nb_live(Game2State *game, uint8_t gain)
         game->player.hearts[last].show = 1;
 }
 
-static void change_ship(Game2State *game, uint8_t pressed)
+static void change_ship(g2_state *game, uint8_t pressed)
 {
     if (pressed & J_DOWN) {
         reset_sound(&game->musics[GAME2_POWER_DOWN]);
-        change_nb_live(game, 0);
+        g2_change_nb_live(game, 0);
     }
     if (!(pressed & J_UP))
         return;
@@ -58,33 +58,33 @@ static void change_ship(Game2State *game, uint8_t pressed)
         game->player.vram_id = 0;
     init_sprite(game->player.vram_id, GAME2_PLAYER, game->sprites, game->vram);
     move_sprite(GAME2_PLAYER, game->player.x, game->player.y);
-    change_nb_live(game, 1);
+    g2_change_nb_live(game, 1);
 }
 
-static void move_everything(Game2State *game, uint8_t value)
+static void move_everything(g2_state *game, uint8_t value)
 {
     if (value > 2)
         game->bg_x++;
     else
         game->bg_x--;
-    for (uint8_t i = 0; i < NB_AMMUNITION; i++) {
+    for (uint8_t i = 0; i < G2_NB_AMMUNITION; i++) {
         if (game->ammunitions[i].shoot == 0)
             continue;
         game->ammunitions[i].x += value;
     }
-    for (uint8_t i = 0; i < NB_ENEMY; i++) {
+    for (uint8_t i = 0; i < G2_NB_ENEMY; i++) {
         if (game->enemies[i].show == 0)
             continue;
         game->enemies[i].x += value;
     }
-    for (uint8_t i = 0; i < NB_ENEMIES_AMMUNITION; i++) {
+    for (uint8_t i = 0; i < G2_NB_ENEMIES_AMMUNITION; i++) {
         if (game->enemies_ammunitions[i].shoot == 0)
             continue;
         game->enemies_ammunitions[i].x += value;
     }
 }
 
-static void handle_heart(Game2State *game, uint16_t clock, uint8_t i)
+static void handle_heart(g2_state *game, uint16_t clock, uint8_t i)
 {
     if (game->player.hearts[i].show == 0) {
         if (game->sprites[GAME2_HEART1 + i].current
@@ -103,7 +103,7 @@ static void handle_heart(Game2State *game, uint16_t clock, uint8_t i)
     }
 }
 
-void handle_player(Game2State *game, const InputState *input,
+void g2_handle_player(g2_state *game, const input_state *input,
     uint8_t pressed, uint16_t clock)
 {
     if ((clock & 3) == 0)
@@ -123,11 +123,11 @@ void handle_player(Game2State *game, const InputState *input,
         move_sprite(GAME2_PLAYER, game->player.x, game->player.y);
         move_everything(game, -1);
     }
-    for (uint8_t i = 0; i < NB_HEART; i++)
+    for (uint8_t i = 0; i < G2_NB_HEART; i++)
         handle_heart(game, clock, i);
 }
 
-static uint8_t shoot(Game2State *game, uint8_t id)
+static uint8_t shoot(g2_state *game, uint8_t id)
 {
     if (game->ammunitions[id].shoot == 1)
         return 0;
@@ -138,11 +138,11 @@ static uint8_t shoot(Game2State *game, uint8_t id)
     return 1;
 }
 
-void handle_ammunition(Game2State *game, uint8_t pressed)
+void g2_handle_ammunition(g2_state *game, uint8_t pressed)
 {
     uint8_t launch = 0;
 
-    for (uint8_t i = 0; i < NB_AMMUNITION; i++) {
+    for (uint8_t i = 0; i < G2_NB_AMMUNITION; i++) {
         if ((pressed & J_A) && launch == 0)
             launch = shoot(game, i);
         if (game->ammunitions[i].shoot == 1) {

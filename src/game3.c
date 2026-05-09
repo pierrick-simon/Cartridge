@@ -12,7 +12,7 @@
 #include "playertile.h"
 #include "platformtile.h"
 
-static void initPlatforms(Game3State *game)
+static void initPlatforms(g3_state *game)
 {
     game->platforms[0].x = 80;
     game->platforms[0].y = 144;
@@ -28,7 +28,7 @@ static void initPlatforms(Game3State *game)
     game->platforms[5].y = 20;
 }
 
-static void drawPlatforms(const Game3State *game)
+static void drawPlatforms(const g3_state *game)
 {
     uint8_t i = 0;
     uint8_t sid;
@@ -43,7 +43,7 @@ static void drawPlatforms(const Game3State *game)
     }
 }
 
-void game3Init(Game3State *game)
+void g3_init(g3_state *game)
 {
     game->score = 0;
     game->phase = G3_PLAY;
@@ -55,7 +55,7 @@ void game3Init(Game3State *game)
     game->vy = G3_JUMP_VY;
     initPlatforms(game);
     set_sprite_data(1, 7, player_tile);
-    set_sprite_tile(G3_PLAYER_SPR, P_IDLE);
+    set_sprite_tile(G3_PLAYER_SPR, 1);
     move_sprite(G3_PLAYER_SPR, game->px, game->py.b.h);
     set_sprite_data(G3_PLAT_TILE_IDX, PLATFORM_TILE_SIZE, platform_tile);
     drawPlatforms(game);
@@ -63,12 +63,12 @@ void game3Init(Game3State *game)
     SHOW_SPRITES;
 }
 
-static uint8_t nextRng(uint8_t rng)
+static inline uint8_t nextRng(uint8_t rng)
 {
     return rng * 53 + 1;
 }
 
-static void recyclePlatform(Game3State *game, uint8_t i, uint8_t topy)
+static void recyclePlatform(g3_state *game, uint8_t i, uint8_t topy)
 {
     game->rng = nextRng(game->rng);
     game->platforms[i].x =
@@ -76,7 +76,7 @@ static void recyclePlatform(Game3State *game, uint8_t i, uint8_t topy)
     game->platforms[i].y = topy;
 }
 
-static void scrollWorld(Game3State *game, uint8_t delta)
+static void scrollWorld(g3_state *game, uint8_t delta)
 {
     uint8_t i = 0;
     uint8_t sid;
@@ -103,7 +103,7 @@ static void scrollWorld(Game3State *game, uint8_t delta)
     }
 }
 
-static void applyGravity(Game3State *game)
+static void applyGravity(g3_state *game)
 {
     uint8_t delta;
 
@@ -119,7 +119,7 @@ static void applyGravity(Game3State *game)
     }
 }
 
-static uint8_t landedOn(const Game3State *game, uint8_t i)
+static uint8_t landedOn(const g3_state *game, uint8_t i)
 {
     uint8_t foot = game->py.b.h;
     uint8_t ptop = game->platforms[i].y;
@@ -136,7 +136,7 @@ static uint8_t landedOn(const Game3State *game, uint8_t i)
     return 1;
 }
 
-static void checkCollisions(Game3State *game)
+static void checkCollisions(g3_state *game)
 {
     uint8_t i = 0;
 
@@ -150,7 +150,7 @@ static void checkCollisions(Game3State *game)
     }
 }
 
-static void moveHorizontal(Game3State *game, uint8_t held)
+static void moveHorizontal(g3_state *game, uint8_t held)
 {
     if (held & J_LEFT) {
         if (game->px <= 8)
@@ -166,18 +166,18 @@ static void moveHorizontal(Game3State *game, uint8_t held)
     }
 }
 
-static void showGameOver(const Game3State *game)
+static inline void showGameOver(const g3_state *game)
 {
-        HIDE_SPRITES;
+    HIDE_SPRITES;
 }
 
-static game_state_t updateDead(Game3State *game,
-    const InputState *input)
+static game_state_t updateDead(g3_state *game,
+    const input_state *input)
 {
     uint8_t pressed = getJustPressed(input);
 
     if (pressed & J_A) {
-        game3Init(game);
+        g3_init(game);
         return STATE_GAME3;
     }
     if (pressed & J_START)
@@ -185,8 +185,8 @@ static game_state_t updateDead(Game3State *game,
     return STATE_GAME3;
 }
 
-static game_state_t updatePlay(Game3State *game,
-    const InputState *input)
+static game_state_t updatePlay(g3_state *game,
+    const input_state *input)
 {
     uint8_t held = getHeld(input);
 
@@ -203,8 +203,8 @@ static game_state_t updatePlay(Game3State *game,
     return STATE_GAME3;
 }
 
-game_state_t game3Update(Game3State *game,
-    const InputState *input)
+game_state_t g3_update(g3_state *game,
+    const input_state *input)
 {
     if (game->phase == G3_DEAD)
         return updateDead(game, input);

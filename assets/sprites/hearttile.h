@@ -5,8 +5,8 @@
 ** explosion
 */
 
-#ifndef HEART_H_
-    #define HEART_H_
+#ifndef HEARTTILE_H_
+    #define HEARTTILE_H_
 
     #define HEART_SIZE 6
 

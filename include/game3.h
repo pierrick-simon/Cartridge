@@ -50,10 +50,10 @@
         platform_t platforms[G3_NB_PLATFORMS];
         g3_phase_t phase;
         uint8_t rng;
-    } Game3State;
+    } g3_state;
 
-    void game3Init(Game3State *game);
-    game_state_t game3Update(Game3State *game,
-        const InputState *input);
+    void g3_init(g3_state *game);
+    game_state_t g3_update(g3_state *game,
+        const input_state *input);
 
 #endif /* !GAME3_H */

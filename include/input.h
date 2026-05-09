@@ -14,10 +14,10 @@ typedef struct {
     uint8_t current;
     uint8_t previous;
     uint8_t justPressed;
-} InputState;
+} input_state;
 
-void readInput(InputState *input);
-uint8_t getHeld(const InputState *input);
-uint8_t getJustPressed(const InputState *input);
+void readInput(input_state *input);
+uint8_t getHeld(const input_state *input);
+uint8_t getJustPressed(const input_state *input);
 
 #endif

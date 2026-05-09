@@ -23,10 +23,10 @@
     typedef struct {
         uint8_t cursor;
         sound_t musics[MENU_NB_MUSIC];
-    } MenuState;
+    } menu_state;
 
-    void menuInit(MenuState *menu);
-    game_state_t menuUpdate(MenuState *menu,
-        const InputState *input);
+    void m_init(menu_state *menu);
+    game_state_t m_update(menu_state *menu,
+        const input_state *input);
 
 #endif

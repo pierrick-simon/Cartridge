@@ -10,7 +10,7 @@
 #include "game2.h"
 #include "input.h"
 
-static void check_hit_player(Game2State *game, uint8_t i)
+static void check_hit_player(g2_state *game, uint8_t i)
 {
     ammunition_t *ammo = &game->enemies_ammunitions[i];
 
@@ -20,14 +20,14 @@ static void check_hit_player(Game2State *game, uint8_t i)
         return;
     ammo->shoot = 0;
     hide_sprite(&game->sprites[GAME2_ENEMIES_AMMUNITION1 + i]);
-    change_nb_live(game, 0);
+    g2_change_nb_live(game, 0);
     sound_channel4(0x00, 0xF2, 0x57, 0x80);
     reset_sound(&game->musics[GAME2_POWER_DOWN]);
 }
 
-void handle_enemies_ammunition(Game2State *game)
+void g2_handle_enemies_ammunition(g2_state *game)
 {
-    for (uint8_t i = 0; i < NB_ENEMIES_AMMUNITION; i++) {
+    for (uint8_t i = 0; i < G2_NB_ENEMIES_AMMUNITION; i++) {
         if (game->enemies_ammunitions[i].shoot == 0)
             continue;
         game->enemies_ammunitions[i].y += 2;
@@ -41,7 +41,7 @@ void handle_enemies_ammunition(Game2State *game)
     }
 }
 
-static void move_skin1(Game2State *game, uint8_t i)
+static void move_skin1(g2_state *game, uint8_t i)
 {
     enemy_t *enemy = &game->enemies[i];
 
@@ -60,13 +60,13 @@ static void move_skin1(Game2State *game, uint8_t i)
     }
 }
 
-static void skin1_try_shoot(Game2State *game, enemy_t *enemy)
+static void skin1_try_shoot(g2_state *game, enemy_t *enemy)
 {
     enemy->timer++;
-    if (enemy->timer < ENEMY_SHOOT_DELAY)
+    if (enemy->timer < G2_ENEMY_SHOOT_DELAY)
         return;
     enemy->timer = 0;
-    for (uint8_t i = 0; i < NB_ENEMIES_AMMUNITION; i++) {
+    for (uint8_t i = 0; i < G2_NB_ENEMIES_AMMUNITION; i++) {
         if (game->enemies_ammunitions[i].shoot == 1)
             continue;
         game->enemies_ammunitions[i].x = enemy->x;
@@ -79,7 +79,7 @@ static void skin1_try_shoot(Game2State *game, enemy_t *enemy)
     }
 }
 
-static void move_skin2(Game2State *game, uint8_t i)
+static void move_skin2(g2_state *game, uint8_t i)
 {
     enemy_t *enemy = &game->enemies[i];
 
@@ -104,10 +104,10 @@ static void move_skin2(Game2State *game, uint8_t i)
     init_sprite(GAME2_VRAM_EXPLOSION, GAME2_ENEMY1 + i,
         game->sprites, game->vram);
     sound_channel4(0x00, 0xF2, 0x57, 0x80);
-    change_nb_live(game, 0);
+    g2_change_nb_live(game, 0);
 }
 
-static void handle_shown_enemy(Game2State *game, uint8_t i, uint16_t clock)
+static void handle_shown_enemy(g2_state *game, uint8_t i, uint16_t clock)
 {
     enemy_t *enemy = &game->enemies[i];
     uint8_t moved = 0;
@@ -126,7 +126,7 @@ static void handle_shown_enemy(Game2State *game, uint8_t i, uint16_t clock)
         move_sprite(i + GAME2_ENEMY1, enemy->x, enemy->y);
 }
 
-static void handle_explode_enemy(Game2State *game, uint8_t i, uint16_t clock)
+static void handle_explode_enemy(g2_state *game, uint8_t i, uint16_t clock)
 {
     sprite_t *sprite = &game->sprites[i + GAME2_ENEMY1];
     uint8_t ship_skin = 0;
@@ -134,7 +134,7 @@ static void handle_explode_enemy(Game2State *game, uint8_t i, uint16_t clock)
     if (sprite->current == game->vram[sprite->vram_id].end - 1) {
         game->enemies[i].explode = 0;
         game->enemies[i].show = 1;
-        ship_skin = (rand() % NB_ENEMY_SKIN) + GAME2_VRAM_SHIP3;
+        ship_skin = (rand() % G2_NB_ENEMY_SKIN) + GAME2_VRAM_SHIP3;
         game->enemies[i].vram_id = ship_skin;
         game->enemies[i].timer = 0;
         game->enemies[i].x = rand() % 160 + 8;
@@ -144,9 +144,9 @@ static void handle_explode_enemy(Game2State *game, uint8_t i, uint16_t clock)
         move_up_sprite(sprite, game->vram);
 }
 
-static void check_hit_enemy(Game2State *game, enemy_t *enemy, uint8_t id)
+static void check_hit_enemy(g2_state *game, enemy_t *enemy, uint8_t id)
 {
-    for (uint8_t j = 0; j < NB_AMMUNITION; j++) {
+    for (uint8_t j = 0; j < G2_NB_AMMUNITION; j++) {
         if (game->ammunitions[j].shoot == 0)
             continue;
         if (game->ammunitions[j].y < enemy->y
@@ -161,14 +161,14 @@ static void check_hit_enemy(Game2State *game, enemy_t *enemy, uint8_t id)
         init_sprite(GAME2_VRAM_EXPLOSION, GAME2_ENEMY1 + id,
             game->sprites, game->vram);
         sound_channel4(0x00, 0xF2, 0x57, 0x80);
-        change_score(game, 5);
+        g2_change_score(game, 5);
         break;
     }
 }
 
-void handle_enemies(Game2State *game, uint16_t clock)
+void g2_handle_enemies(g2_state *game, uint16_t clock)
 {
-    for (uint8_t i = 0; i < NB_ENEMY; i++) {
+    for (uint8_t i = 0; i < G2_NB_ENEMY; i++) {
         if (game->enemies[i].show == 0)
             continue;
         if (game->enemies[i].explode == 0) {
