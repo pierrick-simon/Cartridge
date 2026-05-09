@@ -12,6 +12,7 @@
     #include "input.h"
     #include "sound_manager.h"
     #include "sprite.h"
+    #include "heart.h"
     
     #define NB_AMMUNITION 3
     #define NB_ENEMY 15
@@ -87,16 +88,10 @@
     typedef struct {
         uint8_t x;
         uint8_t y;
-        uint8_t show;
-    } heart_t;
-
-    typedef struct {
-        uint8_t x;
-        uint8_t y;
         uint8_t vram_id;
         uint8_t nb_skins;
         heart_t hearts[NB_HEART];
-    } palyer_t;
+    } player_t;
 
     typedef struct {
         uint8_t score;
@@ -106,7 +101,7 @@
         sound_t musics[GAME2_NB_MUSIC];
         ammunition_t ammunitions[NB_AMMUNITION];
         enemy_t enemies[NB_ENEMY];
-        palyer_t player;
+        player_t player;
         uint8_t bg_x;
         uint8_t bg_y;
     } Game2State;

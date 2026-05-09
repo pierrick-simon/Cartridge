@@ -168,7 +168,7 @@ static void moveHorizontal(Game3State *game, uint8_t held)
 
 static void showGameOver(const Game3State *game)
 {
-        HIDE_SPRITES;
+    HIDE_SPRITES;
 }
 
 static game_state_t updateDead(Game3State *game,

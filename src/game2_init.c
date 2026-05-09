@@ -16,7 +16,7 @@
 #include "game2_theme.h"
 #include "explosion.h"
 #include "power.h"
-#include "heart.h"
+#include "hearttile.h"
 #include "number.h"
 
 static void init_player(Game2State *game)
