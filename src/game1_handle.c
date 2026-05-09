@@ -7,6 +7,7 @@
 
 #include <gb/gb.h>
 #include "game1.h"
+#include "flash.h"
 
 static void handle_heart(g1_state *game, uint8_t clock, uint8_t i)
 {
@@ -44,11 +45,20 @@ static void change_nb_live(g1_state *game, uint8_t gain)
         game->player.hearts[last].show = 1;
 }
 
+static void handle_flash(g1_state *game)
+{
+    if (game->player.dash_timer == 0 || (game->player.dash_timer / 20) % 2 == 0)
+        return move_to_tile(&game->sprites[GAME1_FLASH], game->vram, FULL);
+    else 
+        return move_to_tile(&game->sprites[GAME1_FLASH], game->vram, EMPTY);
+}
+
 void g1_handle_player(g1_state *game, const input_state *input,
     uint8_t pressed, uint8_t clock)
 {
+    g1_move_player(game, input);
+    handle_flash(game);
     change_nb_live(game, clock % 4);
     for (uint8_t i = 0; i < G1_NB_HEART; i++)
         handle_heart(game, clock, i);
-    g1_move_player(game, input);
 }

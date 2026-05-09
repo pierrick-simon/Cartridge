@@ -51,6 +51,7 @@ SRCS		=   $(addprefix $(SRC_DIR)/, 			\
 					$(addprefix sprites/, 			\
 						playertile.c				\
 						spacetile.c 				\
+						flash.c 					\
 						spaceship1.c 				\
 						spaceship2.c 				\
 						spaceship3.c 				\

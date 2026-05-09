@@ -10,6 +10,7 @@
 #include "moontile.h"
 #include "playertile.h"
 #include "hearttile.h"
+#include "flash.h"
 
 static void init_value(g1_state *game)
 {
@@ -28,6 +29,8 @@ static void init_vram(g1_state *game)
     init_vram_sprite(player_tile, P_NB_SPRITE,
         &game->nb_vram, game->vram);
     init_vram_sprite(heart_tiles, HEART_SIZE,
+        &game->nb_vram, game->vram);
+    init_vram_sprite(flash_tile, NB_FLASH,
         &game->nb_vram, game->vram);
 }
 
@@ -57,6 +60,8 @@ static void init_player(g1_state *game)
     init_sprite(game->player.vram_id, GAME1_PLAYER, game->sprites, game->vram);
     move_sprite(GAME1_PLAYER, game->player.x.b.h, game->player.y.b.h);
     init_hearts(game);
+    init_sprite(GAME1_VRAM_FLASH, GAME1_FLASH, game->sprites, game->vram);
+    move_sprite(GAME1_FLASH, 160 / 2, 148);
 }
 
 void g1_init(g1_state *game)
