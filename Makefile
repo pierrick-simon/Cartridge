@@ -35,6 +35,7 @@ SRCS		=   $(addprefix $(SRC_DIR)/, 			\
 					game2.c							\
 					game2_init.c					\
 					game2_handle.c					\
+					game2_enemy.c					\
 					game3.c							\
 					input.c							\
 					main.c 							\

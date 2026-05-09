@@ -20,6 +20,8 @@
     #define G2_NB_SKIN 2
     #define G2_NB_HEART 3
     #define G2_NB_NUMBER 5
+    #define G2_NB_ENEMIES_AMMUNITION 10
+    #define G2_ENEMY_SHOOT_DELAY 90
 
     typedef enum {
         GAME2_VRAM_SHIP1,
@@ -53,6 +55,16 @@
         GAME2_ENEMY13,
         GAME2_ENEMY14,
         GAME2_ENEMY15,
+        GAME2_ENEMIES_AMMUNITION1,
+        GAME2_ENEMIES_AMMUNITION2,
+        GAME2_ENEMIES_AMMUNITION3,
+        GAME2_ENEMIES_AMMUNITION4,
+        GAME2_ENEMIES_AMMUNITION5,
+        GAME2_ENEMIES_AMMUNITION6,
+        GAME2_ENEMIES_AMMUNITION7,
+        GAME2_ENEMIES_AMMUNITION8,
+        GAME2_ENEMIES_AMMUNITION9,
+        GAME2_ENEMIES_AMMUNITION10,
         GAME2_HEART1,
         GAME2_HEART2,
         GAME2_HEART3,
@@ -76,6 +88,9 @@
         uint8_t vram_id;
         uint8_t show;
         uint8_t explode;
+        uint8_t timer;
+        uint8_t dir;
+        uint8_t move_timer;
     } enemy_t;
 
     typedef struct {
@@ -94,12 +109,13 @@
     } player_t;
 
     typedef struct {
-        uint8_t score;
+        uint16_t score;
         uint8_t nb_vram;
         vram_sprite_t vram[NB_GAME2_VRAM];
         sprite_t sprites[MAX_SPRITE];
         sound_t musics[GAME2_NB_MUSIC];
         ammunition_t ammunitions[G2_NB_AMMUNITION];
+        ammunition_t enemies_ammunitions[G2_NB_ENEMIES_AMMUNITION];
         enemy_t enemies[G2_NB_ENEMY];
         player_t player;
         uint8_t bg_x;
@@ -110,9 +126,12 @@
     game_state_t g2_update(g2_state *game,
         const input_state *input);
 
-    void g2_handle_enemies(g2_state *game, uint8_t clock);
+    void g2_handle_enemies_ammunition(g2_state *game);
+    void g2_handle_enemies(g2_state *game, uint16_t clock);
     void g2_handle_ammunition(g2_state *game, uint8_t pressed);
     void g2_handle_player(g2_state *game, const input_state *input,
-        uint8_t pressed, uint8_t clock);
+        uint8_t pressed, uint16_t clock);
+    void g2_change_score(g2_state *game, uint8_t gain);
+    void g2_change_nb_live(g2_state *game, uint8_t gain);
 
 #endif

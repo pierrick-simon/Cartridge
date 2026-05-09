@@ -24,7 +24,7 @@ static void init_player(g2_state *game)
     game->player.vram_id = GAME2_VRAM_SHIP1;
     game->player.nb_skins = G2_NB_SKIN;
     game->player.x = 160 / 2;
-    game->player.y = 144 - 10;
+    game->player.y = 144 - 24;
     init_sprite(game->player.vram_id, GAME2_PLAYER, game->sprites, game->vram);
     for (uint8_t i = 0; i < G2_NB_HEART; i++) {
         init_sprite(GAME2_VRAM_HEART, GAME2_HEART1 + i,
@@ -39,13 +39,22 @@ static void init_player(g2_state *game)
 
 static void init_ammunition(g2_state *game)
 {
+
     for (uint8_t i = 0; i <  G2_NB_AMMUNITION; i++) {
         game->ammunitions[i].shoot = 0;
         game->ammunitions[i].x = 0;
         game->ammunitions[i].y = 0;
         init_sprite(GAME2_VRAM_AMMUNITION, i + GAME2_AMMUNITION1,
             game->sprites, game->vram);
-        hide_sprite(&game->sprites[i]);
+        hide_sprite(&game->sprites[i + GAME2_AMMUNITION1]);
+    }
+    for (uint8_t i = 0; i < G2_NB_ENEMIES_AMMUNITION; i++) {
+        game->enemies_ammunitions[i].shoot = 0;
+        game->enemies_ammunitions[i].x = 0;
+        game->enemies_ammunitions[i].y = 0;
+        init_sprite(GAME2_VRAM_AMMUNITION, i + GAME2_ENEMIES_AMMUNITION1,
+            game->sprites, game->vram);
+        hide_sprite(&game->sprites[i + GAME2_ENEMIES_AMMUNITION1]);
     }
 }
 
@@ -84,6 +93,8 @@ static void init_enemies(g2_state *game)
         game->enemies[i].x = 16 + i * 8;
         game->enemies[i].y = 16 + i * 4;
         game->enemies[i].explode = 0;
+        game->enemies[i].dir = i % 2;
+        game->enemies[i].timer = i * (G2_ENEMY_SHOOT_DELAY / G2_NB_ENEMY);
     }
 }
 
@@ -101,6 +112,7 @@ void g2_init(g2_state *game)
     game->nb_vram = 0;
     game->bg_x = 0;
     game->bg_y = 0;
+    game->score = 0;
     sound_start(&game->musics[GAME2_THEME], 3, game2_theme_music, TRUE, 0x80);
     sound_start(&game->musics[GAME2_POWER_UP], 1, power_up_sound, FALSE, 0x80);
     sound_start(&game->musics[GAME2_POWER_DOWN], 1, power_down_sound, FALSE, 0x80);
