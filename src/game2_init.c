@@ -24,7 +24,7 @@ static void init_player(Game2State *game)
     game->player.vram_id = GAME2_VRAM_SHIP1;
     game->player.nb_skins = NB_SKIN;
     game->player.x = 160 / 2;
-    game->player.y = 144 - 10;
+    game->player.y = 144 - 24;
     init_sprite(game->player.vram_id, GAME2_PLAYER, game->sprites, game->vram);
     for (uint8_t i = 0; i < NB_HEART; i++) {
         init_sprite(GAME2_VRAM_HEART, GAME2_HEART1 + i,
@@ -39,7 +39,7 @@ static void init_player(Game2State *game)
 
 static void init_ammunition(Game2State *game)
 {
-    for (uint8_t i = 0; i <  NB_AMMUNITION; i++) {
+    for (uint8_t i = 0; i < NB_AMMUNITION; i++) {
         game->ammunitions[i].shoot = 0;
         game->ammunitions[i].x = 0;
         game->ammunitions[i].y = 0;
@@ -47,7 +47,7 @@ static void init_ammunition(Game2State *game)
             game->sprites, game->vram);
         hide_sprite(&game->sprites[i + GAME2_AMMUNITION1]);
     }
-    for (uint8_t i = 0; i <  NB_ENEMIES_AMMUNITION; i++) {
+    for (uint8_t i = 0; i < NB_ENEMIES_AMMUNITION; i++) {
         game->enemies_ammunitions[i].shoot = 0;
         game->enemies_ammunitions[i].x = 0;
         game->enemies_ammunitions[i].y = 0;
@@ -92,6 +92,8 @@ static void init_enemies(Game2State *game)
         game->enemies[i].x = 16 + i * 8;
         game->enemies[i].y = 16 + i * 4;
         game->enemies[i].explode = 0;
+        game->enemies[i].dir = i % 2;
+        game->enemies[i].timer = i * (ENEMY_SHOOT_DELAY / NB_ENEMY);
     }
 }
 

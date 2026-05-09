@@ -20,6 +20,7 @@
     #define NB_HEART 3
     #define NB_NUMBER 5
     #define NB_ENEMIES_AMMUNITION 10
+    #define ENEMY_SHOOT_DELAY 90
 
     typedef enum {
         GAME2_VRAM_SHIP1,
@@ -86,6 +87,9 @@
         uint8_t vram_id;
         uint8_t show;
         uint8_t explode;
+        uint8_t timer;
+        uint8_t dir;
+        uint8_t move_timer;
     } enemy_t;
 
     typedef struct {
@@ -110,13 +114,13 @@
     } palyer_t;
 
     typedef struct {
-        uint8_t score;
+        uint16_t score;
         uint8_t nb_vram;
         vram_sprite_t vram[NB_GAME2_VRAM];
         sprite_t sprites[MAX_SPRITE];
         sound_t musics[GAME2_NB_MUSIC];
         ammunition_t ammunitions[NB_AMMUNITION];
-        ammunition_t enemies_ammunitions[NB_AMMUNITION];
+        ammunition_t enemies_ammunitions[NB_ENEMIES_AMMUNITION];
         enemy_t enemies[NB_ENEMY];
         palyer_t player;
         uint8_t bg_x;
@@ -132,5 +136,7 @@
     void handle_ammunition(Game2State *game, uint8_t pressed);
     void handle_player(Game2State *game, const InputState *input,
         uint8_t pressed, uint16_t clock);
+    void change_score(Game2State *game, uint8_t gain);
+    void change_nb_live(Game2State *game, uint8_t gain);
 
 #endif
