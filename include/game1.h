@@ -25,17 +25,26 @@
     #define G1_DASH_COOLDOWN 150
     #define G1_DASH_TIME 10
     #define G1_DASH_DELTA_TIME (G1_DASH_COOLDOWN - G1_DASH_TIME)
+
+    #define ABS(x) ((x) >= 0 ? x : (x * -1))
+
+    #define G1_X 1
+    #define G1_Y 2
     
 typedef enum {
     GAME1_VRAM_PLAYER,
     GAME1_VRAM_HEART,
     GAME1_VRAM_FLASH,
     GAME1_VRAM_SCORE,
+    GAME1_VRAM_ASTEROID,
     NB_GAME1_VRAM,
 };
 
 typedef enum {
+    // player
     GAME1_PLAYER,
+
+    // gui
     GAME1_HEART1,
     GAME1_HEART2,
     GAME1_HEART3,
@@ -45,12 +54,24 @@ typedef enum {
     GAME1_SCORE3,
     GAME1_SCORE4,
     GAME1_SCORE5,
+
+    // attacks
+    GAME1_ASTEROID
 };
+
+typedef struct {
+    uint8_t x;
+    uint8_t y;
+    uint8_t v_x;
+    uint8_t v_y;
+    uint16_t timer;
+    uint8_t orientation;
+    // uint8_t warn_timer;
+} asteroid_t;
 
 typedef struct {
     fixed x;
     fixed y;
-    uint8_t vram_id;
     uint8_t nb_skins;
     heart_t hearts[G1_NB_HEART];
     uint8_t dash_timer;
@@ -63,6 +84,7 @@ typedef struct {
     sprite_t sprites[MAX_SPRITE];
     uint8_t score;
     palyer_t player;
+    asteroid_t asteroid;
 } g1_state;
 
     void g1_init(g1_state *game);
@@ -73,5 +95,8 @@ void g1_move_player(g1_state *game, const input_state *input);
 void g1_handle_player(g1_state *game, const input_state *input,
     uint8_t pressed, uint8_t clock);
 void g1_change_score(g1_state *game, uint8_t gain);
-    
+void g1_handle_attacks(g1_state *game, const input_state *input,
+    uint8_t pressed, uint8_t clock);
+void change_nb_live(palyer_t *player, uint8_t gain);
+
 #endif

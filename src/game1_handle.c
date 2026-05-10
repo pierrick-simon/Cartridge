@@ -6,6 +6,7 @@
 */
 
 #include <gb/gb.h>
+#include <stdio.h>
 #include "game1.h"
 #include "flash.h"
 
@@ -45,21 +46,21 @@ static void handle_heart(g1_state *game, uint8_t clock, uint8_t i)
     }
 }
 
-static void change_nb_live(g1_state *game, uint8_t gain)
+void change_nb_live(palyer_t *player, uint8_t gain)
 {
     uint8_t last = 0;
 
     for (uint8_t i = 0; i < G1_NB_HEART; i++) {
-        if (gain == 0 && game->player.hearts[i].show == 1) {
-            game->player.hearts[i].show = 0;
+        if (gain == 0 && player->hearts[i].show == 1) {
+            player->hearts[i].show = 0;
             break;
         }
-        if (gain == 1 && game->player.hearts[i].show == 1)
+        if (gain == 1 && player->hearts[i].show == 1)
             break;
         last = i;
     }
     if (gain == 1)
-        game->player.hearts[last].show = 1;
+        player->hearts[last].show = 1;
 }
 
 static void handle_flash(g1_state *game)
@@ -75,7 +76,6 @@ void g1_handle_player(g1_state *game, const input_state *input,
 {
     g1_move_player(game, input);
     handle_flash(game);
-    change_nb_live(game, clock % 4);
     for (uint8_t i = 0; i < G1_NB_HEART; i++)
         handle_heart(game, clock, i);
 }

@@ -32,6 +32,7 @@ SRCS		=   $(addprefix $(SRC_DIR)/, 			\
 					game1_init.c					\
 					game1_handle.c					\
 					game1_move_player.c				\
+					game1_attacks.c					\
 					game2.c							\
 					game2_init.c					\
 					game2_handle.c					\
@@ -53,6 +54,7 @@ SRCS		=   $(addprefix $(SRC_DIR)/, 			\
 						playertile.c				\
 						spacetile.c 				\
 						flash.c 					\
+						asteroid.c 					\
 						spaceship1.c 				\
 						spaceship2.c 				\
 						spaceship3.c 				\

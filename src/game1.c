@@ -8,13 +8,13 @@
 #include <gb/gb.h>
 #include "game1.h"
 
-// implement logik here
 game_state_t g1_update(g1_state *game,
     const input_state *input)
 {
     static uint8_t clock = 0;
 
     g1_handle_player(game, input, getJustPressed(input), clock);
+    g1_handle_attacks(game, input, getJustPressed(input), clock);
     if (clock % 60 == 0)
         g1_change_score(game, 1);
     clock++;

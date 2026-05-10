@@ -12,6 +12,19 @@
 #include "hearttile.h"
 #include "flash.h"
 #include "number.h"
+#include "asteroid.h"
+
+static void init_attacks(g1_state *game)
+{
+    init_sprite(GAME1_VRAM_ASTEROID, GAME1_ASTEROID,
+        game->sprites, game->vram);
+    game->asteroid.x = 0;
+    game->asteroid.y = 0;
+    game->asteroid.v_x = 0;
+    game->asteroid.v_y = 0;
+    game->asteroid.timer = 0;
+}
+
 
 static void init_value(g1_state *game)
 {
@@ -34,6 +47,8 @@ static void init_vram(g1_state *game)
     init_vram_sprite(flash_tile, NB_FLASH,
         &game->nb_vram, game->vram);
     init_vram_sprite(number_tiles, NUMBER_SIZE,
+        &game->nb_vram, game->vram);
+    init_vram_sprite(asteroid_tile, NB_ASTEROID,
         &game->nb_vram, game->vram);
 }
 
@@ -61,7 +76,6 @@ static void init_hearts(g1_state *game)
 
 static void init_player(g1_state *game)
 {
-    game->player.vram_id = GAME1_VRAM_PLAYER;
     game->player.nb_skins = 1;
     game->player.x.w = 0;
     game->player.y.w = 0;
@@ -69,7 +83,7 @@ static void init_player(g1_state *game)
     game->player.y.b.h = 144 / 2;
     game->player.flip = 0;
     game->player.dash_timer = 0;
-    init_sprite(game->player.vram_id, GAME1_PLAYER, game->sprites, game->vram);
+    init_sprite(GAME1_VRAM_PLAYER, GAME1_PLAYER, game->sprites, game->vram);
     move_sprite(GAME1_PLAYER, game->player.x.b.h, game->player.y.b.h);
     init_hearts(game);
     init_score(game);
@@ -83,6 +97,7 @@ void g1_init(g1_state *game)
     init_background();
     init_vram(game);
     init_player(game);
+    init_attacks(game);
     SHOW_BKG;
     SHOW_SPRITES;
 }
