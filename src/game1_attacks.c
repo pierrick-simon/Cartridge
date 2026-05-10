@@ -10,7 +10,7 @@
 #include "game1.h"
 
 static void lunch_asteroid(asteroid_t *asteroid, uint16_t clock,
-    uint8_t speed, uint16_t nb_tick, uint8_t warn_tick)
+    uint8_t speed, uint16_t nb_tick)
 {
     uint16_t dir = (clock * 424) % 4;
 
@@ -20,7 +20,6 @@ static void lunch_asteroid(asteroid_t *asteroid, uint16_t clock,
     asteroid->v_y = dir & G1_Y ? speed: -speed;
     asteroid->timer = nb_tick;
     asteroid->orientation = (clock * 531) % 2;
-    // asteroid->warn_timer = warn_tick;
 
 }
 
@@ -61,12 +60,17 @@ static void simulate_asteroid(asteroid_t *asteroid)
 
 static inline void asteroid_hit(const asteroid_t *asteroid, palyer_t *player)
 {
-    if (asteroid->timer == 0)
+    int8_t distx = 0;
+    int8_t disty = 0;
+
+    if (asteroid->timer == 0 || player->cd_timer != 0)
         return;
-    int8_t distx = (int8_t)asteroid->x - (int8_t)player->x.b.h;
-    int8_t disty = (int8_t)asteroid->y - (int8_t)player->y.b.h;
-    if (distx <= 8 && distx >= -8 && disty <= 8 && disty >= -8)
+    distx = (int8_t)asteroid->x - (int8_t)player->x.b.h;
+    disty = (int8_t)asteroid->y - (int8_t)player->y.b.h;
+    if (distx <= 8 && distx >= -8 && disty <= 8 && disty >= -8) {
         change_nb_live(player, 0);
+        player->cd_timer = G1_CD_TIMER;
+    }
 }
 
 static void collision(g1_state *game)
@@ -83,6 +87,6 @@ void g1_handle_attacks(g1_state *game, const input_state *input,
         change_nb_live(&game->player, 1);
         change_nb_live(&game->player, 1);
         change_nb_live(&game->player, 1);
-        lunch_asteroid(&game->asteroid, clock, 2, 1000, 0);
+        lunch_asteroid(&game->asteroid, clock, 2, 1000);
     }
 }

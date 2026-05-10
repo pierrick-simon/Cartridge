@@ -8,6 +8,15 @@
 #include <gb/gb.h>
 #include "game1.h"
 
+static void handle_clock(g1_state *game, uint8_t *clock)
+{
+    if (game->player.cd_timer != 0)
+        --game->player.cd_timer;
+    if (game->player.dash_timer != 0)
+        --game->player.dash_timer;
+    ++(*clock);
+}
+
 game_state_t g1_update(g1_state *game,
     const input_state *input)
 {
@@ -17,7 +26,7 @@ game_state_t g1_update(g1_state *game,
     g1_handle_attacks(game, input, getJustPressed(input), clock);
     if (clock % 60 == 0)
         g1_change_score(game, 1);
-    clock++;
+    handle_clock(game, &clock);
     if (getJustPressed(input) & J_START)
         return STATE_MENU;
     return STATE_GAME1;

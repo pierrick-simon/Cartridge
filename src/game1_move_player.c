@@ -78,13 +78,13 @@ void g1_move_player(g1_state *game, const input_state *input)
         move_dash(game, touch, speed);
     else
         move_classic(game, touch, speed);
+    replace_player(game);
+    if (game->player.cd_timer != 0 && (game->player.cd_timer / G1_CD_DELTA) % 2 == 0)
+        return move_sprite(GAME1_PLAYER, 0, 0);
+    move_sprite(GAME1_PLAYER, game->player.x.b.h, game->player.y.b.h);
     if (touch & (J_UP | J_DOWN | J_LEFT | J_RIGHT)) {
-        replace_player(game);
-        move_sprite(GAME1_PLAYER, game->player.x.b.h, game->player.y.b.h);
         change_playertile(game, input);
         set_sprite_prop(GAME1_PLAYER, game->player.flip);
     } else
         move_to_tile(&game->sprites[GAME1_PLAYER], game->vram, P_IDLE);
-    if (game->player.dash_timer != 0)
-        --game->player.dash_timer;
 }

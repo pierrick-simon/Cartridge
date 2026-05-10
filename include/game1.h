@@ -22,14 +22,18 @@
     #define G1_NB_NUMBER 5
 
     #define G1_DASH_MULTI 3
-    #define G1_DASH_COOLDOWN 150
+    #define G1_DASH_COOLDOWN 50
     #define G1_DASH_TIME 10
+    #define G1_DELTA_DASH 15
     #define G1_DASH_DELTA_TIME (G1_DASH_COOLDOWN - G1_DASH_TIME)
 
     #define ABS(x) ((x) >= 0 ? x : (x * -1))
 
     #define G1_X 1
     #define G1_Y 2
+
+    #define G1_CD_TIMER 250
+    #define G1_CD_DELTA 8
     
 typedef enum {
     GAME1_VRAM_PLAYER,
@@ -66,7 +70,6 @@ typedef struct {
     uint8_t v_y;
     uint16_t timer;
     uint8_t orientation;
-    // uint8_t warn_timer;
 } asteroid_t;
 
 typedef struct {
@@ -75,6 +78,7 @@ typedef struct {
     uint8_t nb_skins;
     heart_t hearts[G1_NB_HEART];
     uint8_t dash_timer;
+    uint8_t cd_timer;
     uint8_t flip;
 } palyer_t;
 

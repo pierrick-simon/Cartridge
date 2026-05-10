@@ -65,7 +65,7 @@ void change_nb_live(palyer_t *player, uint8_t gain)
 
 static void handle_flash(g1_state *game)
 {
-    if (game->player.dash_timer == 0 || (game->player.dash_timer / 20) % 2 == 0)
+    if (game->player.dash_timer == 0 || (game->player.dash_timer / G1_DELTA_DASH) % 2 == 0)
         return move_to_tile(&game->sprites[GAME1_FLASH], game->vram, FULL);
     else 
         return move_to_tile(&game->sprites[GAME1_FLASH], game->vram, EMPTY);

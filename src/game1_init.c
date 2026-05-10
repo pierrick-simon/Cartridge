@@ -83,6 +83,7 @@ static void init_player(g1_state *game)
     game->player.y.b.h = 144 / 2;
     game->player.flip = 0;
     game->player.dash_timer = 0;
+    game->player.cd_timer = 0;
     init_sprite(GAME1_VRAM_PLAYER, GAME1_PLAYER, game->sprites, game->vram);
     move_sprite(GAME1_PLAYER, game->player.x.b.h, game->player.y.b.h);
     init_hearts(game);
