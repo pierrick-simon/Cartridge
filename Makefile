@@ -44,6 +44,7 @@ SRCS		=   $(addprefix $(SRC_DIR)/, 			\
 					cursor.c						\
 					sound_manager.c 				\
 					sprite.c 						\
+					save.c 							\
 				)									\
 				$(addprefix $(ASSETS_DIR)/, 		\
 					$(addprefix tiles/, 			\
@@ -75,6 +76,9 @@ OBJS        =   $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
 
 all: $(NAME)
 
+obj/save_data.o: src/save_data.c
+	$(LCC) $(LCCFLAGS) -Wf-ba0 -c -o obj/save_data.o src/save_data.c
+
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
@@ -84,8 +88,8 @@ $(OBJ_DIR):
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(LCC) $(CFLAGS) $(INCLUDE) -c -o $@ $<
 
-$(NAME): $(OBJS)
-	$(LCC) $(CFLAGS) $(LFLAGS) -o $@ $^
+$(NAME): $(OBJS) obj/save_data.o
+	$(LCC) $(CFLAGS) $(LFLAGS) -o $@ $^ obj/save_data.o
 
 clean:
 	$(RM) -r $(OBJ_DIR)
