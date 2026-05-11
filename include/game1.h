@@ -22,7 +22,7 @@
     #define G1_NB_NUMBER 5
 
     #define G1_DASH_MULTI 3
-    #define G1_DASH_COOLDOWN 50
+    #define G1_DASH_COOLDOWN 180
     #define G1_DASH_TIME 10
     #define G1_DELTA_DASH 15
     #define G1_DASH_DELTA_TIME (G1_DASH_COOLDOWN - G1_DASH_TIME)
@@ -68,8 +68,10 @@ typedef struct {
     uint8_t y;
     uint8_t v_x;
     uint8_t v_y;
+    uint8_t speed;
     uint16_t timer;
     uint8_t orientation;
+    uint8_t here;
 } asteroid_t;
 
 typedef struct {
