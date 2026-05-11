@@ -79,7 +79,7 @@ void g1_move_player(g1_state *game, const input_state *input)
     else
         move_classic(game, touch, speed);
     replace_player(game);
-    if (game->player.cd_timer != 0 && (game->player.cd_timer / G1_CD_DELTA) % 2 == 0)
+    if (game->player.cd_timer != 0 && ((game->player.cd_timer / G1_CD_DELTA) & 1) == 0)
         return move_sprite(GAME1_PLAYER, 0, 0);
     move_sprite(GAME1_PLAYER, game->player.x.b.h, game->player.y.b.h);
     if (touch & (J_UP | J_DOWN | J_LEFT | J_RIGHT)) {

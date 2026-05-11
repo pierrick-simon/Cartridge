@@ -86,7 +86,7 @@ typedef struct {
     uint8_t nb_vram;
     vram_sprite_t vram[NB_GAME1_VRAM];
     sprite_t sprites[MAX_SPRITE];
-    uint8_t score;
+    uint16_t score;
     palyer_t player;
     asteroid_t asteroid;
 } g1_state;

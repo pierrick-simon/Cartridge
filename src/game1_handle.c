@@ -31,14 +31,14 @@ static void handle_heart(g1_state *game, uint8_t clock, uint8_t i)
 {
     if (game->player.hearts[i].show == 0) {
         if (game->sprites[GAME1_HEART1 + i].current
-            != game->vram[GAME1_VRAM_HEART].end - 1 && clock % 2)
+            != game->vram[GAME1_VRAM_HEART].end - 1 && (clock & 1))
             move_up_sprite(&game->sprites[GAME1_HEART1 + i], game->vram);
         if (game->sprites[GAME1_HEART1 + i].current
             == game->vram[GAME1_VRAM_HEART].end - 1)
             hide_sprite(&game->sprites[GAME1_HEART1 + i]);
     } else {
         if (game->sprites[GAME1_HEART1 + i].current
-            != game->vram[GAME1_VRAM_HEART].start && clock % 2) {
+            != game->vram[GAME1_VRAM_HEART].start && (clock & 1)) {
             move_sprite(GAME1_HEART1 + i,
                 game->player.hearts[i].x, game->player.hearts[i].y);
             move_down_sprite(&game->sprites[GAME1_HEART1 + i], game->vram);
@@ -65,7 +65,7 @@ void change_nb_live(palyer_t *player, uint8_t gain)
 
 static void handle_flash(g1_state *game)
 {
-    if (game->player.dash_timer == 0 || (game->player.dash_timer / G1_DELTA_DASH) % 2 == 0)
+    if (game->player.dash_timer == 0 || ((game->player.dash_timer / G1_DELTA_DASH) & 1) == 0)
         return move_to_tile(&game->sprites[GAME1_FLASH], game->vram, FULL);
     else 
         return move_to_tile(&game->sprites[GAME1_FLASH], game->vram, EMPTY);
