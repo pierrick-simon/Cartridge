@@ -66,8 +66,8 @@ typedef enum {
 typedef struct {
     uint8_t x;
     uint8_t y;
-    uint8_t v_x;
-    uint8_t v_y;
+    int8_t v_x;
+    int8_t v_y;
     uint8_t speed;
     uint16_t timer;
     uint8_t orientation;

@@ -12,23 +12,34 @@
 static void lunch_asteroid(asteroid_t *asteroid, uint16_t clock,
     uint8_t speed, uint16_t nb_tick)
 {
-    uint16_t dir = ((clock * 67 + 69)) & 3;
+    uint16_t dir = ((clock * 61 + 69)) & 3;
 
-    asteroid->x = ((clock * 676 + 9) % (14 * 8)) + 8 + 3 * 8;
-    asteroid->y = ((clock * 969 + 3) % (10 * 8)) + 16 + 3 * 8;
-    asteroid->speed = speed;
     asteroid->v_x = dir & G1_X ? speed: (speed * -1);
     asteroid->v_y = dir & G1_Y ? speed: (speed * -1);
-    asteroid->timer = nb_tick;
     asteroid->orientation = (clock * 531) & 1;
+    if (!asteroid->orientation) {
+        asteroid->y = ((clock * 969 + 3) % (10 * 8)) + 16 + 3 * 8;
+        if (asteroid->v_x > 0)
+            asteroid->x = 0;
+        else
+            asteroid->x = 168;
+    } else {
+        asteroid->x = ((clock * 676 + 9) % (14 * 8)) + 8 + 3 * 8;
+    if (asteroid->v_y > 0)
+            asteroid->y = 8;
+        else
+            asteroid->y = 144;
+    }
+    asteroid->speed = speed;
+    asteroid->timer = nb_tick;
     asteroid->here = 1;
 }
 
 static void move_asteroid(asteroid_t *asteroid, uint8_t clock)
 {
-    if (asteroid->orientation || (clock & 1) == 0)
+    if (asteroid->orientation || (clock & 2) == 0)
         asteroid->x += asteroid->v_x;
-    if (!asteroid->orientation || (clock & 1) == 0)
+    if (!asteroid->orientation || (clock & 2) == 0)
         asteroid->y += asteroid->v_y;
     if (asteroid->timer == 0) {
         if (asteroid->x < 0 || asteroid->x > 168 || asteroid->y < 8 || asteroid->y > 144) {
@@ -89,6 +100,6 @@ void g1_handle_attacks(g1_state *game, const input_state *input,
         change_nb_live(&game->player, 1);
         change_nb_live(&game->player, 1);
         change_nb_live(&game->player, 1);
-        lunch_asteroid(&game->asteroid, clock, 4, 500);
+        lunch_asteroid(&game->asteroid, clock, 3, 500);
     }
 }
