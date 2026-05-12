@@ -53,9 +53,12 @@ void g3_init(g3_state *game)
     game->py.b.h = 128;
     game->vx = 0;
     game->vy = G3_JUMP_VY;
+    game->anim_timer = 0;
+    game->bounce_sfx.state = SND_OFF;
+    game->bounce_sfx.music = NULL;
     initPlatforms(game);
     set_sprite_data(1, 7, player_tile);
-    set_sprite_tile(G3_PLAYER_SPR, 1);
+    set_sprite_tile(G3_PLAYER_SPR, 1 + P_IDLE);
     move_sprite(G3_PLAYER_SPR, game->px, game->py.b.h);
     set_sprite_data(G3_PLAT_TILE_IDX, PLATFORM_TILE_SIZE, platform_tile);
     drawPlatforms(game);
@@ -144,6 +147,8 @@ static void checkCollisions(g3_state *game)
         if (landedOn(game, i)) {
             game->vy = G3_JUMP_VY;
             game->score++;
+            game->anim_timer = G3_ANIM_BOUNCE_FRAMES;
+            sound_start(&game->bounce_sfx, 2, g3_bounce_snd, 0, 0xFF);
             return;
         }
         i++;
@@ -193,6 +198,13 @@ static game_state_t updatePlay(g3_state *game,
     moveHorizontal(game, held);
     applyGravity(game);
     checkCollisions(game);
+    sound_update(&game->bounce_sfx);
+    if (game->anim_timer > 0) {
+        game->anim_timer--;
+        set_sprite_tile(G3_PLAYER_SPR, 1 + P_RL);
+    } else {
+        set_sprite_tile(G3_PLAYER_SPR, 1 + P_IDLE);
+    }
     move_sprite(G3_PLAYER_SPR, game->px, game->py.b.h);
     if (game->py.b.h > G3_SCREEN_H + 16) {
         game->phase = G3_DEAD;
