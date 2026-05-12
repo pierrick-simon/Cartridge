@@ -124,12 +124,26 @@ static inline uint8_t nextRng(uint8_t rng)
     return rng * 53 + 1;
 }
 
+static uint8_t getGapMin(uint16_t score)
+{
+    uint8_t extra = (uint8_t)(score / G3_DIFF_STEP);
+
+    if (extra > G3_DIFF_MAX_EXTRA)
+        extra = G3_DIFF_MAX_EXTRA;
+    return G3_PLAT_GAP_MIN + extra;
+}
+
 static void recyclePlatform(g3_state *game, uint8_t i, uint8_t topy)
 {
+    uint8_t gap_min = getGapMin(game->score);
+    uint8_t gap_range = G3_PLAT_GAP_MAX - gap_min;
+
     game->rng = nextRng(game->rng);
     game->platforms[i].x =
         8 + (game->rng % (G3_SCREEN_W - G3_PLAT_W - 16));
-    game->platforms[i].y = topy;
+    game->rng = nextRng(game->rng);
+    game->platforms[i].y = topy - gap_min
+        - (game->rng % gap_range);
 }
 
 static void scrollWorld(g3_state *game, uint8_t delta)
@@ -148,9 +162,7 @@ static void scrollWorld(g3_state *game, uint8_t delta)
     i = 0;
     while (i < G3_NB_PLATFORMS) {
         if (game->platforms[i].y > G3_SCREEN_H + 16) {
-            game->rng = nextRng(game->rng);
-            recyclePlatform(game, i, top_y - G3_PLAT_GAP_MIN
-                - (game->rng % (G3_PLAT_GAP_MAX - G3_PLAT_GAP_MIN)));
+            recyclePlatform(game, i, top_y);
             top_y = game->platforms[i].y;
         }
         sid = G3_PLAT_SPR_OFF + i * 2;
