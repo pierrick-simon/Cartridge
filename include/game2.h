@@ -14,8 +14,8 @@
     #include "sprite.h"
     #include "heart.h"
     
-    #define G2_NB_AMMUNITION 3
-    #define G2_NB_ENEMY 15
+    #define G2_NB_AMMUNITION 6
+    #define G2_NB_ENEMY 5
     #define G2_NB_ENEMY_SKIN 2
     #define G2_NB_SKIN 2
     #define G2_NB_HEART 3
@@ -42,6 +42,9 @@
         GAME2_AMMUNITION1,
         GAME2_AMMUNITION2,
         GAME2_AMMUNITION3,
+        GAME2_AMMUNITION4,
+        GAME2_AMMUNITION5,
+        GAME2_AMMUNITION6,
         GAME2_ENEMY1,
         GAME2_ENEMY2,
         GAME2_ENEMY3,
@@ -49,14 +52,6 @@
         GAME2_ENEMY5,
         GAME2_ENEMY6,
         GAME2_ENEMY7,
-        GAME2_ENEMY8,
-        GAME2_ENEMY9,
-        GAME2_ENEMY10,
-        GAME2_ENEMY11,
-        GAME2_ENEMY12,
-        GAME2_ENEMY13,
-        GAME2_ENEMY14,
-        GAME2_ENEMY15,
         GAME2_ENEMIES_AMMUNITION1,
         GAME2_ENEMIES_AMMUNITION2,
         GAME2_ENEMIES_AMMUNITION3,

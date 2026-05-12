@@ -91,11 +91,7 @@ static void move_skin2(g2_state *game, uint8_t i)
         enemy->x++;
     else if (enemy->x > game->player.x)
         enemy->x--;
-    if (enemy->y < game->player.y)
-        enemy->y += 2;
-    else if (enemy->y > game->player.y)
-        enemy->y--;
-
+    enemy->y += 2;
     if (enemy->x + 6 < game->player.x || enemy->x > game->player.x + 6)
         return;
     if (enemy->y + 6 < game->player.y || enemy->y > game->player.y + 6)
@@ -122,7 +118,7 @@ static void handle_shown_enemy(g2_state *game, uint8_t i, uint16_t clock)
         move_skin2(game, i);
         moved = 1;
     }
-    if (moved)
+    if (moved == 1)
         move_sprite(i + GAME2_ENEMY1, enemy->x, enemy->y);
 }
 

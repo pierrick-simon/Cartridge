@@ -141,24 +141,35 @@ void g2_handle_player(g2_state *game, const input_state *input,
         handle_heart(game, clock, i);
 }
 
-static uint8_t shoot(g2_state *game, uint8_t id)
+static uint8_t shoot(g2_state *game, uint8_t id, uint8_t launch)
 {
     if (game->ammunitions[id].shoot == 1)
         return 0;
     game->ammunitions[id].shoot = 1;
     game->ammunitions[id].x = game->player.x;
     game->ammunitions[id].y = game->player.y;
+    if (game->player.vram_id == GAME2_VRAM_SHIP2 && launch == 2)
+        game->ammunitions[id].x -= 2;
+    else if (game->player.vram_id == GAME2_VRAM_SHIP2 && launch == 1) {
+        game->ammunitions[id].x += 3;
+        game->ammunitions[id].y += 2;
+    }
     sound_channel1(0x2A, 0x80, 0xF1, 0xA9, 0x87);
     return 1;
 }
 
 void g2_handle_ammunition(g2_state *game, uint8_t pressed)
 {
-    uint8_t launch = 0;
+    uint8_t launch = 1;
+    uint8_t nb_ammunition = 3;
 
-    for (uint8_t i = 0; i < G2_NB_AMMUNITION; i++) {
-        if ((pressed & J_A) && launch == 0)
-            launch = shoot(game, i);
+    if (game->player.vram_id == GAME2_VRAM_SHIP2) {
+        launch = 2;
+        nb_ammunition = G2_NB_AMMUNITION;
+    }
+    for (uint8_t i = 0; i < nb_ammunition; i++) {
+        if ((pressed & J_A) && launch != 0)
+            launch -= shoot(game, i, launch);
         if (game->ammunitions[i].shoot == 1) {
             game->ammunitions[i].y -= 2;
             move_sprite(GAME2_AMMUNITION1 + i,
