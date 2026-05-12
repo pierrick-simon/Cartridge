@@ -13,6 +13,9 @@
 #include "platformtile.h"
 #include "hearttile.h"
 #include "number.h"
+#include "moontile.h"
+#include "game2_theme.h"
+#include "save_data.h"
 
 static void initPlatforms(g3_state *game)
 {
@@ -49,6 +52,13 @@ static void initSounds(g3_state *game)
 {
     game->bounce_sfx.state = SND_OFF;
     game->bounce_sfx.music = NULL;
+    sound_start(&game->theme, 3, game2_theme_music, 1, 0x80);
+}
+
+static void initBackground(void)
+{
+    set_bkg_data(0, 0, moon_tile);
+    set_bkg_tiles(0, 0, 20, 18, moon_map);
 }
 
 static void initVram(void)
@@ -65,7 +75,7 @@ static void initScore(void)
 
     while (i < G3_NB_NUMBER) {
         set_sprite_tile(G3_SCORE_SPR_OFF + i, G3_NUMBER_VRAM_IDX);
-        move_sprite(G3_SCORE_SPR_OFF + i, 8 + 6 * i, 144);
+        move_sprite(G3_SCORE_SPR_OFF + i, 8 + 6 * i, G3_HUD_Y);
         i++;
     }
 }
@@ -77,7 +87,7 @@ static void initHearts(g3_state *game)
     while (i < G3_NB_HEART) {
         game->hearts[i].show = 1;
         game->hearts[i].x = 160 - 10 * G3_NB_HEART + 10 * i;
-        game->hearts[i].y = 144;
+        game->hearts[i].y = G3_HUD_Y;
         set_sprite_tile(G3_HEART_SPR_OFF + i, G3_HEART_VRAM_IDX);
         move_sprite(G3_HEART_SPR_OFF + i,
             game->hearts[i].x, game->hearts[i].y);
@@ -98,6 +108,7 @@ void g3_init(g3_state *game)
     game->anim_timer = 0;
     initSounds(game);
     initPlatforms(game);
+    initBackground();
     initVram();
     set_sprite_tile(G3_PLAYER_SPR, 1 + P_IDLE);
     move_sprite(G3_PLAYER_SPR, game->px, game->py.b.h);
@@ -233,9 +244,22 @@ static void moveHorizontal(g3_state *game, uint8_t held)
     }
 }
 
-static inline void showGameOver(const g3_state *game)
+static void hideGameplaySprites(void)
 {
-    HIDE_SPRITES;
+    uint8_t i = 0;
+
+    move_sprite(G3_PLAYER_SPR, 0, 0);
+    while (i < G3_NB_PLATFORMS) {
+        move_sprite(G3_PLAT_SPR_OFF + i * 2, 0, 0);
+        move_sprite(G3_PLAT_SPR_OFF + i * 2 + 1, 0, 0);
+        i++;
+    }
+}
+
+static void showGameOver(const g3_state *game)
+{
+    save_score(game->score, 2);
+    hideGameplaySprites();
 }
 
 static game_state_t updateDead(g3_state *game,
@@ -243,6 +267,7 @@ static game_state_t updateDead(g3_state *game,
 {
     uint8_t pressed = getJustPressed(input);
 
+    sound_update(&game->theme);
     if (pressed & J_A) {
         g3_init(game);
         return STATE_GAME3;
@@ -261,6 +286,7 @@ static game_state_t updatePlay(g3_state *game,
     applyGravity(game);
     checkCollisions(game);
     g3_update_score(game);
+    sound_update(&game->theme);
     sound_update(&game->bounce_sfx);
     if (game->anim_timer > 0) {
         game->anim_timer--;

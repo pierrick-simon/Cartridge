@@ -42,6 +42,8 @@
     #define G3_SCORE_SPR_OFF 14
     #define G3_HEART_SPR_OFF 19
 
+    #define G3_HUD_Y 148
+
     typedef struct {
         uint8_t x;
         uint8_t y;
@@ -63,6 +65,7 @@
         uint8_t rng;
         uint8_t anim_timer;
         sound_t bounce_sfx;
+        sound_t theme;
         heart_t hearts[G3_NB_HEART];
     } g3_state;
 
