@@ -127,6 +127,7 @@ static void scrollWorld(g3_state *game, uint8_t delta)
     uint8_t sid;
     uint8_t top_y = 255;
 
+    game->score += delta;
     while (i < G3_NB_PLATFORMS) {
         game->platforms[i].y += delta;
         if (game->platforms[i].y < top_y)
@@ -208,10 +209,8 @@ static void checkCollisions(g3_state *game)
     while (i < G3_NB_PLATFORMS) {
         if (landedOn(game, i)) {
             game->vy = G3_JUMP_VY;
-            game->score++;
             game->anim_timer = G3_ANIM_BOUNCE_FRAMES;
             sound_start(&game->bounce_sfx, 2, g3_bounce_snd, 0, 0xFF);
-            g3_update_score(game);
             return;
         }
         i++;
@@ -261,6 +260,7 @@ static game_state_t updatePlay(g3_state *game,
     moveHorizontal(game, held);
     applyGravity(game);
     checkCollisions(game);
+    g3_update_score(game);
     sound_update(&game->bounce_sfx);
     if (game->anim_timer > 0) {
         game->anim_timer--;
