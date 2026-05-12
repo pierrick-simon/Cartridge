@@ -23,6 +23,8 @@
     #define G2_NB_ENEMIES_AMMUNITION 10
     #define G2_ENEMY_SHOOT_DELAY 90
 
+    #define G2_INVINCIBLE_FRAMES 90
+
     typedef enum {
         GAME2_VRAM_SHIP1,
         GAME2_VRAM_SHIP2,
@@ -105,6 +107,7 @@
         uint8_t y;
         uint8_t vram_id;
         uint8_t nb_skins;
+        uint8_t invincible;
         heart_t hearts[G2_NB_HEART];
     } player_t;
 

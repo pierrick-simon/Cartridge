@@ -32,8 +32,10 @@ void g2_change_nb_live(g2_state *game, uint8_t gain)
     uint8_t last = 0;
 
     for (uint8_t i = 0; i < G2_NB_HEART; i++) {
-        if (gain == 0 && game->player.hearts[i].show == 1) {
+        if (gain == 0 && game->player.hearts[i].show == 1
+            && game->player.invincible == 0) {
             game->player.hearts[i].show = 0;
+            game->player.invincible = G2_INVINCIBLE_FRAMES;
             return;
         }
         if (gain == 1 && game->player.hearts[i].show == 1)
@@ -103,12 +105,8 @@ static void handle_heart(g2_state *game, uint16_t clock, uint8_t i)
     }
 }
 
-void g2_handle_player(g2_state *game, const input_state *input,
-    uint8_t pressed, uint16_t clock)
+static void player_change_pos(g2_state *game, const input_state *input)
 {
-    if ((clock & 3) == 0)
-        move_up_sprite(&game->sprites[GAME2_PLAYER], game->vram);
-    change_ship(game, pressed);
     if (getHeld(input) & J_LEFT) {
         game->player.x--;
         if (game->player.x < 16)
@@ -121,7 +119,23 @@ void g2_handle_player(g2_state *game, const input_state *input,
         if (game->player.x > 160 - 8)
             game->player.x = 160 - 8;
         move_sprite(GAME2_PLAYER, game->player.x, game->player.y);
-        move_everything(game, -1);
+        move_everything(game, (uint8_t)-1);
+    }
+}
+
+void g2_handle_player(g2_state *game, const input_state *input,
+    uint8_t pressed, uint16_t clock)
+{
+    if ((clock & 3) == 0)
+        move_up_sprite(&game->sprites[GAME2_PLAYER], game->vram);
+    change_ship(game, pressed);
+    player_change_pos(game, input);
+    if (game->player.invincible > 0) {
+        game->player.invincible--;
+        if ((game->player.invincible & 3) == 0 && game->player.invincible != 0)
+            move_sprite(GAME2_PLAYER, 0, 0);
+        else
+            move_sprite(GAME2_PLAYER, game->player.x, game->player.y);
     }
     for (uint8_t i = 0; i < G2_NB_HEART; i++)
         handle_heart(game, clock, i);
