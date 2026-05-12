@@ -13,6 +13,7 @@
     #include "game_types.h"
     #include "input.h"
     #include "sound_manager.h"
+    #include "sound_note.h"
 
     #define G3_NB_PLATFORMS 6
     #define G3_PLAT_TILE_IDX 8
@@ -55,6 +56,11 @@
         uint8_t anim_timer;
         sound_t bounce_sfx;
     } g3_state;
+
+    static const uint8_t g3_bounce_snd[] = {
+        PT, RN, G5, PT, RN, C6,
+        END, END, END
+    };
 
     void g3_init(g3_state *game);
     game_state_t g3_update(g3_state *game,
