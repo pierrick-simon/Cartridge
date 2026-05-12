@@ -14,6 +14,7 @@
     #include "input.h"
     #include "sound_manager.h"
     #include "sound_note.h"
+    #include "heart.h"
 
     #define G3_NB_PLATFORMS 6
     #define G3_PLAT_TILE_IDX 8
@@ -33,6 +34,13 @@
     #define G3_PLAT_GAP_MAX 52
     #define G3_PLAYER_SPEED 2
     #define G3_ANIM_BOUNCE_FRAMES 8
+
+    #define G3_NB_HEART 3
+    #define G3_NB_NUMBER 5
+    #define G3_NUMBER_VRAM_IDX 9
+    #define G3_HEART_VRAM_IDX 19
+    #define G3_SCORE_SPR_OFF 14
+    #define G3_HEART_SPR_OFF 19
 
     typedef struct {
         uint8_t x;
@@ -55,6 +63,7 @@
         uint8_t rng;
         uint8_t anim_timer;
         sound_t bounce_sfx;
+        heart_t hearts[G3_NB_HEART];
     } g3_state;
 
     static const uint8_t g3_bounce_snd[] = {
