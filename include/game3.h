@@ -12,6 +12,7 @@
 
     #include "game_types.h"
     #include "input.h"
+    #include "sound_manager.h"
 
     #define G3_NB_PLATFORMS 6
     #define G3_PLAT_TILE_IDX 8
@@ -30,6 +31,7 @@
     #define G3_PLAT_GAP_MIN 30
     #define G3_PLAT_GAP_MAX 52
     #define G3_PLAYER_SPEED 2
+    #define G3_ANIM_BOUNCE_FRAMES 8
 
     typedef struct {
         uint8_t x;
@@ -42,7 +44,7 @@
     } g3_phase_t;
 
     typedef struct {
-        uint8_t score;
+        uint16_t score;
         uint8_t px;
         fixed py;
         int8_t vx;
@@ -50,6 +52,8 @@
         platform_t platforms[G3_NB_PLATFORMS];
         g3_phase_t phase;
         uint8_t rng;
+        uint8_t anim_timer;
+        sound_t bounce_sfx;
     } g3_state;
 
     void g3_init(g3_state *game);
