@@ -36,6 +36,8 @@
     #define G3_DIFF_MAX_EXTRA 10
     #define G3_PLAYER_SPEED 2
     #define G3_ANIM_BOUNCE_FRAMES 8
+    #define G3_PLAT_SPEED 1
+    #define G3_MOBILE_SCORE 400
 
     #define G3_NB_HEART 3
     #define G3_NB_NUMBER 5
@@ -49,6 +51,7 @@
     typedef struct {
         uint8_t x;
         uint8_t y;
+        int8_t vx;
     } platform_t;
 
     typedef enum {
@@ -79,5 +82,12 @@
     void g3_init(g3_state *game);
     game_state_t g3_update(g3_state *game,
         const input_state *input);
+    void g3_initPlatforms(g3_state *game);
+    void g3_drawPlatforms(const g3_state *game);
+    void g3_scrollWorld(g3_state *game, uint8_t delta);
+    void g3_recyclePlatform(g3_state *game, uint8_t i, uint8_t topy);
+    void g3_movePlatforms(g3_state *game);
+    game_state_t updateDead(g3_state *game, const input_state *input);
+    game_state_t updatePlay(g3_state *game, const input_state *input);
 
 #endif /* !GAME3_H */
