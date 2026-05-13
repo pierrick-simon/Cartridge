@@ -18,13 +18,24 @@
 #include "power.h"
 #include "hearttile.h"
 #include "number.h"
+#include "power_up.h"
+
+static void init_power_up(g2_state *game)
+{
+    for (uint8_t i = 0; i < G2_NB_POWER_UP; i++) {
+        init_sprite(GAME2_VRAM_POWER_UP, GAME2_POWER_UP1 + i,
+            game->sprites, game->vram);
+        game->power_up[i].vram_id = GAME2_VRAM_POWER_UP;
+        game->power_up[i].show = 0;
+    }
+}
 
 static void init_player(g2_state *game)
 {
     game->player.vram_id = GAME2_VRAM_SHIP1;
     game->player.nb_skins = G2_NB_SKIN;
     game->player.x = 160 / 2;
-    game->player.y = 144 - 24;
+    game->player.y = 144 - 12;
     init_sprite(game->player.vram_id, GAME2_PLAYER, game->sprites, game->vram);
     for (uint8_t i = 0; i < G2_NB_HEART; i++) {
         init_sprite(GAME2_VRAM_HEART, GAME2_HEART1 + i,
@@ -41,7 +52,7 @@ static void init_ammunition(g2_state *game)
 {
 
     for (uint8_t i = 0; i <  G2_NB_AMMUNITION; i++) {
-        game->ammunitions[i].shoot = 0;
+        game->ammunitions[i].show = 0;
         game->ammunitions[i].x = 0;
         game->ammunitions[i].y = 0;
         init_sprite(GAME2_VRAM_AMMUNITION, i + GAME2_AMMUNITION1,
@@ -49,7 +60,7 @@ static void init_ammunition(g2_state *game)
         hide_sprite(&game->sprites[i + GAME2_AMMUNITION1]);
     }
     for (uint8_t i = 0; i < G2_NB_ENEMIES_AMMUNITION; i++) {
-        game->enemies_ammunitions[i].shoot = 0;
+        game->enemies_ammunitions[i].show = 0;
         game->enemies_ammunitions[i].x = 0;
         game->enemies_ammunitions[i].y = 0;
         init_sprite(GAME2_VRAM_AMMUNITION, i + GAME2_ENEMIES_AMMUNITION1,
@@ -76,6 +87,8 @@ static void init_vram(g2_state *game)
         &game->nb_vram, game->vram);
     init_vram_sprite(number_tiles, NUMBER_SIZE,
         &game->nb_vram, game->vram);
+    init_vram_sprite(power_up_tiles, POWER_UP_SIZE,
+        &game->nb_vram, game->vram);
 }
 
 static void init_enemies(g2_state *game)
@@ -90,8 +103,8 @@ static void init_enemies(g2_state *game)
             + game->vram[ship_skin].start;
         game->enemies[i].vram_id = ship_skin;
         game->enemies[i].show = 1;
-        game->enemies[i].x = 16 + i * 8;
-        game->enemies[i].y = 16 + i * 4;
+        game->enemies[i].x = rand() % 160 + 8;
+        game->enemies[i].y = rand() % 50 + 20;
         game->enemies[i].explode = 0;
         game->enemies[i].dir = i % 2;
         game->enemies[i].timer = i * (G2_ENEMY_SHOOT_DELAY / G2_NB_ENEMY);
@@ -125,6 +138,7 @@ void g2_init(g2_state *game)
     init_ammunition(game);
     init_enemies(game);
     init_score(game);
+    init_power_up(game);
     move_sprite(GAME2_PLAYER, game->player.x, game->player.y);
     SHOW_BKG;
     SHOW_SPRITES;

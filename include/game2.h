@@ -18,9 +18,10 @@
     #define G2_NB_ENEMY 5
     #define G2_NB_ENEMY_SKIN 2
     #define G2_NB_SKIN 2
-    #define G2_NB_HEART 3
-    #define G2_NB_NUMBER 5
+    #define G2_NB_HEART 5
+    #define G2_NB_NUMBER 4
     #define G2_NB_ENEMIES_AMMUNITION 10
+    #define G2_NB_POWER_UP 3
     #define G2_ENEMY_SHOOT_DELAY 90
 
     #define G2_INVINCIBLE_FRAMES 90
@@ -34,6 +35,7 @@
         GAME2_VRAM_EXPLOSION,
         GAME2_VRAM_HEART,
         GAME2_VRAM_SCORE,
+        GAME2_VRAM_POWER_UP,
         NB_GAME2_VRAM,
     };
 
@@ -65,11 +67,15 @@
         GAME2_HEART1,
         GAME2_HEART2,
         GAME2_HEART3,
+        GAME2_HEART4,
+        GAME2_HEART5,
         GAME2_SCORE1,
         GAME2_SCORE2,
         GAME2_SCORE3,
         GAME2_SCORE4,
-        GAME2_SCORE5,
+        GAME2_POWER_UP1,
+        GAME2_POWER_UP2,
+        GAME2_POWER_UP3,
     };
 
     typedef enum {
@@ -94,8 +100,8 @@
         uint8_t x;
         uint8_t y;
         uint8_t vram_id;
-        uint8_t shoot;
-    } ammunition_t;
+        uint8_t show;
+    } entity_t;
 
     typedef struct {
         uint8_t x;
@@ -112,9 +118,10 @@
         vram_sprite_t vram[NB_GAME2_VRAM];
         sprite_t sprites[MAX_SPRITE];
         sound_t musics[GAME2_NB_MUSIC];
-        ammunition_t ammunitions[G2_NB_AMMUNITION];
-        ammunition_t enemies_ammunitions[G2_NB_ENEMIES_AMMUNITION];
+        entity_t ammunitions[G2_NB_AMMUNITION];
+        entity_t enemies_ammunitions[G2_NB_ENEMIES_AMMUNITION];
         enemy_t enemies[G2_NB_ENEMY];
+        entity_t power_up[G2_NB_POWER_UP];
         player_t player;
         uint8_t bg_x;
         uint8_t bg_y;
@@ -127,9 +134,10 @@
     void g2_handle_enemies_ammunition(g2_state *game);
     void g2_handle_enemies(g2_state *game, uint16_t clock);
     void g2_handle_ammunition(g2_state *game, uint8_t pressed);
-    void g2_handle_player(g2_state *game, const input_state *input,
-        uint8_t pressed, uint16_t clock);
+    uint8_t g2_handle_player(g2_state *game, const input_state *input,
+        uint16_t clock);
     void g2_change_score(g2_state *game, uint8_t gain);
     void g2_change_nb_live(g2_state *game, uint8_t gain);
+    void g2_handle_power_up(g2_state *game);
 
 #endif

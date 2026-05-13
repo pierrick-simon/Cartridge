@@ -63,6 +63,7 @@ SRCS		=   $(addprefix $(SRC_DIR)/, 			\
 						explosion.c 				\
 						hearttile.c					\
 						number.c					\
+						power_up.c 					\
 					)								\
 					$(addprefix musics/, 			\
 						sound_note.c 				\
