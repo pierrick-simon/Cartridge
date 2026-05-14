@@ -9,28 +9,33 @@
 #include <stdio.h>
 #include "game1.h"
 
-static void lunch_star(star_t *star, uint16_t clock,
+static void lunch_star(g1_state *game, uint16_t clock,
     uint8_t speed, uint16_t nb_tick)
 {
-    uint16_t dir = ((clock * 61 + 69)) & 2;
+    star_t *star = &game->star;
+    uint16_t dir = clock * 61 + 69;
 
     star->orientation = (clock * 531) & 1;
     if (!star->orientation) {
         star->y.b.h = ((clock * 969 + 3) % (10 * 8)) + 16 + 3 * 8;
-        if (dir & 1)
+        if (dir & 2)
             star->x.b.h = 0;
         else
             star->x.b.h = 168;
     } else {
         star->x.b.h = ((clock * 676 + 9) % (14 * 8)) + 8 + 3 * 8;
-        if (dir & 1)
+        if (dir & 2)
                 star->y.b.h = 8;
             else
                 star->y.b.h = 144;
     }
+    star->explode_timer = -1;
+    star->here = 1;
     star->speed = (G1_DELTA_STAR_SPEED - (speed *
         G1_DELTA_STAR_SPEED / 10)) + G1_MAX_STAR_SPEED;
     star->timer = nb_tick;
+    init_sprite(GAME1_VRAM_STAR, GAME1_STAR,
+            game->sprites, game->vram);
 }
 
 static void lunch_asteroid(g1_state *game, uint8_t i,
@@ -38,7 +43,7 @@ static void lunch_asteroid(g1_state *game, uint8_t i,
 {
     uint8_t clock = game->clock;
     asteroid_t *asteroid = &game->asteroid[i];
-    uint16_t dir = ((clock * 61 + 69)) & 3;
+    uint16_t dir = clock * 61 + 69;
 
     asteroid->v_x = dir & G1_X ? speed: (speed * -1);
     asteroid->v_y = dir & G1_Y ? speed: (speed * -1);
@@ -62,18 +67,34 @@ static void lunch_asteroid(g1_state *game, uint8_t i,
     set_sprite_prop(GAME1_F_ASTEROID + i, ((clock * 211 + 2) % 4) * S_FLIPX);
 }
 
-static void move_star(star_t *star, uint8_t clock, const palyer_t *player)
+static void move_star(g1_state *game, uint8_t clock)
 {
-    int16_t v_x = (player->x.w - star->x.w);
-    int16_t v_y = (player->y.w - star->y.w);
-
-    star->x.w += v_x / star->speed;
-    star->y.w += v_y / star->speed;
-    if (star->timer == 0) {
-        move_sprite(GAME1_STAR, 0, 0);
+    star_t *star = &game->star;
+    int16_t v_x = (game->player.x.w - star->x.w);
+    int16_t v_y = (game->player.y.w - star->y.w);
+    
+    if (star->explode_timer == 0) {
         star->here = 0;
+        move_sprite(GAME1_STAR, 0, 0);
         return;
     }
+    if (star->timer == 0 && star->explode_timer != 0)
+        --star->explode_timer;
+    if (star->timer != 0)
+        --star->timer;
+    if (star->timer == 0 && star->explode_timer == -1) {
+        star->explode_timer = G1_STAR_EXPLODE_TIMER;
+        init_sprite(GAME1_VRAM_EXPLOSION, GAME1_STAR,
+            game->sprites, game->vram);
+        return;
+    }
+    if (star->explode_timer != -1) {
+        if (star->explode_timer & 3)
+            move_up_sprite(&game->sprites[GAME1_STAR], game->vram);
+        return;
+    }
+    star->x.w += v_x / star->speed;
+    star->y.w += v_y / star->speed;
     move_sprite(GAME1_STAR, star->x.b.h + 1, star->y.b.h + 1);
 }
 
@@ -141,9 +162,14 @@ static void collision(g1_state *game)
             return;
         }
     }
-    if (&game->star.here == 1 || is_hit(game->star.x.b.h, game->star.y.b.h,
-            game->player.x.b.h, game->player.y.b.h))
+    if (game->star.timer != 0 && is_hit(game->star.x.b.h, game->star.y.b.h,
+            game->player.x.b.h, game->player.y.b.h)) {
         collide(&game->player);
+        init_sprite(GAME1_VRAM_EXPLOSION, GAME1_STAR,
+            game->sprites, game->vram);
+        game->star.timer = 0;
+        game->star.explode_timer = G1_STAR_EXPLODE_TIMER;
+    }
 }
 
 void g1_handle_attacks(g1_state *game, const input_state *input,
@@ -151,16 +177,18 @@ void g1_handle_attacks(g1_state *game, const input_state *input,
 {
     for (uint8_t i = 0; i < G1_NB_ASTEROID; ++i)
         simulate_asteroid(&game->asteroid[i], game->clock, i);
+    if (game->star.here == 1)
+        move_star(game, game->clock);
     collision(game);
-    move_star(&game->star, game->clock, &game->player);
     if (pressed & J_B) {
         change_nb_live(&game->player, 1);
         change_nb_live(&game->player, 1);
         change_nb_live(&game->player, 1);
-        for (uint8_t i = 0; i < G1_NB_ASTEROID; ++i)
-            if (game->asteroid[i].here == 0) {
-                lunch_asteroid(game, i, 1, 100);
-                break;
-            }
+        lunch_star(game, game->clock, 1, 1000);
+        // for (uint8_t i = 0; i < G1_NB_ASTEROID; ++i)
+        //     if (game->asteroid[i].here == 0) {
+        //         lunch_asteroid(game, i, 1, 100);
+        //         break;
+        //     }
     }
 }

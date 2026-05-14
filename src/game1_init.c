@@ -14,6 +14,7 @@
 #include "number.h"
 #include "asteroid.h"
 #include "star.h"
+#include "explosion.h"
 
 static void init_asteroid(g1_state *game, uint8_t i)
 {
@@ -33,6 +34,7 @@ static void init_attacks(g1_state *game)
     game->star.x.w = 0;
     game->star.y.w = 0;
     game->star.timer = 0;
+    game->star.here = 0;
 }
 
 
@@ -62,6 +64,8 @@ static void init_vram(g1_state *game)
     init_vram_sprite(asteroid_tile, NB_ASTEROID,
         &game->nb_vram, game->vram);
     init_vram_sprite(star_tile, 1,
+        &game->nb_vram, game->vram);
+    init_vram_sprite(explosion_tiles, EXPLOSION_SIZE,
         &game->nb_vram, game->vram);
 }
 

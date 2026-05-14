@@ -42,6 +42,8 @@
     #define G1_MIN_STAR_SPEED 70
     #define G1_DELTA_STAR_SPEED (G1_MIN_STAR_SPEED - G1_MAX_STAR_SPEED)
 
+    #define G1_STAR_EXPLODE_TIMER 18
+
 typedef enum {
     GAME1_VRAM_PLAYER,
     GAME1_VRAM_HEART,
@@ -49,6 +51,7 @@ typedef enum {
     GAME1_VRAM_SCORE,
     GAME1_VRAM_ASTEROID,
     GAME1_VRAM_STAR,
+    GAME1_VRAM_EXPLOSION,
     NB_GAME1_VRAM,
 };
 
@@ -85,6 +88,7 @@ typedef struct {
     fixed y;
     uint8_t speed;
     uint16_t timer;
+    uint16_t explode_timer;
     uint8_t orientation;
     uint8_t here;
 } star_t;
