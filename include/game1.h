@@ -43,6 +43,8 @@
     #define G1_DELTA_STAR_SPEED (G1_MIN_STAR_SPEED - G1_MAX_STAR_SPEED)
 
     #define G1_STAR_EXPLODE_TIMER 18
+    
+    #define G1_ATTACK_COOLDOWN 180
 
 typedef enum {
     GAME1_VRAM_PLAYER,
@@ -112,6 +114,7 @@ typedef struct {
     asteroid_t asteroid[G1_NB_ASTEROID];
     star_t star;
     uint32_t clock;
+    uint8_t spawn_timer;
 } g1_state;
 
     void g1_init(g1_state *game);

@@ -8,6 +8,7 @@
 #include <gb/gb.h>
 #include <stdio.h>
 #include "game1.h"
+#include <rand.h>
 
 static void lunch_star(g1_state *game, uint16_t clock,
     uint8_t speed, uint16_t nb_tick)
@@ -65,6 +66,17 @@ static void lunch_asteroid(g1_state *game, uint8_t i,
     asteroid->timer = nb_tick;
     asteroid->here = 1;
     set_sprite_prop(GAME1_F_ASTEROID + i, ((clock * 211 + 2) % 4) * S_FLIPX);
+}
+
+static void lunch_attack(g1_state *game)
+{
+    if (game->star.here == 0 && rand() % 2 == 0)
+        return lunch_star(game, game->clock, 1, 1000);
+    for (uint8_t i = 0; i < G1_NB_ASTEROID; ++i)
+        if (game->asteroid[i].here == 0)
+            return lunch_asteroid(game, i, 2, 500);
+    if (game->star.here == 0)
+        lunch_star(game, game->clock, 1, 1000);
 }
 
 static void move_star(g1_state *game, uint8_t clock)
@@ -180,15 +192,6 @@ void g1_handle_attacks(g1_state *game, const input_state *input,
     if (game->star.here == 1)
         move_star(game, game->clock);
     collision(game);
-    if (pressed & J_B) {
-        change_nb_live(&game->player, 1);
-        change_nb_live(&game->player, 1);
-        change_nb_live(&game->player, 1);
-        lunch_star(game, game->clock, 1, 1000);
-        // for (uint8_t i = 0; i < G1_NB_ASTEROID; ++i)
-        //     if (game->asteroid[i].here == 0) {
-        //         lunch_asteroid(game, i, 1, 100);
-        //         break;
-        //     }
-    }
+    if (game->spawn_timer == 0)
+        lunch_attack(game);
 }

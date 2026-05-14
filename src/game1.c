@@ -15,6 +15,7 @@ static void handle_clock(g1_state *game)
         --game->player.cd_timer;
     if (game->player.dash_timer != 0)
         --game->player.dash_timer;
+    --(game->spawn_timer);
     ++(game->clock);
 }
 
