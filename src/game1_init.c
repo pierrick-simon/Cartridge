@@ -14,15 +14,21 @@
 #include "number.h"
 #include "asteroid.h"
 
+static void init_asteroid(g1_state *game, uint8_t i)
+{
+    init_sprite(GAME1_VRAM_ASTEROID, GAME1_F_ASTEROID + i,
+        game->sprites, game->vram);
+    game->asteroid[i].x = 0;
+    game->asteroid[i].y = 0;
+    game->asteroid[i].v_x = 0;
+    game->asteroid[i].v_y = 0;
+    game->asteroid[i].timer = 0;
+}
+
 static void init_attacks(g1_state *game)
 {
-    init_sprite(GAME1_VRAM_ASTEROID, GAME1_ASTEROID,
-        game->sprites, game->vram);
-    game->asteroid.x = 0;
-    game->asteroid.y = 0;
-    game->asteroid.v_x = 0;
-    game->asteroid.v_y = 0;
-    game->asteroid.timer = 0;
+    for (uint8_t i = 0; i < G1_NB_ASTEROID; ++i)
+        init_asteroid(game, i);
 }
 
 
@@ -54,22 +60,22 @@ static void init_vram(g1_state *game)
 
 static void init_score(g1_state *game)
 {
-    for (uint8_t i = 0; i < G1_NB_NUMBER; i++) {
-        init_sprite(GAME1_VRAM_SCORE, GAME1_SCORE1 + i,
+    for (uint8_t i = 0; i < G1_NB_SCORE; i++) {
+        init_sprite(GAME1_VRAM_SCORE, GAME1_F_SCORE + i,
             game->sprites, game->vram);
-        move_sprite(GAME1_SCORE1 + i, 8 + 6 * i, 148);
+        move_sprite(GAME1_F_SCORE + i, 8 + 6 * i, 148);
     }
 }
 
 static void init_hearts(g1_state *game)
 {
     for (uint8_t i = 0; i < G1_NB_HEART; i++) {
-        init_sprite(GAME1_VRAM_HEART, GAME1_HEART1 + i,
+        init_sprite(GAME1_VRAM_HEART, GAME1_F_HEART + i,
             game->sprites, game->vram);
         game->player.hearts[i].show = 1;
         game->player.hearts[i].y = 148;
         game->player.hearts[i].x = 164 - 10 * G1_NB_HEART + 10 * i;
-        move_sprite(GAME1_HEART1 + i,
+        move_sprite(GAME1_F_HEART + i,
             game->player.hearts[i].x, game->player.hearts[i].y);
     }
 }

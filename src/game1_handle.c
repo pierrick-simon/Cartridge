@@ -12,36 +12,31 @@
 
 void g1_change_score(g1_state *game, uint8_t gain)
 {
-    uint16_t score;
+    uint16_t score = 0;
 
     game->score += gain;
     score = game->score;
-    move_to_tile(&game->sprites[GAME1_SCORE5], game->vram, score % 10);
-    score /= 10;
-    move_to_tile(&game->sprites[GAME1_SCORE4], game->vram, score % 10);
-    score /= 10;
-    move_to_tile(&game->sprites[GAME1_SCORE3], game->vram, score % 10);
-    score /= 10;
-    move_to_tile(&game->sprites[GAME1_SCORE2], game->vram, score % 10);
-    score /= 10;
-    move_to_tile(&game->sprites[GAME1_SCORE1], game->vram, score % 10);
+    for (uint8_t i = GAME1_L_SCORE; i >= GAME1_F_SCORE; --i) {
+        move_to_tile(&game->sprites[i], game->vram, score % 10);
+        score /= 10;
+    }
 }
 
 static void handle_heart(g1_state *game, uint8_t clock, uint8_t i)
 {
     if (game->player.hearts[i].show == 0) {
-        if (game->sprites[GAME1_HEART1 + i].current
+        if (game->sprites[GAME1_F_HEART + i].current
             != game->vram[GAME1_VRAM_HEART].end - 1 && (clock & 1))
-            move_up_sprite(&game->sprites[GAME1_HEART1 + i], game->vram);
-        if (game->sprites[GAME1_HEART1 + i].current
+            move_up_sprite(&game->sprites[GAME1_F_HEART + i], game->vram);
+        if (game->sprites[GAME1_F_HEART + i].current
             == game->vram[GAME1_VRAM_HEART].end - 1)
-            hide_sprite(&game->sprites[GAME1_HEART1 + i]);
+            hide_sprite(&game->sprites[GAME1_F_HEART + i]);
     } else {
-        if (game->sprites[GAME1_HEART1 + i].current
+        if (game->sprites[GAME1_F_HEART + i].current
             != game->vram[GAME1_VRAM_HEART].start && (clock & 1)) {
-            move_sprite(GAME1_HEART1 + i,
+            move_sprite(GAME1_F_HEART + i,
                 game->player.hearts[i].x, game->player.hearts[i].y);
-            move_down_sprite(&game->sprites[GAME1_HEART1 + i], game->vram);
+            move_down_sprite(&game->sprites[GAME1_F_HEART + i], game->vram);
         }
     }
 }

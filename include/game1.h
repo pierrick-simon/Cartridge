@@ -12,14 +12,13 @@
     #include "input.h"
     #include "sprite.h"
     #include "heart.h"
+    #include <asm/types.h>
 
     #define G1_P_SPEED 1.42
     #define G1_P_DIAG_SPEED 1
     #define G1_H_TO_W(x) ((uint16_t)((x) * 256))
     #define G1_SPEED (G1_H_TO_W(G1_P_SPEED))
     #define G1_DIAG_SPEED (G1_H_TO_W(G1_P_DIAG_SPEED))
-    #define G1_NB_HEART 3
-    #define G1_NB_NUMBER 5
 
     #define G1_DASH_MULTI 3
     #define G1_DASH_COOLDOWN 180
@@ -35,6 +34,10 @@
     #define G1_CD_TIMER 250
     #define G1_CD_DELTA 8
     
+    #define G1_NB_ASTEROID 10
+    #define G1_NB_HEART 3
+    #define G1_NB_SCORE 4
+
 typedef enum {
     GAME1_VRAM_PLAYER,
     GAME1_VRAM_HEART,
@@ -49,18 +52,15 @@ typedef enum {
     GAME1_PLAYER,
 
     // gui
-    GAME1_HEART1,
-    GAME1_HEART2,
-    GAME1_HEART3,
+    GAME1_F_HEART,
+    GAME1_L_HEART = GAME1_F_HEART + G1_NB_HEART - 1,
     GAME1_FLASH,
-    GAME1_SCORE1,
-    GAME1_SCORE2,
-    GAME1_SCORE3,
-    GAME1_SCORE4,
-    GAME1_SCORE5,
+    GAME1_F_SCORE,
+    GAME1_L_SCORE = GAME1_F_SCORE + G1_NB_SCORE - 1,
 
     // attacks
-    GAME1_ASTEROID
+    GAME1_F_ASTEROID,
+    GAME1_L_ASTEROID = GAME1_F_ASTEROID + G1_NB_ASTEROID - 1,
 };
 
 typedef struct {
@@ -90,7 +90,7 @@ typedef struct {
     sprite_t sprites[MAX_SPRITE];
     uint16_t score;
     palyer_t player;
-    asteroid_t asteroid;
+    asteroid_t asteroid[G1_NB_ASTEROID];
 } g1_state;
 
     void g1_init(g1_state *game);

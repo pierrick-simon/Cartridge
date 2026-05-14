@@ -35,7 +35,7 @@ static void lunch_asteroid(asteroid_t *asteroid, uint16_t clock,
     asteroid->here = 1;
 }
 
-static void move_asteroid(asteroid_t *asteroid, uint8_t clock)
+static void move_asteroid(asteroid_t *asteroid, uint8_t clock, uint8_t i)
 {
     if (asteroid->orientation || (clock & 2) == 0)
         asteroid->x += asteroid->v_x;
@@ -43,10 +43,10 @@ static void move_asteroid(asteroid_t *asteroid, uint8_t clock)
         asteroid->y += asteroid->v_y;
     if (asteroid->timer == 0) {
         if (asteroid->x < 0 || asteroid->x > 168 || asteroid->y < 8 || asteroid->y > 144) {
-            move_sprite(GAME1_ASTEROID, 0, 0);
+            move_sprite(GAME1_F_ASTEROID + i, 0, 0);
             asteroid->here = 0;
         } else
-            move_sprite(GAME1_ASTEROID, asteroid->x, asteroid->y);
+            move_sprite(GAME1_F_ASTEROID + i, asteroid->x, asteroid->y);
         return;
     }
     if (asteroid->y < 8 + 8)
@@ -57,16 +57,16 @@ static void move_asteroid(asteroid_t *asteroid, uint8_t clock)
         asteroid->v_x = asteroid->speed * -1;
     if (asteroid->x < 8)
         asteroid->v_x = asteroid->speed;
-    move_sprite(GAME1_ASTEROID, asteroid->x, asteroid->y);
+    move_sprite(GAME1_F_ASTEROID + i, asteroid->x, asteroid->y);
 }
 
-static void simulate_asteroid(asteroid_t *asteroid, uint8_t clock)
+static void simulate_asteroid(asteroid_t *asteroid, uint8_t clock, uint8_t i)
 {
     if (asteroid->here == 0)
         return;
     if (asteroid->timer != 0)
         --asteroid->timer;
-    move_asteroid(asteroid, clock);
+    move_asteroid(asteroid, clock, i);
 }
 
 static inline void asteroid_hit(const asteroid_t *asteroid, palyer_t *player)
@@ -84,22 +84,28 @@ static inline void asteroid_hit(const asteroid_t *asteroid, palyer_t *player)
     }
 }
 
-static void collision(g1_state *game)
+static void collision(g1_state *game, uint8_t i)
 {
     if (game->player.dash_timer != 0)
         return;
-    asteroid_hit(&game->asteroid, &game->player);
+    asteroid_hit(&game->asteroid[i], &game->player);
 }
 
 void g1_handle_attacks(g1_state *game, const input_state *input,
     uint8_t pressed, uint8_t clock)
 {
-    simulate_asteroid(&game->asteroid, clock);
-    collision(game);
+    for (uint8_t i = 0; i < G1_NB_ASTEROID; ++i) {
+        simulate_asteroid(&game->asteroid[i], clock, i);
+        collision(game, i);
+    }
     if (pressed & J_B) {
         change_nb_live(&game->player, 1);
         change_nb_live(&game->player, 1);
         change_nb_live(&game->player, 1);
-        lunch_asteroid(&game->asteroid, clock, 3, 500);
+        for (uint8_t i = 0; i < G1_NB_ASTEROID; ++i)
+            if (game->asteroid[i].here == 0) {
+                lunch_asteroid(&game->asteroid[i], clock, 3, 500);
+                break;
+            }
     }
 }
