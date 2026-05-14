@@ -16,7 +16,7 @@
 
 void g3_initPlatforms(g3_state *game)
 {
-    game->platforms[0].x = 80; game->platforms[0].y = 144; game->platforms[0].vx = 0;
+    game->platforms[0].x = 80; game->platforms[0].y = 136; game->platforms[0].vx = 0;
     game->platforms[1].x = 56; game->platforms[1].y = 116; game->platforms[1].vx = 0;
     game->platforms[2].x = 104; game->platforms[2].y = 92; game->platforms[2].vx = 0;
     game->platforms[3].x = 40; game->platforms[3].y = 68; game->platforms[3].vx = 0;
