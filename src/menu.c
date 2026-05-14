@@ -9,6 +9,7 @@
 #include "number.h"
 #include "starwars.h"
 #include "save_data.h"
+#include "menutile.h"
 
 static void printCenterString(const char *str)
 {
@@ -25,12 +26,14 @@ static void printCenterString(const char *str)
 static void m_init_sprite(menu_state *menu)
 {
     init_sprite(MENU_VRAM_CURSOR, MENU_CURSOR, menu->sprites, menu->vram);
-    move_sprite(MENU_CURSOR, 56, 56 + 24 * menu->cursor);
+    move_sprite(MENU_CURSOR, 28, 56 + 16 * menu->cursor);
     for (uint8_t i = 0; i < M_NB_NUMBER; i++) {
         init_sprite(MENU_VRAM_NUMBER, MENU_SCORE1 + i,
             menu->sprites, menu->vram);
-        move_sprite(MENU_SCORE1 + i, 70 + 6 * i, 130);
+        move_sprite(MENU_SCORE1 + i, 71 + 6 * i, 112);
     }
+    set_bkg_data(0, 0, menu_tile);
+    set_bkg_tiles(0, 0, 20, 18, menu_map);
 }
 
 static void change_score(menu_state *menu, uint16_t score)
@@ -74,7 +77,7 @@ void m_init(menu_state *menu)
 static void moveCursorDown(menu_state *menu)
 {
     menu->cursor = (menu->cursor + 1) % MENU_ENTRY_COUNT;
-    move_sprite(MENU_CURSOR, 56, 56 + 24 * menu->cursor);
+    move_sprite(MENU_CURSOR, 28, 56 + 16 * menu->cursor);
     sound_channel1(0x00, 0x81, 0x43, 0x73, 0x86);
     change_score(menu, menu->scores[menu->cursor]);
 }
@@ -84,7 +87,7 @@ static void moveCursorUp(menu_state *menu)
     menu->cursor = (menu->cursor == 0)
         ? MENU_ENTRY_COUNT - 1
         : menu->cursor - 1;
-    move_sprite(MENU_CURSOR, 56, 56 + 24 * menu->cursor);
+    move_sprite(MENU_CURSOR, 28, 56 + 16 * menu->cursor);
     sound_channel1(0x00, 0x81, 0x43, 0x73, 0x86);
     change_score(menu, menu->scores[menu->cursor]);
 }

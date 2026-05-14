@@ -48,6 +48,7 @@ SRCS		=   $(addprefix $(SRC_DIR)/, 			\
 				)									\
 				$(addprefix $(ASSETS_DIR)/, 		\
 					$(addprefix backgrounds/, 		\
+						menutile.c					\
 						moontile.c					\
 						spacetile.c 				\
 					)								\
