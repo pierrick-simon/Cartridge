@@ -40,6 +40,7 @@ static void init_value(g1_state *game)
 {
     game->nb_vram = 0;
     game->score = 0;
+    game->clock = 0;
 }
 
 static void init_background()

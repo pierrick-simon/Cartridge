@@ -33,9 +33,11 @@ static void lunch_star(star_t *star, uint16_t clock,
     star->timer = nb_tick;
 }
 
-static void lunch_asteroid(asteroid_t *asteroid, uint16_t clock,
+static void lunch_asteroid(g1_state *game, uint8_t i,
     uint8_t speed, uint16_t nb_tick)
 {
+    uint8_t clock = game->clock;
+    asteroid_t *asteroid = &game->asteroid[i];
     uint16_t dir = ((clock * 61 + 69)) & 3;
 
     asteroid->v_x = dir & G1_X ? speed: (speed * -1);
@@ -57,6 +59,7 @@ static void lunch_asteroid(asteroid_t *asteroid, uint16_t clock,
     asteroid->speed = speed;
     asteroid->timer = nb_tick;
     asteroid->here = 1;
+    set_sprite_prop(GAME1_F_ASTEROID + i, ((clock * 211 + 2) % 4) * S_FLIPX);
 }
 
 static void move_star(star_t *star, uint8_t clock, const palyer_t *player)
@@ -144,16 +147,20 @@ static void collision(g1_state *game)
 }
 
 void g1_handle_attacks(g1_state *game, const input_state *input,
-    uint8_t pressed, uint8_t clock)
+    uint8_t pressed)
 {
     for (uint8_t i = 0; i < G1_NB_ASTEROID; ++i)
-        simulate_asteroid(&game->asteroid[i], clock, i);
+        simulate_asteroid(&game->asteroid[i], game->clock, i);
     collision(game);
-    move_star(&game->star, clock, &game->player);
+    move_star(&game->star, game->clock, &game->player);
     if (pressed & J_B) {
         change_nb_live(&game->player, 1);
         change_nb_live(&game->player, 1);
         change_nb_live(&game->player, 1);
-        lunch_star(&game->star, clock, 10, 10000);
+        for (uint8_t i = 0; i < G1_NB_ASTEROID; ++i)
+            if (game->asteroid[i].here == 0) {
+                lunch_asteroid(game, i, 1, 100);
+                break;
+            }
     }
 }

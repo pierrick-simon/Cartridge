@@ -18,6 +18,10 @@ void clear_screen(void)
     for (uint8_t i = 0; i < 192; i++)
         set_sprite_data(i, 1, empty_tile);
     move_bkg(0, 0);
+    for (uint8_t i = 0; i < 40; ++i) {
+        move_sprite(i, 0, 0);
+        set_sprite_prop(i, 0);
+    }
 }
 
 static void transition_to(app_ctx *ctx, game_state_t next)

@@ -67,10 +67,10 @@ static void handle_flash(g1_state *game)
 }
 
 void g1_handle_player(g1_state *game, const input_state *input,
-    uint8_t pressed, uint8_t clock)
+    uint8_t pressed)
 {
     g1_move_player(game, input);
     handle_flash(game);
     for (uint8_t i = 0; i < G1_NB_HEART; i++)
-        handle_heart(game, clock, i);
+        handle_heart(game, game->clock, i);
 }

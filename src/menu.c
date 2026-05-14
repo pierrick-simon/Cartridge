@@ -11,20 +11,9 @@
 #include "save_data.h"
 #include "menutile.h"
 
-static void printCenterString(const char *str)
-{
-    size_t len = 0;
-
-    if (!str)
-        return;
-    len = strlen(str);
-    for (size_t i = 0; i < (20 - len) / 2; i++)
-        printf(" ");
-    printf("%s\n", str);
-}
-
 static void m_init_sprite(menu_state *menu)
 {
+    menu->cursor = 0;
     init_sprite(MENU_VRAM_CURSOR, MENU_CURSOR, menu->sprites, menu->vram);
     move_sprite(MENU_CURSOR, 28, 56 + 16 * menu->cursor);
     for (uint8_t i = 0; i < M_NB_NUMBER; i++) {
@@ -53,14 +42,9 @@ void m_init(menu_state *menu)
 {
     menu->nb_vram = 0;
     sound_start(&menu->musics[MENU_THEME], 3, starwars_music, TRUE, 0xFF);
-    printf("\n\n\n\n\n");
-    printCenterString("Game 1");
-    printf("\n\n");
-    printCenterString("Game 2");
-    printf("\n\n");
-    printCenterString("Game 3");
     init_vram_sprite(CursorTiles, NB_CURSOR_TILE, &menu->nb_vram, menu->vram);
     init_vram_sprite(number_tiles, NUMBER_SIZE, &menu->nb_vram, menu->vram);
+    printf(" ");
     m_init_sprite(menu);
     menu->cursor = 0;
     if (has_existing_save())

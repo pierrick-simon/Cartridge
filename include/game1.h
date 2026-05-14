@@ -96,7 +96,7 @@ typedef struct {
     heart_t hearts[G1_NB_HEART];
     uint8_t dash_timer;
     uint8_t cd_timer;
-    uint8_t flip; // utiliser stp
+    uint8_t flip;
 } palyer_t;
 
 typedef struct {
@@ -107,6 +107,7 @@ typedef struct {
     palyer_t player;
     asteroid_t asteroid[G1_NB_ASTEROID];
     star_t star;
+    uint32_t clock;
 } g1_state;
 
     void g1_init(g1_state *game);
@@ -115,10 +116,10 @@ typedef struct {
 
 void g1_move_player(g1_state *game, const input_state *input);
 void g1_handle_player(g1_state *game, const input_state *input,
-    uint8_t pressed, uint8_t clock);
+    uint8_t pressed);
 void g1_change_score(g1_state *game, uint8_t gain);
 void g1_handle_attacks(g1_state *game, const input_state *input,
-    uint8_t pressed, uint8_t clock);
+    uint8_t pressed);
 void change_nb_live(palyer_t *player, uint8_t gain);
 
 #endif
