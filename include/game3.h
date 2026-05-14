@@ -12,6 +12,9 @@
 
     #include "game_types.h"
     #include "input.h"
+    #include "sound_manager.h"
+    #include "sound_note.h"
+    #include "heart.h"
 
     #define G3_NB_PLATFORMS 6
     #define G3_PLAT_TILE_IDX 8
@@ -27,13 +30,28 @@
     #define G3_PLAYER_W 8
     #define G3_PLAYER_H 8
     #define G3_CAMERA_Y 56
-    #define G3_PLAT_GAP_MIN 30
-    #define G3_PLAT_GAP_MAX 52
+    #define G3_PLAT_GAP_MIN 50
+    #define G3_PLAT_GAP_MAX 68
+    #define G3_DIFF_STEP 300
+    #define G3_DIFF_MAX_EXTRA 7
     #define G3_PLAYER_SPEED 2
+    #define G3_ANIM_BOUNCE_FRAMES 8
+    #define G3_PLAT_SPEED 1
+    #define G3_MOBILE_SCORE 400
+
+    #define G3_NB_HEART 3
+    #define G3_NB_NUMBER 5
+    #define G3_NUMBER_VRAM_IDX 9
+    #define G3_HEART_VRAM_IDX 19
+    #define G3_SCORE_SPR_OFF 14
+    #define G3_HEART_SPR_OFF 19
+
+    #define G3_HUD_Y 148
 
     typedef struct {
         uint8_t x;
         uint8_t y;
+        int8_t vx;
     } platform_t;
 
     typedef enum {
@@ -42,7 +60,7 @@
     } g3_phase_t;
 
     typedef struct {
-        uint8_t score;
+        uint16_t score;
         uint8_t px;
         fixed py;
         int8_t vx;
@@ -50,10 +68,26 @@
         platform_t platforms[G3_NB_PLATFORMS];
         g3_phase_t phase;
         uint8_t rng;
+        uint8_t anim_timer;
+        sound_t bounce_sfx;
+        sound_t theme;
+        heart_t hearts[G3_NB_HEART];
     } g3_state;
+
+    static const uint8_t g3_bounce_snd[] = {
+        PT, RN, G5, PT, RN, C6,
+        END, END, END
+    };
 
     void g3_init(g3_state *game);
     game_state_t g3_update(g3_state *game,
         const input_state *input);
+    void g3_initPlatforms(g3_state *game);
+    void g3_drawPlatforms(const g3_state *game);
+    void g3_scrollWorld(g3_state *game, uint8_t delta);
+    void g3_recyclePlatform(g3_state *game, uint8_t i, uint8_t topy);
+    void g3_movePlatforms(g3_state *game);
+    game_state_t updateDead(g3_state *game, const input_state *input);
+    game_state_t updatePlay(g3_state *game, const input_state *input);
 
 #endif /* !GAME3_H */
