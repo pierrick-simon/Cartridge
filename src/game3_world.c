@@ -66,7 +66,7 @@ static void recycleAndDraw(g3_state *game, uint8_t top_y)
     uint8_t sid;
 
     while (i < G3_NB_PLATFORMS) {
-        if (game->platforms[i].y > G3_HUD_Y) {
+        if (game->platforms[i].y > G3_HUD_Y - 10) {
             g3_recyclePlatform(game, i, top_y);
             top_y = game->platforms[i].y;
         }
