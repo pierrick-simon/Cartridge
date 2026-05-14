@@ -30,10 +30,10 @@
     #define G3_PLAYER_W 8
     #define G3_PLAYER_H 8
     #define G3_CAMERA_Y 56
-    #define G3_PLAT_GAP_MIN 38
-    #define G3_PLAT_GAP_MAX 52
+    #define G3_PLAT_GAP_MIN 50
+    #define G3_PLAT_GAP_MAX 68
     #define G3_DIFF_STEP 300
-    #define G3_DIFF_MAX_EXTRA 10
+    #define G3_DIFF_MAX_EXTRA 7
     #define G3_PLAYER_SPEED 2
     #define G3_ANIM_BOUNCE_FRAMES 8
     #define G3_PLAT_SPEED 1
