@@ -7,7 +7,7 @@
 
 #include "sound_note.h"
 
-uint8_t duration_frames[] = {
+const uint8_t duration_frames[] = {
     SND_FRAMES_NONE,
     SND_FRAMES_THIRTYSEC,
     SND_FRAMES_SIXTEENTH,
@@ -17,7 +17,7 @@ uint8_t duration_frames[] = {
     SND_FRAMES_WHOLE
 };
 
-uint16_t note_freq[] = {
+const uint16_t note_freq[] = {
     0,44,156,262,363,457,547,631,710,786,854,923,986,
 	1046,1102,1155,1205,1253,1297,1339,1379,1417,
 	1452,1486,1517,1546,1575,1602,1627,1650,1673,1694,1714,

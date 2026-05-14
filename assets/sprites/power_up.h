@@ -10,6 +10,6 @@
 
     #define POWER_UP_SIZE 2
 
-extern unsigned char power_up_tiles[];
+extern const unsigned char power_up_tiles[];
 
 #endif /* POWER_UP_H_ */

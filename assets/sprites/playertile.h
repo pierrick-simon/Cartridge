@@ -18,6 +18,6 @@
 
     #define P_NB_SPRITE 7
 
-extern unsigned char player_tile[];
+extern const unsigned char player_tile[];
 
 #endif /* PLAYERTILE_H_ */

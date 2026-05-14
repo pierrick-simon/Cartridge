@@ -55,7 +55,7 @@
         END
     };
 
-    extern uint16_t note_freq[];
-    extern uint8_t duration_frames[];
+    extern const uint16_t note_freq[];
+    extern const uint8_t duration_frames[];
 
 #endif

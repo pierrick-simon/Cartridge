@@ -10,6 +10,6 @@
 
     #define SPACESHIP2_SIZE 4
 
-    extern unsigned char spaceship2_tiles[];
+    extern const unsigned char spaceship2_tiles[];
 
 #endif /* !SPACESHIP1_H_ */

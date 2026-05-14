@@ -13,6 +13,6 @@
 #define FULL 1
 #define NB_FLASH 2
 
-extern unsigned char flash_tile[];
+extern const unsigned char flash_tile[];
 
 #endif /* !FLASH_H_ */

@@ -13,6 +13,7 @@
 #include "flash.h"
 #include "number.h"
 #include "asteroid.h"
+#include "star.h"
 
 static void init_asteroid(g1_state *game, uint8_t i)
 {
@@ -20,8 +21,6 @@ static void init_asteroid(g1_state *game, uint8_t i)
         game->sprites, game->vram);
     game->asteroid[i].x = 0;
     game->asteroid[i].y = 0;
-    game->asteroid[i].v_x = 0;
-    game->asteroid[i].v_y = 0;
     game->asteroid[i].timer = 0;
 }
 
@@ -29,6 +28,11 @@ static void init_attacks(g1_state *game)
 {
     for (uint8_t i = 0; i < G1_NB_ASTEROID; ++i)
         init_asteroid(game, i);
+    init_sprite(GAME1_VRAM_STAR, GAME1_STAR,
+        game->sprites, game->vram);
+    game->star.x.w = 0;
+    game->star.y.w = 0;
+    game->star.timer = 0;
 }
 
 
@@ -55,6 +59,8 @@ static void init_vram(g1_state *game)
     init_vram_sprite(number_tiles, NUMBER_SIZE,
         &game->nb_vram, game->vram);
     init_vram_sprite(asteroid_tile, NB_ASTEROID,
+        &game->nb_vram, game->vram);
+    init_vram_sprite(star_tile, 1,
         &game->nb_vram, game->vram);
 }
 

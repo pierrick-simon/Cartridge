@@ -5,8 +5,6 @@
 ** platformtile
 */
 
-#include "platformtile.h"
-
 unsigned char platform_tile[] = {
     0xFF, 0xFF,
     0x00, 0xFF,

@@ -10,7 +10,7 @@
 
     #include <stdint.h>
 
-    extern uint8_t power_up_sound[];
-    extern uint8_t power_down_sound[];
+    extern const uint8_t power_up_sound[];
+    extern const uint8_t power_down_sound[];
 
 #endif

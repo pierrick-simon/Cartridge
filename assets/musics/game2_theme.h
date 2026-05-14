@@ -10,6 +10,6 @@
 
     #include <stdint.h>
 
-    extern uint8_t game2_theme_music[];
+    extern const uint8_t game2_theme_music[];
 
 #endif

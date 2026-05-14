@@ -13,6 +13,6 @@
         NB_CURSOR_TILE,
     } cursor_t;
 
-    extern unsigned char CursorTiles[];
+    extern const unsigned char CursorTiles[];
 
 #endif

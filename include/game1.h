@@ -34,9 +34,13 @@
     #define G1_CD_TIMER 250
     #define G1_CD_DELTA 8
     
-    #define G1_NB_ASTEROID 10
+    #define G1_NB_ASTEROID 5
     #define G1_NB_HEART 3
     #define G1_NB_SCORE 4
+
+    #define G1_MAX_STAR_SPEED 15
+    #define G1_MIN_STAR_SPEED 70
+    #define G1_DELTA_STAR_SPEED (G1_MIN_STAR_SPEED - G1_MAX_STAR_SPEED)
 
 typedef enum {
     GAME1_VRAM_PLAYER,
@@ -44,6 +48,7 @@ typedef enum {
     GAME1_VRAM_FLASH,
     GAME1_VRAM_SCORE,
     GAME1_VRAM_ASTEROID,
+    GAME1_VRAM_STAR,
     NB_GAME1_VRAM,
 };
 
@@ -61,6 +66,7 @@ typedef enum {
     // attacks
     GAME1_F_ASTEROID,
     GAME1_L_ASTEROID = GAME1_F_ASTEROID + G1_NB_ASTEROID - 1,
+    GAME1_STAR,
 };
 
 typedef struct {
@@ -77,11 +83,20 @@ typedef struct {
 typedef struct {
     fixed x;
     fixed y;
+    uint8_t speed;
+    uint16_t timer;
+    uint8_t orientation;
+    uint8_t here;
+} star_t;
+
+typedef struct {
+    fixed x;
+    fixed y;
     uint8_t nb_skins;
     heart_t hearts[G1_NB_HEART];
     uint8_t dash_timer;
     uint8_t cd_timer;
-    uint8_t flip;
+    uint8_t flip; // utiliser stp
 } palyer_t;
 
 typedef struct {
@@ -91,6 +106,7 @@ typedef struct {
     uint16_t score;
     palyer_t player;
     asteroid_t asteroid[G1_NB_ASTEROID];
+    star_t star;
 } g1_state;
 
     void g1_init(g1_state *game);

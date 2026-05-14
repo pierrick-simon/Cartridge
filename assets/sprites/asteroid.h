@@ -10,6 +10,6 @@
 
 #define NB_ASTEROID 1
 
-extern unsigned char asteroid_tile[];
+extern const unsigned char asteroid_tile[];
 
 #endif /* !ASTEROID_H_ */
