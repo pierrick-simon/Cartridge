@@ -10,6 +10,6 @@
 
     #define EXPLOSION_SIZE 13
 
-    extern unsigned char explosion_tiles[];
+    extern const unsigned char explosion_tiles[];
 
 #endif /* !EXPLOSION_H_ */

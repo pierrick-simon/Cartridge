@@ -7,27 +7,28 @@
 
 #include <gb/gb.h>
 #include "game1.h"
+#include "save_data.h"
 
-static void handle_clock(g1_state *game, uint8_t *clock)
+static void handle_clock(g1_state *game)
 {
     if (game->player.cd_timer != 0)
         --game->player.cd_timer;
     if (game->player.dash_timer != 0)
         --game->player.dash_timer;
-    ++(*clock);
+    ++(game->clock);
 }
 
 game_state_t g1_update(g1_state *game,
     const input_state *input)
 {
-    static uint8_t clock = 0;
-
-    g1_handle_player(game, input, getJustPressed(input), clock);
-    g1_handle_attacks(game, input, getJustPressed(input), clock);
-    if (clock % 60 == 0)
+    g1_handle_player(game, input, get_just_pressed(input));
+    g1_handle_attacks(game, input, get_just_pressed(input));
+    if (game->clock % 60 == 0)
         g1_change_score(game, 1);
-    handle_clock(game, &clock);
-    if (getJustPressed(input) & J_START)
+    handle_clock(game);
+    if (get_just_pressed(input) & J_START || game->player.hearts[G1_NB_HEART - 1].show == 0) {
+        save_score(game->score, 0);
         return STATE_MENU;
+    }
     return STATE_GAME1;
 }

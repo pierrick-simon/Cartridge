@@ -12,14 +12,13 @@
     #include "input.h"
     #include "sprite.h"
     #include "heart.h"
+    #include <asm/types.h>
 
     #define G1_P_SPEED 1.42
     #define G1_P_DIAG_SPEED 1
     #define G1_H_TO_W(x) ((uint16_t)((x) * 256))
     #define G1_SPEED (G1_H_TO_W(G1_P_SPEED))
     #define G1_DIAG_SPEED (G1_H_TO_W(G1_P_DIAG_SPEED))
-    #define G1_NB_HEART 3
-    #define G1_NB_NUMBER 5
 
     #define G1_DASH_MULTI 3
     #define G1_DASH_COOLDOWN 180
@@ -35,12 +34,21 @@
     #define G1_CD_TIMER 250
     #define G1_CD_DELTA 8
     
+    #define G1_NB_ASTEROID 5
+    #define G1_NB_HEART 3
+    #define G1_NB_SCORE 4
+
+    #define G1_MAX_STAR_SPEED 15
+    #define G1_MIN_STAR_SPEED 70
+    #define G1_DELTA_STAR_SPEED (G1_MIN_STAR_SPEED - G1_MAX_STAR_SPEED)
+
 typedef enum {
     GAME1_VRAM_PLAYER,
     GAME1_VRAM_HEART,
     GAME1_VRAM_FLASH,
     GAME1_VRAM_SCORE,
     GAME1_VRAM_ASTEROID,
+    GAME1_VRAM_STAR,
     NB_GAME1_VRAM,
 };
 
@@ -49,30 +57,37 @@ typedef enum {
     GAME1_PLAYER,
 
     // gui
-    GAME1_HEART1,
-    GAME1_HEART2,
-    GAME1_HEART3,
+    GAME1_F_HEART,
+    GAME1_L_HEART = GAME1_F_HEART + G1_NB_HEART - 1,
     GAME1_FLASH,
-    GAME1_SCORE1,
-    GAME1_SCORE2,
-    GAME1_SCORE3,
-    GAME1_SCORE4,
-    GAME1_SCORE5,
+    GAME1_F_SCORE,
+    GAME1_L_SCORE = GAME1_F_SCORE + G1_NB_SCORE - 1,
 
     // attacks
-    GAME1_ASTEROID
+    GAME1_F_ASTEROID,
+    GAME1_L_ASTEROID = GAME1_F_ASTEROID + G1_NB_ASTEROID - 1,
+    GAME1_STAR,
 };
 
 typedef struct {
     uint8_t x;
     uint8_t y;
-    uint8_t v_x;
-    uint8_t v_y;
+    int8_t v_x;
+    int8_t v_y;
     uint8_t speed;
     uint16_t timer;
     uint8_t orientation;
     uint8_t here;
 } asteroid_t;
+
+typedef struct {
+    fixed x;
+    fixed y;
+    uint8_t speed;
+    uint16_t timer;
+    uint8_t orientation;
+    uint8_t here;
+} star_t;
 
 typedef struct {
     fixed x;
@@ -90,7 +105,9 @@ typedef struct {
     sprite_t sprites[MAX_SPRITE];
     uint16_t score;
     palyer_t player;
-    asteroid_t asteroid;
+    asteroid_t asteroid[G1_NB_ASTEROID];
+    star_t star;
+    uint32_t clock;
 } g1_state;
 
     void g1_init(g1_state *game);
@@ -99,10 +116,10 @@ typedef struct {
 
 void g1_move_player(g1_state *game, const input_state *input);
 void g1_handle_player(g1_state *game, const input_state *input,
-    uint8_t pressed, uint8_t clock);
+    uint8_t pressed);
 void g1_change_score(g1_state *game, uint8_t gain);
 void g1_handle_attacks(g1_state *game, const input_state *input,
-    uint8_t pressed, uint8_t clock);
+    uint8_t pressed);
 void change_nb_live(palyer_t *player, uint8_t gain);
 
 #endif

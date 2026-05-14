@@ -10,6 +10,6 @@
 
     #include <stdint.h>
 
-    extern uint8_t starwars_music[];
+    extern const uint8_t starwars_music[];
 
 #endif

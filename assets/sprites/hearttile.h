@@ -10,6 +10,6 @@
 
     #define HEART_SIZE 6
 
-    extern unsigned char heart_tiles[];
+    extern const unsigned char heart_tiles[];
 
 #endif /* !EXPLOSION_H_ */

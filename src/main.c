@@ -17,6 +17,11 @@ void clear_screen(void)
         set_bkg_data(i, 1, empty_tile);
     for (uint8_t i = 0; i < 192; i++)
         set_sprite_data(i, 1, empty_tile);
+    move_bkg(0, 0);
+    for (uint8_t i = 0; i < 40; ++i) {
+        move_sprite(i, 0, 0);
+        set_sprite_prop(i, 0);
+    }
 }
 
 static void transition_to(app_ctx *ctx, game_state_t next)
@@ -31,12 +36,11 @@ static void transition_to(app_ctx *ctx, game_state_t next)
     vsync();
 }
 
-static game_state_t dispatchUpdate(app_ctx *ctx)
+static game_state_t dispatch_update(app_ctx *ctx)
 {
     return update_table[ctx->state](ctx);
 }
 
-// DISPLAY_ON GBDK, macro turns on display after init
 void main(void)
 {
     static app_ctx ctx = {.state = INIT_STATE};
@@ -46,7 +50,7 @@ void main(void)
     sound_init();
     while (1) {
         wait_vbl_done();
-        readInput(&ctx.input);
-        transition_to(&ctx, dispatchUpdate(&ctx));
+        read_input(&ctx.input);
+        transition_to(&ctx, dispatch_update(&ctx));
     }
 }

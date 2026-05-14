@@ -8,8 +8,8 @@
 #ifndef PLATFORMTILE_H_
     #define PLATFORMTILE_H_
 
-    #define PLATFORM_TILE_SIZE 1
+    #define PLATFORM_TILE_SIZE 2
 
-    extern unsigned char platform_tile[];
+    extern const unsigned char platform_tile[];
 
 #endif /* !PLATFORMTILE_H_ */

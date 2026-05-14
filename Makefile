@@ -19,7 +19,7 @@ LFLAGS      =   -Wl-yt0x1B -Wl-yoA -Wl-ya1
 # Pass include path to the SDCC frontend only (-Wf) not to lcc itself
 # Dont add GBDK's include path
 # lcc adds it
-INCLUDE     =   -Wf-I./include -Wf-I./assets/tiles/ \
+INCLUDE     =   -Wf-I./include -Wf-I./assets/backgrounds/ \
 				-Wf-I./assets/maps/ -Wf-I./assets/sprites/ \
 				-Wf-I./assets/musics/
 
@@ -50,13 +50,14 @@ SRCS		=   $(addprefix $(SRC_DIR)/, 			\
 					save.c 							\
 				)									\
 				$(addprefix $(ASSETS_DIR)/, 		\
-					$(addprefix tiles/, 			\
+					$(addprefix backgrounds/, 		\
+						menutile.c					\
 						moontile.c					\
-						platformtile.c				\
+						spacetile.c 				\
 					)								\
 					$(addprefix sprites/, 			\
+						platformtile.c				\
 						playertile.c				\
-						spacetile.c 				\
 						flash.c 					\
 						asteroid.c 					\
 						spaceship1.c 				\
@@ -66,8 +67,10 @@ SRCS		=   $(addprefix $(SRC_DIR)/, 			\
 						explosion.c 				\
 						hearttile.c					\
 						number.c					\
+						power_up.c 					\
+						star.c 						\
 					)								\
-					$(addprefix musics/, 			\
+					$(addprefix	 musics/, 			\
 						sound_note.c 				\
 						starwars.c					\
 						game2_theme.c 				\
@@ -105,6 +108,5 @@ re: fclean all
 CORE    =   $(HOME)/.var/app/org.libretro.RetroArch/config/retroarch/cores/gambatte_libretro.so
 run: all
 	flatpak run org.libretro.RetroArch -L $(CORE) $(NAME)
-	$(RM) $(NAME)
 
 .PHONY: all clean fclean re run

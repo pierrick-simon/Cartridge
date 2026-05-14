@@ -8,7 +8,7 @@
 #ifndef SPACETILE_H_
 #define SPACETILE_H_
 
-extern unsigned char space_tiles[];
-extern unsigned char space_map[];
+extern const unsigned char space_tiles[];
+extern const unsigned char space_map[];
 
 #endif /* !SPACETILE_H_ */
