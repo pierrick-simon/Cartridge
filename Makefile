@@ -104,6 +104,5 @@ re: fclean all
 CORE    =   $(HOME)/.var/app/org.libretro.RetroArch/config/retroarch/cores/gambatte_libretro.so
 run: all
 	flatpak run org.libretro.RetroArch -L $(CORE) $(NAME)
-	$(RM) $(NAME)
 
 .PHONY: all clean fclean re run

@@ -16,8 +16,8 @@ typedef struct {
     uint8_t justPressed;
 } input_state;
 
-void readInput(input_state *input);
-uint8_t getHeld(const input_state *input);
-uint8_t getJustPressed(const input_state *input);
+void read_input(input_state *input);
+uint8_t get_held(const input_state *input);
+uint8_t get_just_pressed(const input_state *input);
 
 #endif

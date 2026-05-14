@@ -22,12 +22,12 @@ game_state_t g1_update(g1_state *game,
 {
     static uint8_t clock = 0;
 
-    g1_handle_player(game, input, getJustPressed(input), clock);
-    g1_handle_attacks(game, input, getJustPressed(input), clock);
+    g1_handle_player(game, input, get_just_pressed(input), clock);
+    g1_handle_attacks(game, input, get_just_pressed(input), clock);
     if (clock % 60 == 0)
         g1_change_score(game, 1);
     handle_clock(game, &clock);
-    if (getJustPressed(input) & J_START)
+    if (get_just_pressed(input) & J_START)
         return STATE_MENU;
     return STATE_GAME1;
 }

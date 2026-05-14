@@ -7,6 +7,7 @@
 
 #include <gb/gb.h>
 #include <stdio.h>
+#include <rand.h>
 #include "game3.h"
 #include "input.h"
 #include "playertile.h"
@@ -35,8 +36,15 @@ static void drawPlatforms(const g3_state *game)
 
     while (i < G3_NB_PLATFORMS) {
         sid = G3_PLAT_SPR_OFF + i * 2;
-        set_sprite_tile(sid, G3_PLAT_TILE_IDX);
-        set_sprite_tile(sid + 1, G3_PLAT_TILE_IDX);
+        if (rand() % 2 == 0) {
+            set_sprite_tile(sid, G3_PLAT_TILE_IDX);
+            set_sprite_tile(sid + 1, G3_PLAT_TILE_IDX + 1);
+        } else {
+            set_sprite_tile(sid, G3_PLAT_TILE_IDX + 1);
+            set_sprite_prop(sid, S_FLIPX);
+            set_sprite_tile(sid + 1, G3_PLAT_TILE_IDX);
+            set_sprite_prop(sid + 1, S_FLIPX);
+        }
         move_sprite(sid, game->platforms[i].x, game->platforms[i].y);
         move_sprite(sid + 1, game->platforms[i].x + 8, game->platforms[i].y);
         i++;
@@ -174,7 +182,7 @@ static inline void showGameOver(const g3_state *game)
 static game_state_t updateDead(g3_state *game,
     const input_state *input)
 {
-    uint8_t pressed = getJustPressed(input);
+    uint8_t pressed = get_just_pressed(input);
 
     if (pressed & J_A) {
         g3_init(game);
@@ -188,7 +196,7 @@ static game_state_t updateDead(g3_state *game,
 static game_state_t updatePlay(g3_state *game,
     const input_state *input)
 {
-    uint8_t held = getHeld(input);
+    uint8_t held = get_held(input);
 
     moveHorizontal(game, held);
     applyGravity(game);
@@ -198,7 +206,7 @@ static game_state_t updatePlay(g3_state *game,
         game->phase = G3_DEAD;
         showGameOver(game);
     }
-    if (getJustPressed(input) & J_START)
+    if (get_just_pressed(input) & J_START)
         return STATE_MENU;
     return STATE_GAME3;
 }

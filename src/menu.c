@@ -92,7 +92,7 @@ static void moveCursorUp(menu_state *menu)
 game_state_t m_update(menu_state *menu,
     const input_state *input)
 {
-    uint8_t pressed = getJustPressed(input);
+    uint8_t pressed = get_just_pressed(input);
     sound_update(&menu->musics[MENU_THEME]);
 
     if (pressed & J_DOWN)

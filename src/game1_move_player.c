@@ -14,7 +14,7 @@
 
 static void change_playertile(g1_state *game, const input_state *input)
 {
-    uint8_t touch = getHeld(input);
+    uint8_t touch = get_held(input);
     uint8_t dash = game->player.dash_timer >= G1_DASH_DELTA_TIME;
 
     if ((touch & J_UP && touch & J_LEFT) || (touch & J_DOWN && touch & J_RIGHT)) {
@@ -69,7 +69,7 @@ static void move_dash(g1_state *game,
 
 void g1_move_player(g1_state *game, const input_state *input)
 {
-    uint8_t touch = getHeld(input);
+    uint8_t touch = get_held(input);
     uint16_t speed = G1_SPEED;
 
     if (touch & (J_UP | J_DOWN) && touch & (J_LEFT | J_RIGHT))

@@ -13,7 +13,7 @@
 game_state_t g2_update(g2_state *game, const input_state *input)
 {
     static uint16_t clock = 0;
-    uint8_t pressed = getJustPressed(input);
+    uint8_t pressed = get_just_pressed(input);
     uint8_t nb_live = 0;
 
     for (uint8_t i = 0; i < GAME2_NB_MUSIC; i++)

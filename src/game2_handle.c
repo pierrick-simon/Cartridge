@@ -108,14 +108,14 @@ static uint8_t handle_heart(g2_state *game, uint16_t clock, uint8_t i)
 
 static void player_change_pos(g2_state *game, const input_state *input)
 {
-    if (getHeld(input) & J_LEFT) {
+    if (get_held(input) & J_LEFT) {
         game->player.x--;
         if (game->player.x < 16)
             game->player.x = 16;
         move_sprite(GAME2_PLAYER, game->player.x, game->player.y);
         move_everything(game, 1);
     }
-    if (getHeld(input) & J_RIGHT) {
+    if (get_held(input) & J_RIGHT) {
         game->player.x++;
         if (game->player.x > 160 - 8)
             game->player.x = 160 - 8;
