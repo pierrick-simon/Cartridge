@@ -123,7 +123,7 @@ static void updatePlayerSprite(g3_state *game)
 
 game_state_t updateDead(g3_state *game, const input_state *input)
 {
-    uint8_t pressed = getJustPressed(input);
+    uint8_t pressed = get_just_pressed(input);
 
     sound_update(&game->theme);
     if (pressed & J_A) {
@@ -137,7 +137,7 @@ game_state_t updateDead(g3_state *game, const input_state *input)
 
 game_state_t updatePlay(g3_state *game, const input_state *input)
 {
-    uint8_t held = getHeld(input);
+    uint8_t held = get_held(input);
 
     moveHorizontal(game, held);
     applyGravity(game);
@@ -151,7 +151,7 @@ game_state_t updatePlay(g3_state *game, const input_state *input)
         game->phase = G3_DEAD;
         showGameOver(game);
     }
-    if (getJustPressed(input) & J_START)
+    if (get_just_pressed(input) & J_START)
         return STATE_MENU;
     return STATE_GAME3;
 }
