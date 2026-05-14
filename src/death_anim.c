@@ -1,0 +1,141 @@
+/*
+** EPITECH PROJECT, 2026
+** cartridge
+** File description:
+** Generic death animation
+*/
+
+#include <gb/gb.h>
+#include "input.h"
+#include "death_anim.h"
+
+// Black column, "G A M E", space, "O V E R", black column
+static const uint8_t s_da_tiles[] =
+{
+    0xFF,0xFF, 0xFF,0xFF, 0xFF,0xFF, 0xFF,0xFF,
+    0xFF,0xFF, 0xFF,0xFF, 0xFF,0xFF, 0xFF,0xFF,
+
+    0x87,0x87,
+    0x7F,0x7F,
+    0x67,0x67,
+    0x7B,0x7B,
+    0x87,0x87,
+    0xFF,0xFF,  0xFF,0xFF,  0xFF,0xFF,
+
+    0xCF,0xCF,
+    0xB7,0xB7,
+    0x7B,0x7B,
+    0x03,0x03,
+    0x7B,0x7B,
+    0x7B,0x7B,
+    0xFF,0xFF,  0xFF,0xFF,
+
+    0x7B,0x7B,
+    0x33,0x33,
+    0x4B,0x4B,
+    0x7B,0x7B,
+    0x7B,0x7B,
+    0x7B,0x7B,
+    0xFF,0xFF,  0xFF,0xFF,
+
+    0x03,0x03,
+    0x7F,0x7F,
+    0x7F,0x7F,
+    0x0F,0x0F,
+    0x7F,0x7F,
+    0x03,0x03,
+    0xFF,0xFF,  0xFF,0xFF,
+
+    0x87,0x87,
+    0x7B,0x7B,
+    0x7B,0x7B,
+    0x7B,0x7B,
+    0x7B,0x7B,
+    0x87,0x87,
+    0xFF,0xFF,  0xFF,0xFF,
+
+    0x7B,0x7B,
+    0x7B,0x7B,
+    0x7B,0x7B,
+    0xB7,0xB7,
+    0xB7,0xB7,
+    0xCF,0xCF,
+    0xFF,0xFF,  0xFF,0xFF,
+
+    0x0F,0x0F,
+    0x77,0x77,
+    0x77,0x77,
+    0x0F,0x0F,
+    0x5F,0x5F,
+    0x6F,0x6F,
+    0xFF,0xFF,  0xFF,0xFF,
+};
+
+static const uint8_t s_black_row[20] = {
+    240,240,240,240,240,240,240,240,240,240,
+    240,240,240,240,240,240,240,240,240,240
+};
+
+// "GAME OVER" centred in 20 columns (black, GAME, space, OVER, black)
+
+/*
+    ici j'ai essayé de faire un truc pour centrer le tout,
+    le texte est centré mais il y a une bordure blanche
+    que j'arrive pas à enlever. J'ai essayé de rajouter une row
+    (s_gameover_row[21], puis ajouter ajouter un "240"), mais ça ne change RIEN.
+    j'ai vrm l'impression que c'est un truc de con et que je suis fatigué,
+    bonne chance si vous essayez de vous plonger dans le truc <3
+*/
+static const uint8_t s_gameover_row[20] = {
+    240,240,240,240,240,240,240,
+    241,242,243,244,
+    240,
+    245,246,244,247,
+    240,240,240,240,240
+};
+
+static uint8_t s_da_timer;
+
+void death_anim_start(void)
+{
+    uint8_t i = 0;
+
+    while (i < 40) {
+        move_sprite(i, 0, 0);
+        i++;
+    }
+    set_bkg_data(DA_TILE_BASE, DA_NB_TILES, s_da_tiles);
+    i = 0;
+    while (i < 18) {
+        set_win_tiles(0, i, 20, 1, s_black_row);
+        i++;
+    }
+    set_win_tiles(0, DA_TEXT_ROW, 20, 1, s_gameover_row);
+    move_win(0, 144);
+    SHOW_WIN;
+    s_da_timer = 0;
+}
+
+da_result_t death_anim_update(const input_state *input)
+{
+    uint8_t pressed;
+
+    if (s_da_timer < DA_CURTAIN_FRAMES) {
+        s_da_timer++;
+        move_win(0, 144 - s_da_timer * DA_CURTAIN_STEP);
+        SCY_REG += 2;
+        return DA_RUNNING;
+    }
+    pressed = get_just_pressed(input);
+    if (pressed & J_A) {
+        HIDE_WIN;
+        move_bkg(0, 0);
+        return DA_RESTART;
+    }
+    if (pressed & J_START) {
+        HIDE_WIN;
+        move_bkg(0, 0);
+        return DA_MENU;
+    }
+    return DA_RUNNING;
+}
