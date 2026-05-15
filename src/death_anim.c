@@ -88,6 +88,8 @@ static const uint8_t s_gameover_row[21] = {
 };
 
 static uint8_t s_da_timer;
+static uint8_t s_da_closing;
+static da_result_t s_da_result;
 
 void death_anim_start(void)
 {
@@ -107,12 +109,39 @@ void death_anim_start(void)
     move_win(0, 144);
     SHOW_WIN;
     s_da_timer = 0;
+    s_da_closing = 0;
+    s_da_result = DA_RUNNING;
+}
+
+static void clear_screen(void)
+{
+    uint8_t i = 0;
+
+    while (i < 40) {
+        move_sprite(i, 0, 0);
+        i++;
+    }
+    move_bkg(0, 0);
+    i = 0;
+    while (i < 18) {
+        set_bkg_tiles(0, i, 20, 1, s_black_row);
+        i++;
+    }
 }
 
 da_result_t death_anim_update(const input_state *input)
 {
     uint8_t pressed;
 
+    if (s_da_closing) {
+        s_da_timer++;
+        move_win(0, s_da_timer * DA_CURTAIN_STEP);
+        if (s_da_timer >= DA_CURTAIN_FRAMES) {
+            HIDE_WIN;
+            return s_da_result;
+        }
+        return DA_RUNNING;
+    }
     if (s_da_timer < DA_CURTAIN_FRAMES) {
         s_da_timer++;
         move_win(0, 144 - s_da_timer * DA_CURTAIN_STEP);
@@ -121,14 +150,18 @@ da_result_t death_anim_update(const input_state *input)
     }
     pressed = get_just_pressed(input);
     if (pressed & J_A) {
-        HIDE_WIN;
-        move_bkg(0, 0);
-        return DA_RESTART;
+        clear_screen();
+        s_da_result = DA_RESTART;
+        s_da_closing = 1;
+        s_da_timer = 0;
+        return DA_RUNNING;
     }
     if (pressed & J_START) {
-        HIDE_WIN;
-        move_bkg(0, 0);
-        return DA_MENU;
+        clear_screen();
+        s_da_result = DA_MENU;
+        s_da_closing = 1;
+        s_da_timer = 0;
+        return DA_RUNNING;
     }
     return DA_RUNNING;
 }
