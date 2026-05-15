@@ -70,11 +70,11 @@ static void lunch_asteroid(g1_state *game, uint8_t i,
 
 static void lunch_attack(g1_state *game)
 {
-    if (game->star.here == 0 && rand() % 2 == 0)
+    if (game->star.here == 0 && (rand() % 2) == 0)
         return lunch_star(game, game->clock, 1, 1000);
-    for (uint8_t i = 0; i < G1_NB_ASTEROID; ++i)
+    for (uint8_t i = 0; i < game->max_asteroid; ++i)
         if (game->asteroid[i].here == 0)
-            return lunch_asteroid(game, i, 2, 500);
+            return lunch_asteroid(game, i, 2, 50000);
     if (game->star.here == 0)
         lunch_star(game, game->clock, 1, 1000);
 }
@@ -164,19 +164,22 @@ static void collide(palyer_t *player)
 
 static void collision(g1_state *game)
 {
-    if (game->player.dash_timer != 0 || game->player.cd_timer != 0)
+    if (game->player.dash_timer != 0)
         return;
-    for (uint8_t i = 0; i < G1_NB_ASTEROID; ++i) {
-        if (&game->asteroid[i].here == 1 ||
+    for (uint8_t i = 0; i < game->max_asteroid; ++i) {
+        if (game->asteroid[i].here == 1  && game->player.cd_timer == 0 &&
                 is_hit(game->asteroid[i].x, game->asteroid[i].y,
-                game->player.x.b.h, game->player.y.b.h)) {
+                game->player.x.b.h, game->player.y.b.h
+            )) {
             collide(&game->player);
             return;
         }
     }
     if (game->star.timer != 0 && is_hit(game->star.x.b.h, game->star.y.b.h,
             game->player.x.b.h, game->player.y.b.h)) {
-        collide(&game->player);
+        if (game->player.cd_timer == 0) {
+            collide(&game->player);
+        }
         init_sprite(GAME1_VRAM_EXPLOSION, GAME1_STAR,
             game->sprites, game->vram);
         game->star.timer = 0;
@@ -187,11 +190,13 @@ static void collision(g1_state *game)
 void g1_handle_attacks(g1_state *game, const input_state *input,
     uint8_t pressed)
 {
-    for (uint8_t i = 0; i < G1_NB_ASTEROID; ++i)
+    for (uint8_t i = 0; i < game->max_asteroid; ++i)
         simulate_asteroid(&game->asteroid[i], game->clock, i);
     if (game->star.here == 1)
         move_star(game, game->clock);
     collision(game);
-    if (game->spawn_timer == 0)
+    if (game->spawn_timer == 0) {
         lunch_attack(game);
+        game->spawn_timer = G1_ATTACK_COOLDOWN;
+    }
 }

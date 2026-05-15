@@ -6,6 +6,7 @@
 */
 
 #include <gb/gb.h>
+#include <rand.h>
 #include "game1.h"
 #include "moontile.h"
 #include "playertile.h"
@@ -40,10 +41,12 @@ static void init_attacks(g1_state *game)
 
 static void init_value(g1_state *game)
 {
+    initarand(sys_time);
     game->nb_vram = 0;
     game->score = 0;
     game->clock = 0;
-    game->spawn_timer = 0;
+    game->spawn_timer = G1_ATTACK_COOLDOWN;
+    game->max_asteroid = G1_MIN_ASTEROID;
 }
 
 static void init_background()

@@ -34,7 +34,7 @@
     #define G1_CD_TIMER 250
     #define G1_CD_DELTA 8
     
-    #define G1_NB_ASTEROID 5
+    #define G1_NB_ASTEROID 7
     #define G1_NB_HEART 3
     #define G1_NB_SCORE 4
 
@@ -45,6 +45,9 @@
     #define G1_STAR_EXPLODE_TIMER 18
     
     #define G1_ATTACK_COOLDOWN 180
+    #define G1_MIN_ASTEROID 1
+    #define G1_MAX_ASTEROID G1_NB_ASTEROID
+    #define G1_DELTA_INCR_MAX_ASTEROID (60 * 15)
 
 typedef enum {
     GAME1_VRAM_PLAYER,
@@ -115,6 +118,7 @@ typedef struct {
     star_t star;
     uint32_t clock;
     uint8_t spawn_timer;
+    uint8_t max_asteroid;
 } g1_state;
 
     void g1_init(g1_state *game);

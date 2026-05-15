@@ -15,6 +15,9 @@ static void handle_clock(g1_state *game)
         --game->player.cd_timer;
     if (game->player.dash_timer != 0)
         --game->player.dash_timer;
+    if ((game->clock % (G1_DELTA_INCR_MAX_ASTEROID) == 0)
+        && game->max_asteroid != G1_MAX_ASTEROID)
+        ++(game->max_asteroid);
     --(game->spawn_timer);
     ++(game->clock);
 }
