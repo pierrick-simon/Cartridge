@@ -48,12 +48,14 @@ SRCS		=   $(addprefix $(SRC_DIR)/, 			\
 					sound_manager.c 				\
 					sprite.c 						\
 					save.c 							\
+					death_anim.c					\
 				)									\
 				$(addprefix $(ASSETS_DIR)/, 		\
 					$(addprefix backgrounds/, 		\
 						menutile.c					\
 						moontile.c					\
 						spacetile.c 				\
+						game_over_tile.c			\
 					)								\
 					$(addprefix sprites/, 			\
 						platformtile.c				\

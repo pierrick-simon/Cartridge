@@ -10,6 +10,7 @@
 #include "input.h"
 #include "playertile.h"
 #include "save_data.h"
+#include "death_anim.h"
 
 static void g3_update_score(const g3_state *game)
 {
@@ -107,7 +108,7 @@ static void hideGameplaySprites(void)
 static void showGameOver(const g3_state *game)
 {
     save_score(game->score, 2);
-    hideGameplaySprites();
+    death_anim_start();
 }
 
 static void updatePlayerSprite(g3_state *game)
@@ -123,14 +124,17 @@ static void updatePlayerSprite(g3_state *game)
 
 game_state_t updateDead(g3_state *game, const input_state *input)
 {
-    uint8_t pressed = get_just_pressed(input);
+    da_result_t r;
 
     sound_update(&game->theme);
-    if (pressed & J_A) {
+    sound_update(&game->bounce_sfx);
+    r = death_anim_update(input);
+    if (r == DA_RESTART) {
         g3_init(game);
+        HIDE_WIN;
         return STATE_GAME3;
     }
-    if (pressed & J_START)
+    if (r == DA_MENU)
         return STATE_MENU;
     return STATE_GAME3;
 }
