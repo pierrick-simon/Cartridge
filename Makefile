@@ -55,6 +55,7 @@ SRCS		=   $(addprefix $(SRC_DIR)/, 			\
 						menutile.c					\
 						moontile.c					\
 						spacetile.c 				\
+						game_over_tile.c			\
 					)								\
 					$(addprefix sprites/, 			\
 						platformtile.c				\

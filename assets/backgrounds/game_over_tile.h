@@ -10,7 +10,7 @@
 
     #include <stdint.h>
 
-    #define GAME_OVER_NB_TILES 7
+    #define GAME_OVER_NB_TILES 8
 
     extern const uint8_t game_over_tiles[];
 
