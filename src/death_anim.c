@@ -71,27 +71,20 @@ static const uint8_t s_da_tiles[] =
     0xFF,0xFF,  0xFF,0xFF,
 };
 
-static const uint8_t s_black_row[20] = {
+static const uint8_t s_black_row[21] = {
     240,240,240,240,240,240,240,240,240,240,
-    240,240,240,240,240,240,240,240,240,240
+    240,240,240,240,240,240,240,240,240,240,
+    240
 };
 
 // "GAME OVER" centred in 20 columns (black, GAME, space, OVER, black)
 
-/*
-    ici j'ai essayé de faire un truc pour centrer le tout,
-    le texte est centré mais il y a une bordure blanche
-    que j'arrive pas à enlever. J'ai essayé de rajouter une row
-    (s_gameover_row[21], puis ajouter ajouter un "240"), mais ça ne change RIEN.
-    j'ai vrm l'impression que c'est un truc de con et que je suis fatigué,
-    bonne chance si vous essayez de vous plonger dans le truc <3
-*/
-static const uint8_t s_gameover_row[20] = {
+static const uint8_t s_gameover_row[21] = {
     240,240,240,240,240,240,240,
     241,242,243,244,
     240,
     245,246,244,247,
-    240,240,240,240
+    240,240,240,240,240
 };
 
 static uint8_t s_da_timer;
@@ -107,10 +100,10 @@ void death_anim_start(void)
     set_bkg_data(DA_TILE_BASE, DA_NB_TILES, s_da_tiles);
     i = 0;
     while (i < 18) {
-        set_win_tiles(1, i, 20, 1, s_black_row);
+        set_win_tiles(0, i, 21, 1, s_black_row);
         i++;
     }
-    set_win_tiles(1, DA_TEXT_ROW, 20, 1, s_gameover_row);
+    set_win_tiles(0, DA_TEXT_ROW, 21, 1, s_gameover_row);
     move_win(0, 144);
     SHOW_WIN;
     s_da_timer = 0;
