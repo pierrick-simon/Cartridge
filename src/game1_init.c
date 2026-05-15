@@ -16,6 +16,7 @@
 #include "asteroid.h"
 #include "star.h"
 #include "explosion.h"
+#include "game2_theme.h"
 
 static void init_asteroid(g1_state *game, uint8_t i)
 {
@@ -105,6 +106,7 @@ static void init_player(g1_state *game)
     game->player.flip = 0;
     game->player.dash_timer = 0;
     game->player.cd_timer = 0;
+    sound_start(&game->musics[GAME1_THEME], 3, game2_theme_music, TRUE, 0x80);
     init_sprite(GAME1_VRAM_PLAYER, GAME1_PLAYER, game->sprites, game->vram);
     move_sprite(GAME1_PLAYER, game->player.x.b.h, game->player.y.b.h);
     init_hearts(game);

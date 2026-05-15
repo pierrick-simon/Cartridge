@@ -25,6 +25,8 @@ static void handle_clock(g1_state *game)
 game_state_t g1_update(g1_state *game,
     const input_state *input)
 {
+    for (uint8_t i = 0; i < GAME1_NB_MUSIC; i++)
+        sound_update(&game->musics[i]);
     g1_handle_player(game, input, get_just_pressed(input));
     g1_handle_attacks(game, input, get_just_pressed(input));
     if (game->clock % 60 == 0)

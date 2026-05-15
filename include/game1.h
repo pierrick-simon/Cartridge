@@ -8,11 +8,12 @@
 #ifndef GAME1_H
     #define GAME1_H
 
+    #include <asm/types.h>
     #include "game_types.h"
     #include "input.h"
     #include "sprite.h"
     #include "heart.h"
-    #include <asm/types.h>
+    #include "sound_manager.h"
 
     #define G1_P_SPEED 1.42
     #define G1_P_DIAG_SPEED 1
@@ -77,6 +78,11 @@ typedef enum {
     GAME1_STAR,
 };
 
+typedef enum {
+    GAME1_THEME,
+    GAME1_NB_MUSIC,
+};
+
 typedef struct {
     uint8_t x;
     uint8_t y;
@@ -115,6 +121,7 @@ typedef struct {
     uint16_t score;
     palyer_t player;
     asteroid_t asteroid[G1_NB_ASTEROID];
+    sound_t musics[GAME1_NB_MUSIC];
     star_t star;
     uint32_t clock;
     uint8_t spawn_timer;
