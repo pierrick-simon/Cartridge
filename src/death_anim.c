@@ -129,39 +129,51 @@ static void clear_screen(void)
     }
 }
 
+static da_result_t handle_closing(void)
+{
+    s_da_timer++;
+    if (s_da_timer >= DA_CURTAIN_FRAMES) {
+        set_win_tiles(0, DA_TEXT_ROW, 21, 1, s_black_row);
+        move_win(0, 0);
+        return s_da_result;
+    }
+    move_win(0, s_da_timer * DA_CURTAIN_STEP);
+    return DA_RUNNING;
+}
+
+static void handle_opening(void)
+{
+    s_da_timer++;
+    move_win(0, 144 - s_da_timer * DA_CURTAIN_STEP);
+    SCY_REG += 2;
+}
+
+static void start_closing(da_result_t result)
+{
+    clear_screen();
+    s_da_result = result;
+    s_da_closing = 1;
+    s_da_timer = 0;
+}
+
+static da_result_t handle_wait_input(const input_state *input)
+{
+    uint8_t pressed = get_just_pressed(input);
+
+    if (pressed & J_A)
+        start_closing(DA_RESTART);
+    if (pressed & J_START)
+        start_closing(DA_MENU);
+    return DA_RUNNING;
+}
+
 da_result_t death_anim_update(const input_state *input)
 {
-    uint8_t pressed;
-
-    if (s_da_closing) {
-        s_da_timer++;
-        move_win(0, s_da_timer * DA_CURTAIN_STEP);
-        if (s_da_timer >= DA_CURTAIN_FRAMES) {
-            HIDE_WIN;
-            return s_da_result;
-        }
-        return DA_RUNNING;
-    }
+    if (s_da_closing)
+        return handle_closing();
     if (s_da_timer < DA_CURTAIN_FRAMES) {
-        s_da_timer++;
-        move_win(0, 144 - s_da_timer * DA_CURTAIN_STEP);
-        SCY_REG += 2;
+        handle_opening();
         return DA_RUNNING;
     }
-    pressed = get_just_pressed(input);
-    if (pressed & J_A) {
-        clear_screen();
-        s_da_result = DA_RESTART;
-        s_da_closing = 1;
-        s_da_timer = 0;
-        return DA_RUNNING;
-    }
-    if (pressed & J_START) {
-        clear_screen();
-        s_da_result = DA_MENU;
-        s_da_closing = 1;
-        s_da_timer = 0;
-        return DA_RUNNING;
-    }
-    return DA_RUNNING;
+    return handle_wait_input(input);
 }

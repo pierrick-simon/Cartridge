@@ -13,6 +13,7 @@
 void clear_screen(void)
 {
     uint8_t empty_tile[16] = {0};
+    HIDE_WIN;
     for (uint8_t i = 0; i < 192; i++)
         set_bkg_data(i, 1, empty_tile);
     for (uint8_t i = 0; i < 192; i++)

@@ -131,6 +131,7 @@ game_state_t updateDead(g3_state *game, const input_state *input)
     r = death_anim_update(input);
     if (r == DA_RESTART) {
         g3_init(game);
+        HIDE_WIN;
         return STATE_GAME3;
     }
     if (r == DA_MENU)
