@@ -10,7 +10,7 @@
 #include "game1.h"
 #include <rand.h>
 
-static void lunch_star(g1_state *game, uint16_t clock,
+static void lunch_star(g1_state *game, uint32_t clock,
     uint8_t speed, uint16_t nb_tick)
 {
     star_t *star = &game->star;
@@ -45,6 +45,8 @@ static void lunch_asteroid(g1_state *game, uint8_t i,
     uint8_t clock = game->clock;
     asteroid_t *asteroid = &game->asteroid[i];
     uint16_t dir = clock * 61 + 69;
+    uint8_t flip = ((clock * 211) % 4);
+    uint8_t prop = 0;
 
     asteroid->v_x = dir & G1_X ? speed: (speed * -1);
     asteroid->v_y = dir & G1_Y ? speed: (speed * -1);
@@ -65,18 +67,30 @@ static void lunch_asteroid(g1_state *game, uint8_t i,
     asteroid->speed = speed;
     asteroid->timer = nb_tick;
     asteroid->here = 1;
-    set_sprite_prop(GAME1_F_ASTEROID + i, ((clock * 211 + 2) % 4) * S_FLIPX);
+    flip & 1 ? prop += S_FLIPX: 0;
+    flip & 2 ? prop += S_FLIPY: 0;
+    set_sprite_prop(GAME1_F_ASTEROID + i, flip);
+}
+
+static inline uint32_t get_nb_tick(uint32_t clock)
+{
+    if (clock > 9000)
+        clock = 9000;
+    return ((clock * (2000)) / 9000) + 500;
 }
 
 static void lunch_attack(g1_state *game)
 {
     if (game->star.here == 0 && (rand() % 2) == 0)
-        return lunch_star(game, game->clock, game->clock / 1800, 1000);
+        return lunch_star(game, game->clock, game->clock / (60 * 15),
+            get_nb_tick(game->clock) * 2);
     for (uint8_t i = 0; i < game->max_asteroid; ++i)
         if (game->asteroid[i].here == 0)
-            return lunch_asteroid(game, i, 2, 50000);
+            return lunch_asteroid(game, i,
+                game->clock > 900 ? 2: 1, get_nb_tick(game->clock));
     if (game->star.here == 0)
-        lunch_star(game, game->clock, 1, 1000);
+        lunch_star(game, game->clock, game->clock / (60 * 15),
+            get_nb_tick(game->clock) * 2);
 }
 
 static void move_star(g1_state *game, uint8_t clock)
@@ -107,7 +121,7 @@ static void move_star(g1_state *game, uint8_t clock)
     }
     star->x.w += v_x / star->speed;
     star->y.w += v_y / star->speed;
-    move_sprite(GAME1_STAR, star->x.b.h, star->y.b.h);
+    move_sprite(GAME1_STAR, star->x.b.h + 1, star->y.b.h + 1);
 }
 
 static void move_asteroid(asteroid_t *asteroid, uint8_t clock, uint8_t i)
