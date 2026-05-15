@@ -126,6 +126,7 @@ void g2_init(g2_state *game)
     game->bg_x = 0;
     game->bg_y = 0;
     game->score = 0;
+    game->phase = G2_PLAY;
     sound_start(&game->musics[GAME2_THEME], 3, game2_theme_music, TRUE, 0x80);
     sound_start(&game->musics[GAME2_POWER_UP], 1, power_up_sound, FALSE, 0x80);
     sound_start(&game->musics[GAME2_POWER_DOWN], 1, power_down_sound, FALSE, 0x80);

@@ -114,6 +114,11 @@ typedef struct {
     uint8_t flip;
 } palyer_t;
 
+typedef enum {
+    G1_PLAY,
+    G1_DEAD
+} g1_phase_t;
+
 typedef struct {
     uint8_t nb_vram;
     vram_sprite_t vram[NB_GAME1_VRAM];
@@ -126,6 +131,7 @@ typedef struct {
     uint32_t clock;
     uint8_t spawn_timer;
     uint8_t max_asteroid;
+    g1_phase_t phase;
 } g1_state;
 
     void g1_init(g1_state *game);

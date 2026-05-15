@@ -8,6 +8,7 @@
 #include <gb/gb.h>
 #include "game1.h"
 #include "save_data.h"
+#include "death_anim.h"
 
 static void handle_clock(g1_state *game)
 {
@@ -22,7 +23,7 @@ static void handle_clock(g1_state *game)
     ++(game->clock);
 }
 
-game_state_t g1_update(g1_state *game,
+static game_state_t g1_updatePlay(g1_state *game,
     const input_state *input)
 {
     for (uint8_t i = 0; i < GAME1_NB_MUSIC; i++)
@@ -32,9 +33,37 @@ game_state_t g1_update(g1_state *game,
     if (game->clock % 60 == 0)
         g1_change_score(game, 1);
     handle_clock(game);
-    if (get_just_pressed(input) & J_START || game->player.hearts[G1_NB_HEART - 1].show == 0) {
-        save_score(game->score, 0);
+    if (get_just_pressed(input) & J_START)
         return STATE_MENU;
+    if (game->player.hearts[G1_NB_HEART - 1].show == 0) {
+        save_score(game->score, 0);
+        game->phase = G1_DEAD;
+        death_anim_start();
     }
     return STATE_GAME1;
+}
+
+static game_state_t g1_updateDead(g1_state *game,
+    const input_state *input)
+{
+    da_result_t r;
+
+    for (uint8_t i = 0; i < GAME1_NB_MUSIC; i++)
+        sound_update(&game->musics[i]);
+    r = death_anim_update(input);
+    if (r == DA_RESTART) {
+        g1_init(game);
+        HIDE_WIN;
+        return STATE_GAME1;
+    }
+    if (r == DA_MENU)
+        return STATE_MENU;
+    return STATE_GAME1;
+}
+
+game_state_t g1_update(g1_state *game, const input_state *input)
+{
+    if (game->phase == G1_DEAD)
+        return g1_updateDead(game, input);
+    return g1_updatePlay(game, input);
 }

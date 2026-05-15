@@ -112,6 +112,11 @@
         heart_t hearts[G2_NB_HEART];
     } player_t;
 
+    typedef enum {
+        G2_PLAY,
+        G2_DEAD
+    } g2_phase_t;
+
     typedef struct {
         uint16_t score;
         uint8_t nb_vram;
@@ -125,6 +130,7 @@
         player_t player;
         uint8_t bg_x;
         uint8_t bg_y;
+        g2_phase_t phase;
     } g2_state;
 
     void g2_init(g2_state *game);

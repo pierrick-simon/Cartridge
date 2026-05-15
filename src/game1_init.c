@@ -48,6 +48,7 @@ static void init_value(g1_state *game)
     game->clock = 0;
     game->spawn_timer = G1_ATTACK_COOLDOWN;
     game->max_asteroid = G1_MIN_ASTEROID;
+    game->phase = G1_PLAY;
 }
 
 static void init_background()
