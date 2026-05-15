@@ -186,6 +186,7 @@ static void collision(g1_state *game)
                 game->player.x.b.h, game->player.y.b.h
             )) {
             collide(&game->player);
+            sound_channel4(0x00, 0xF2, 0x57, 0x80);
             return;
         }
     }
@@ -194,6 +195,7 @@ static void collision(g1_state *game)
         if (game->player.cd_timer == 0) {
             collide(&game->player);
         }
+        sound_channel1(0x2A, 0x80, 0xF1, 0xA9, 0x87);
         init_sprite(GAME1_VRAM_EXPLOSION, GAME1_STAR,
             game->sprites, game->vram);
         game->star.timer = 0;
