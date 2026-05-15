@@ -91,7 +91,7 @@ static const uint8_t s_gameover_row[20] = {
     241,242,243,244,
     240,
     245,246,244,247,
-    240,240,240,240,240
+    240,240,240,240
 };
 
 static uint8_t s_da_timer;
@@ -107,10 +107,10 @@ void death_anim_start(void)
     set_bkg_data(DA_TILE_BASE, DA_NB_TILES, s_da_tiles);
     i = 0;
     while (i < 18) {
-        set_win_tiles(0, i, 20, 1, s_black_row);
+        set_win_tiles(1, i, 20, 1, s_black_row);
         i++;
     }
-    set_win_tiles(0, DA_TEXT_ROW, 20, 1, s_gameover_row);
+    set_win_tiles(1, DA_TEXT_ROW, 20, 1, s_gameover_row);
     move_win(0, 144);
     SHOW_WIN;
     s_da_timer = 0;
