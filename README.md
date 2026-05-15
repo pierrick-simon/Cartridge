@@ -1,5 +1,20 @@
 # Cartridge (v0.1)
 
+### Preview
+
+![Space-GB](docs/Menu.png) \
+Space-GB Menu
+
+![MoonDash](docs/MoonDash.gif) \
+MoonDash preview
+
+![ShootX](docs/ShootX.gif) \
+ShootX preview
+
+![SlimeJump](docs/SlimeJump.gif) \
+SlimeJump preview
+
+
 ### Development
 
 By *Ariel Amriou*(ariel.amriou@epitech.eu), *Pierrick Simon*(pierrick.simon@epitech.eu) & *Sandes Savarimuthu*(sandes.savarimuthu@epitech.eu).
@@ -16,6 +31,7 @@ This project requires the following dependencies:
 
 - **Programming Language:** C
 - **Tool Kit:** GBDK
+- **Emulator:** Retroarch
 
 ### Installation for Linux
 
