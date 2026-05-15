@@ -8,7 +8,6 @@
 #include "cursor.h"
 #include "number.h"
 #include "starwars.h"
-#include "save_data.h"
 #include "menutile.h"
 
 static void m_init_sprite(menu_state *menu)
@@ -16,26 +15,30 @@ static void m_init_sprite(menu_state *menu)
     menu->cursor = 0;
     init_sprite(MENU_VRAM_CURSOR, MENU_CURSOR, menu->sprites, menu->vram);
     move_sprite(MENU_CURSOR, 28, 56 + 16 * menu->cursor);
-    for (uint8_t i = 0; i < M_NB_NUMBER; i++) {
-        init_sprite(MENU_VRAM_NUMBER, MENU_SCORE1 + i,
+    for (uint8_t i = 0; i < M_NB_TOTAL_NUMBER; i++) {
+        init_sprite(MENU_VRAM_NUMBER, MENU_F_SCORE1 + i,
             menu->sprites, menu->vram);
-        move_sprite(MENU_SCORE1 + i, 71 + 6 * i, 112);
+        move_sprite(MENU_F_SCORE1 + i,
+            71 + 6 * (i % M_NB_NUMBER),
+            112 + 16 * (i / M_NB_NUMBER));
     }
     set_bkg_data(0, 0, menu_tile);
     set_bkg_tiles(0, 0, 20, 18, menu_map);
 }
 
-static void change_score(menu_state *menu, uint16_t score)
+static void change_score(menu_state *menu, uint16_t scores[NB_SAVE_SCORE])
 {
-    move_to_tile(&menu->sprites[MENU_SCORE5], menu->vram, score % 10);
-    score /= 10;
-    move_to_tile(&menu->sprites[MENU_SCORE4], menu->vram, score % 10);
-    score /= 10;
-    move_to_tile(&menu->sprites[MENU_SCORE3], menu->vram, score % 10);
-    score /= 10;
-    move_to_tile(&menu->sprites[MENU_SCORE2], menu->vram, score % 10);
-    score /= 10;
-    move_to_tile(&menu->sprites[MENU_SCORE1], menu->vram, score % 10);
+    uint16_t score = 0;
+
+    for (uint8_t i = 0; i < NB_SAVE_SCORE; i++) {
+        score = scores[i];
+        for (uint8_t j = M_NB_NUMBER; j > 0; j--) {
+            move_to_tile(
+                &menu->sprites[MENU_F_SCORE1 + (i * M_NB_NUMBER) + j - 1],
+                menu->vram, score % 10);
+            score /= 10;
+        }
+    }
 }
 
 void m_init(menu_state *menu)
@@ -47,12 +50,13 @@ void m_init(menu_state *menu)
     printf(" ");
     m_init_sprite(menu);
     menu->cursor = 0;
+    for (uint8_t i = 0; i < NB_GAME; i++)
+        for (uint8_t j = 0; j < NB_SAVE_SCORE; j++)
+            menu->scores[i][j] = 0;
     if (has_existing_save())
         load_save(menu->scores);
     else {
         init_save_score();
-        for (uint8_t i = 0; i < NB_GAME; i++)
-            menu->scores[i] = 0;
     }
     change_score(menu, menu->scores[menu->cursor]);
     SHOW_SPRITES;
