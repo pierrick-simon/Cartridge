@@ -71,7 +71,7 @@ static void lunch_asteroid(g1_state *game, uint8_t i,
 static void lunch_attack(g1_state *game)
 {
     if (game->star.here == 0 && (rand() % 2) == 0)
-        return lunch_star(game, game->clock, 1, 1000);
+        return lunch_star(game, game->clock, game->clock / 1800, 1000);
     for (uint8_t i = 0; i < game->max_asteroid; ++i)
         if (game->asteroid[i].here == 0)
             return lunch_asteroid(game, i, 2, 50000);
@@ -107,7 +107,7 @@ static void move_star(g1_state *game, uint8_t clock)
     }
     star->x.w += v_x / star->speed;
     star->y.w += v_y / star->speed;
-    move_sprite(GAME1_STAR, star->x.b.h + 1, star->y.b.h + 1);
+    move_sprite(GAME1_STAR, star->x.b.h, star->y.b.h);
 }
 
 static void move_asteroid(asteroid_t *asteroid, uint8_t clock, uint8_t i)
@@ -146,11 +146,11 @@ static void simulate_asteroid(asteroid_t *asteroid, uint8_t clock, uint8_t i)
 
 static inline uint8_t is_hit(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2)
 {
-    int8_t distx = 0;
-    int8_t disty = 0;
+    int16_t distx = 0;
+    int16_t disty = 0;
 
-    distx = (int8_t)x1 - (int8_t)x2;
-    disty = (int8_t)y1 - (int8_t)y2;
+    distx = (int16_t)x1 - (int16_t)x2;
+    disty = (int16_t)y1 - (int16_t)y2;
     if (distx <= 8 && distx >= -8 && disty <= 8 && disty >= -8)
         return 1;
     return 0;
@@ -167,7 +167,7 @@ static void collision(g1_state *game)
     if (game->player.dash_timer != 0)
         return;
     for (uint8_t i = 0; i < game->max_asteroid; ++i) {
-        if (game->asteroid[i].here == 1  && game->player.cd_timer == 0 &&
+        if (game->asteroid[i].here == 1 && game->player.cd_timer == 0 &&
                 is_hit(game->asteroid[i].x, game->asteroid[i].y,
                 game->player.x.b.h, game->player.y.b.h
             )) {
