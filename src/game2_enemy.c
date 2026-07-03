@@ -151,7 +151,7 @@ static void add_power_up(g2_state *game, enemy_t *enemy)
         game->power_up[i].show = 1;
         game->power_up[i].x = enemy->x;
         game->power_up[i].y = enemy->y;
-        if (game->score > 250 && game->player.vram_id != GAME2_VRAM_SHIP2)
+        if (game->score > 150 && game->player.vram_id != GAME2_VRAM_SHIP2)
             tile = rand() % 2;
         move_to_tile(&game->sprites[GAME2_POWER_UP1 + i], game->vram, tile);
         break;
